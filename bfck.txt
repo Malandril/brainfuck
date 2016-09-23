@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$1" = "-p" ];
+then
+    java -jar $2
+else
+    echo "Error : Missing -p argument"
+fi
