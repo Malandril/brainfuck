@@ -25,4 +25,5 @@ public class Operation {
     public void moveL() {
         Brainfuck.memoire.changeCurrentPointerValue(-1);
     }
+
 }

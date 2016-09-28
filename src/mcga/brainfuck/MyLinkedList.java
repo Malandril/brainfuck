@@ -17,4 +17,5 @@ public class MyLinkedList<Integer> extends LinkedList<Integer>{
             throw new IndexOutOfBoundsException();
         }
     }
+
 }
