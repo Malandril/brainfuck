@@ -18,7 +18,7 @@ public enum Instructions {
         this.names = Arrays.asList(names);
     }
 
-    public Instructions hasInstruction(String str){
+    static public Instructions hasInstruction(String str){
         return Arrays.stream(Instructions.values()).filter(s->{return s.names.contains(str);}).findFirst().orElse(null);
     }
 

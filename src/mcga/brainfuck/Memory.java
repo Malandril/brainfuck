@@ -21,11 +21,14 @@ public class Memory {
         return i >= 0 && i < 256;
     }
 
-    void addCurrentCellValue(Integer i) {
+    void addCurrentCellValue(Integer i) throws InvalidValueException{
         int val = memoire.get(currentCellPointer);
         if (val + i >= 0 && val + i < 256) {
             memoire.set(currentCellPointer, val + i);
-            System.out.println("Memory pointer : " + currentCellPointer + " la valeur vaut : " + val);
+            System.out.println("Memory pointer : " + currentCellPointer + " la valeur vaut : " + memoire.get(currentCellPointer));
+        }
+        else{
+            throw new InvalidValueException();
         }
 
     }
