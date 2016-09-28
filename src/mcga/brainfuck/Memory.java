@@ -12,6 +12,7 @@ public class Memory {
         this.memoire.add(0);
     }
 
+
     public int getCurrentCellPointer() {
         return currentCellPointer;
     }

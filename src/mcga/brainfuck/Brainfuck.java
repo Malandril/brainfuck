@@ -19,6 +19,7 @@ public class Brainfuck {
             operation.moveR();
         }
 
+
     }
 
 }

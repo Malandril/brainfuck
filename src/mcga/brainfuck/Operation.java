@@ -25,4 +25,5 @@ public class Operation {
     public void moveL() {
         memory.changeCurrentPointerValue(-1);
     }
+
 }
