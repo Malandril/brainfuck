@@ -49,8 +49,10 @@ public class Interpreter {
     }
 
     public void isolCommand(String str){
+        String tmp;
         for(int i=0 ; i<str.length() ; i++){
             System.out.println(str.charAt(i));
+            tmp += str.charAt(i);
         }
     }
 }
