@@ -15,9 +15,9 @@ public class Brainfuck {
         Operation operation = new Operation();
         operation.incrementation();
         operation.incrementation();
-        operation.moveR();
-        operation.moveL();
-        operation.moveL();
+        for(int i=0; i< 30301;i++){
+            operation.moveR();
+        }
 
     }
 

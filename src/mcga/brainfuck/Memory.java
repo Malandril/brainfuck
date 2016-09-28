@@ -32,9 +32,8 @@ public class Memory {
     void changeCurrentPointerValue(Integer i) throws IndexOutOfBoundsException{
         int val = currentCellPointer;
         if (val + i >= memoire.size()) {
-            memoire.add(currentCellPointer+i,0);
+            memoire.add(0);
         }
-
         currentCellPointer += i;
         memoire.get(currentCellPointer);
         System.out.println("Memory pointer : " + currentCellPointer);
