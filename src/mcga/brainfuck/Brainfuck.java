@@ -6,7 +6,7 @@ import  java.util.ArrayList;
  * Created by user on 23/09/2016.
  */
 public class Brainfuck {
-
+    static Memory memoire = new Memory();
     protected int dataPointer = 0; // pointer to the current index of file
     protected int memoryPointer = 0; // pointer to the current index of memory
     public static void main(String[] args) {
@@ -15,7 +15,7 @@ public class Brainfuck {
         Operation operation = new Operation();
         operation.incrementation();
         operation.incrementation();
-        for(int i=0; i< 30301;i++){
+        for(int i = 0; i<30;i++){
             operation.moveR();
         }
 

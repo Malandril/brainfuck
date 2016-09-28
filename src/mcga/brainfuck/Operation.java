@@ -5,25 +5,25 @@ package mcga.brainfuck;
  */
 public class Operation {
 
-    Memory memory = new Memory();
+    //Memory memory = new Memory();
 
     public Operation() {
     }
 
     public void incrementation() {
-        memory.addCurrentCellValue(1);
+        Brainfuck.memoire.addCurrentCellValue(1);
     }
 
     public void decrementation() {
-        memory.addCurrentCellValue(-1);
+        Brainfuck.memoire.addCurrentCellValue(-1);
     }
 
     public void moveR() {
-        memory.changeCurrentPointerValue(1);
+        Brainfuck.memoire.changeCurrentPointerValue(1);
     }
 
     public void moveL() {
-        memory.changeCurrentPointerValue(-1);
+        Brainfuck.memoire.changeCurrentPointerValue(-1);
     }
 
 }
