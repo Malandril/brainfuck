@@ -4,10 +4,11 @@ import  java.util.ArrayList;
 /**
  * Created by user on 26/09/2016.
  */
-public class Operation extends brainfuck {
+public class Operation{
     //List<Integer> memory= new ArrayList<Integer>();
     private int dataPointer = 0; // pointer to the current index of file
     private int memoryPointer = 0; // pointer to the current index of memory
+    List<Integer> memory = new MyLinkedList<>();
 
 
     public Operation(){

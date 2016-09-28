@@ -6,7 +6,7 @@ import  java.util.ArrayList;
  * Created by user on 23/09/2016.
  */
 public class brainfuck {
-    List<Integer> memory = new MyLinkedList<>();
+
     protected int dataPointer = 0; // pointer to the current index of file
     protected int memoryPointer = 0; // pointer to the current index of memory
     public static void main(String[] args) {
