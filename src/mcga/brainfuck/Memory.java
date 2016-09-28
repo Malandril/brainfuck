@@ -4,11 +4,11 @@ package mcga.brainfuck;
  * Created by user on 26/09/2016.
  */
 public class Memory {
-    private java.util.List<Integer> memoire;
+    private java.util.List <Integer> memoire;
     int currentCellPointer = 0;
 
     public Memory() {
-        this.memoire = new MyLinkedList<>();
+        this.memoire = new MyLinkedList <>();
         this.memoire.add(0);
     }
 
@@ -21,13 +21,12 @@ public class Memory {
         return i >= 0 && i < 256;
     }
 
-    void addCurrentCellValue(Integer i) throws InvalidValueException{
+    void addCurrentCellValue(Integer i) throws InvalidValueException {
         int val = memoire.get(currentCellPointer);
         if (val + i >= 0 && val + i < 256) {
             memoire.set(currentCellPointer, val + i);
             System.out.println("Memory pointer : " + currentCellPointer + " la valeur vaut : " + memoire.get(currentCellPointer));
-        }
-        else{
+        } else {
             throw new InvalidValueException();
         }
 

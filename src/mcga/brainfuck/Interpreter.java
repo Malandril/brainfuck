@@ -25,7 +25,7 @@ public class Interpreter {
         while (scanner.hasNext()) {
             str = scanner.nextLine();
             Instructions instr = Instructions.hasInstruction(str);
-            if (instr!=null) {
+            if (instr != null) {
                 switch (instr) {
                     case INCR:
                         new Operation().incrementation();

@@ -15,7 +15,7 @@ public class Operation {
     }
 
     public void decrementation() {
-        Brainfuck.memoire.addCurrentCellValue(-1);
+        Brainfuck.memoire.addCurrentCellValue(- 1);
     }
 
     public void moveR() {
@@ -23,7 +23,7 @@ public class Operation {
     }
 
     public void moveL() {
-        Brainfuck.memoire.changeCurrentPointerValue(-1);
+        Brainfuck.memoire.changeCurrentPointerValue(- 1);
     }
 
 }
