@@ -5,7 +5,7 @@ import  java.util.ArrayList;
 /**
  * Created by user on 23/09/2016.
  */
-public class brainfuck {
+public class Brainfuck {
 
     protected int dataPointer = 0; // pointer to the current index of file
     protected int memoryPointer = 0; // pointer to the current index of memory
@@ -16,8 +16,8 @@ public class brainfuck {
         operation.incrementation();
         operation.incrementation();
         operation.moveR();
-        operation.moveR();
-        operation.moveR();
+        operation.moveL();
+        operation.moveL();
 
     }
 

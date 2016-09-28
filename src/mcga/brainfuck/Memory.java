@@ -5,33 +5,39 @@ package mcga.brainfuck;
  */
 public class Memory {
     private java.util.List<Integer> memoire;
-    int currentCellPointer=0;
+    int currentCellPointer = 0;
 
     public Memory() {
         this.memoire = new MyLinkedList<>();
+        this.memoire.add(0);
     }
 
     public int getCurrentCellPointer() {
         return currentCellPointer;
     }
 
-    boolean isValidNumber(int i){
-        return i>=0&&i<256;
+    boolean isValidNumber(int i) {
+        return i >= 0 && i < 256;
     }
-    void addCurrentCellValue(Integer i){
-        int val=memoire.get(currentCellPointer);
-        if(val+i>=0&&val+i<256) {
-            memoire.set(currentCellPointer, val+i);
-            System.out.println("Memory pointer : " + currentCellPointer +" la valeur vaut : " + val);
+
+    void addCurrentCellValue(Integer i) {
+        int val = memoire.get(currentCellPointer);
+        if (val + i >= 0 && val + i < 256) {
+            memoire.set(currentCellPointer, val + i);
+            System.out.println("Memory pointer : " + currentCellPointer + " la valeur vaut : " + val);
         }
 
     }
-    void changeCurrentPointerValue(Integer i){
-        int val=currentCellPointer;
-        if(val+i>=0&&val+i<30000) {
-            currentCellPointer+=i;
-            System.out.println("Memory pointer : " + currentCellPointer);
+
+    void changeCurrentPointerValue(Integer i) throws IndexOutOfBoundsException{
+        int val = currentCellPointer;
+        if (val + i >= memoire.size()) {
+            memoire.add(currentCellPointer+i,0);
         }
+
+        currentCellPointer += i;
+        memoire.get(currentCellPointer);
+        System.out.println("Memory pointer : " + currentCellPointer);
 
     }
 
