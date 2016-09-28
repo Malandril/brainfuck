@@ -25,6 +25,7 @@ public class Interpreter {
         while (scanner.hasNext()) {
             str = scanner.nextLine();
             Instructions instr = Instructions.hasInstruction(str);
+            isolCommand(str);
             if (instr != null) {
                 switch (instr) {
                     case INCR:
@@ -44,6 +45,12 @@ public class Interpreter {
                         break;
                 }
             }
+        }
+    }
+
+    public void isolCommand(String str){
+        for(int i=0 ; i<str.length() ; i++){
+            System.out.println(str.charAt(i));
         }
     }
 }
