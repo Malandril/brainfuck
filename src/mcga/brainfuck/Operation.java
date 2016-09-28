@@ -19,28 +19,25 @@ public class Operation extends brainfuck {
         else {
             memory.add(memoryPointer, (int) (memory.get(memoryPointer) + 1));
         }
-        System.out.println(memory.get(memoryPointer));// DEBUG
+        System.out.println("Memory pointer : " + memoryPointer +" la valeur vaut : " + memory.get(memoryPointer));
     }
 
     public void decrementation(){
         if(memory.get(memoryPointer)!=0){
             memory.add(memoryPointer, (int) (memory.get(memoryPointer) - 1));
         }
-        System.out.println(memory.get(memoryPointer));
+        System.out.println("Memory pointer : " + memoryPointer +" la valeur vaut :" + memory.get(memoryPointer));
     }
 
-    public void right(){
-        if(memoryPointer == 29999){}
-        else {
+    public void moveR(){
             memoryPointer++;
-        }
-        System.out.println(memoryPointer);
+        System.out.println("Memory pointer : " + memoryPointer);
     }
 
-    public void left(){
-        if(memoryPointer!=0){
+    public void moveL(){
+        if(memoryPointer!=0) {
             memoryPointer--;
         }
-        System.out.println(memoryPointer);
+        System.out.println("Memory pointer : " + memoryPointer);
     }
 }
