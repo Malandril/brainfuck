@@ -29,7 +29,7 @@ public class Memory {
 
     }
 
-    void changeCurrentPointerValue(Integer i) throws IndexOutOfBoundsException{
+    void changeCurrentPointerValue(Integer i) throws IndexOutOfBoundsException {
         int val = currentCellPointer;
         if (val + i >= memoire.size()) {
             memoire.add(0);
