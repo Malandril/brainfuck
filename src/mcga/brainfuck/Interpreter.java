@@ -49,10 +49,14 @@ public class Interpreter {
     }
 
     public void isolCommand(String str){
-        String tmp;
+        // TODO: 28/09/2016 plusieurs instructions longues par ligne ? 
+        // TODO: 28/09/2016 INCRD -> INCR ou rien ?
+        // TODO: 28/09/2016 séparation par des espaces des commandes longues ?
+        String tmp = "";
         for(int i=0 ; i<str.length() ; i++){
             System.out.println(str.charAt(i));
             tmp += str.charAt(i);
         }
+        System.out.println(tmp);
     }
 }
