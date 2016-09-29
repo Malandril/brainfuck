@@ -28,6 +28,7 @@ public class Memory {
             System.out.println("Memory pointer : " + currentIndex + " la valeur vaut : " + memoire.get(currentIndex));
         } else {
             throw new InvalidValueException();
+
         }
 
     }

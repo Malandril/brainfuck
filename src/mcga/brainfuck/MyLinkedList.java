@@ -22,7 +22,7 @@ public class MyLinkedList<T> extends LinkedList<T> {
         if (this.size() < MAX_SIZE) {
             super.add(index, element);
         } else {
-            throw new IndexOutOfBoundsException();
+            System.exit(1);
         }
     }
 }

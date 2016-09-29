@@ -29,9 +29,7 @@ public class Brainfuck {
         } else {
             interpreter = new Interpreter();
         }
-
-
-        String fileName = recoverVales(args);
+        interpreter.readFile();
 
         System.out.println(memoire);
     }
@@ -42,13 +40,13 @@ public class Brainfuck {
      * @param args
      * @return
      */
-    static String recoverVales(String[] args) {
+/*    static String recoverVales(String[] args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals(fileArg)) {
                 return args[i + 1];
             }
         }
         return "";
-    }
+    }*/
 
 }
