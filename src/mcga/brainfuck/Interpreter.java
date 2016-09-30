@@ -27,6 +27,7 @@ public class Interpreter {
         while (scanner.hasNext()) {
             str = scanner.nextLine();
             if (readLine(str)) {
+                System.out.println(str);
                 Instructions instr = Instructions.hasInstruction(str);
                 instrAction(instr);
             } else {
@@ -45,7 +46,8 @@ public class Interpreter {
 
     /**
      * Detects if a line of is a line of short or long instructions.
-     * A long instruction is composed of letters. We just need to test if the first character is a letter.
+     * A long instruction is composed of uppercase letters.
+     * We just need to test if the first character is a letter.
      * @param line
      * @return true if long instructions, false if short instructions
      */
