@@ -1,7 +1,5 @@
 package mcga.brainfuck;
 
-import com.sun.org.apache.bcel.internal.generic.Instruction;
-
 import java.io.InputStream;
 import java.util.Scanner;
 

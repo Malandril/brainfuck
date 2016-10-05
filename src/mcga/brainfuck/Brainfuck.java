@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * mlo by lol on 23/09/2016.
+ * The Brainfuck class contains the main method.
  */
 public class Brainfuck {
     private static final String fileArg = "-p";
