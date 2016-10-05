@@ -21,26 +21,31 @@ public class Memory {
         return i >= 0 && i < 256;
     }
 
-    void addCurrentCellValue(Integer i) throws InvalidValueException {
-        int val = memoire.get(currentIndex);
-        if (isValidNumber(val + i)) {
+    boolean isValidInput(int i) {
+        return (i == -1 || i == 1);
+    }
+
+    void addCurrentCellValue(int i) throws InvalidValueException {
+        int val = getCurrentCellValue();
+        if (isValidInput(i) && isValidNumber(val + i)) {
             memoire.set(currentIndex, val + i);
-            System.out.println("Memory pointer : " + currentIndex + " la valeur vaut : " + memoire.get(currentIndex));
+//            System.out.println("Memory pointer : " + currentIndex + " la valeur vaut : " + memoire.get(currentIndex));
         } else {
             throw new InvalidValueException();
-
         }
 
     }
 
-    void changeCurrentPointerValue(Integer i) throws IndexOutOfBoundsException {
+    void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException, InvalidValueException {
         int val = currentIndex;
+        if (!isValidInput(i)) {
+            throw new InvalidValueException();
+        }
         if (val + i >= memoire.size()) {
             memoire.add(0);
         }
         currentIndex += i;
         memoire.get(currentIndex);
-        System.out.println("Memory pointer : " + currentIndex);
 
     }
 

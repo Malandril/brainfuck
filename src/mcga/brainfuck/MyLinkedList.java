@@ -2,27 +2,25 @@ package mcga.brainfuck;
 
 import java.util.LinkedList;
 
-/**
- * Created by user on 26/09/2016.
- */
+
 public class MyLinkedList<T> extends LinkedList<T> {
     int MAX_SIZE = 30000;
 
     @Override
-    public boolean add(T t) throws IndexOutOfBoundsException {
+    public boolean add(T t) {
         if (this.size() < MAX_SIZE) {
             return super.add(t);
         } else {
-            throw new IndexOutOfBoundsException();
+            throw new MyIndexOutOfBoundsException();
         }
     }
 
     @Override
-    public void add(int index, T element) {
-        if (this.size() < MAX_SIZE) {
-            super.add(index, element);
+    public T get(int index) {
+        if (index >= 0) {
+            return super.get(index);
         } else {
-            System.exit(1);
+            throw new MyIndexOutOfBoundsException(Integer.toString(index));
         }
     }
 }

@@ -9,5 +9,11 @@ public class MyIndexOutOfBoundsException extends IndexOutOfBoundsException {
         System.exit(2);
     }
 
+    public MyIndexOutOfBoundsException(String str) {
+        super(str);
+        System.err.println("index out of Bound " + str);
+        System.exit(2);
+    }
+
 
 }
