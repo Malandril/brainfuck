@@ -80,6 +80,7 @@ public class Interpreter {
      * Determines the operation to call depending of the instruction.
      * @param instr Instruction
      */
+    // TODO: 05/10/2016 changer return 
     public void instrAction(Instructions instr) {
         if (instr != null) {
             switch (instr) {
