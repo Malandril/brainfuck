@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * mlo by lol on 23/09/2016. 
+ * mlo by lol on 23/09/2016.
  */
 public class Brainfuck {
     private static final String fileArg = "-p";
@@ -33,20 +33,5 @@ public class Brainfuck {
 
         System.out.println(memoire);
     }
-
-    /**
-     * ne sert à rien lol
-     *
-     * @param args
-     * @return
-     */
-/*    static String recoverVales(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(fileArg)) {
-                return args[i + 1];
-            }
-        }
-        return "";
-    }*/
 
 }
