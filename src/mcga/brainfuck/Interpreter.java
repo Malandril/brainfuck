@@ -10,10 +10,17 @@ public class Interpreter {
 
     private InputStream stream;
 
-    public Interpreter(InputStream stream) {
-        this.stream = stream;
-    }
+    /**
+     * Constructor
+     * Use argument file
+     * @param stream == file
+     */
+    public Interpreter(InputStream stream) {this.stream = stream;}
 
+    /**
+     * Constructor
+     * Use STDInput
+     */
     public Interpreter() {
         this(System.in);
     }
@@ -21,7 +28,7 @@ public class Interpreter {
     public void readFile() {
         Scanner scanner = new Scanner(this.stream);
         String str;
-        if (!scanner.hasNext()) {
+        if (!scanner.hasNext()) { // If
             System.exit(0);
         }
         while (scanner.hasNext()) {
