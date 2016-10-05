@@ -6,6 +6,7 @@ package mcga.brainfuck;
 public class InvalidValueException extends RuntimeException {
     public InvalidValueException() {
         super();
+        System.err.println("Value  must be between 0 and 255");
         System.exit(1);
     }
 }

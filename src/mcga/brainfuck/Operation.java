@@ -19,11 +19,11 @@ public class Operation {
     }
 
     public void moveR() {
-        Brainfuck.memoire.changeCurrentPointerValue(1);
+        Brainfuck.memoire.changeCurrentIndex(1);
     }
 
     public void moveL() {
-        Brainfuck.memoire.changeCurrentPointerValue(-1);
+        Brainfuck.memoire.changeCurrentIndex(-1);
     }
 
 }

@@ -21,7 +21,9 @@ public class Interpreter {
     public void readFile() {
         Scanner scanner = new Scanner(this.stream);
         String str;
-
+        if (!scanner.hasNext()) {
+            System.exit(0);
+        }
         while (scanner.hasNext()) {
             str = scanner.nextLine();
             Instructions instr = Instructions.hasInstruction(str);
@@ -40,10 +42,13 @@ public class Interpreter {
                         new Operation().moveR();
                         break;
                     default:
-                        System.out.println("looooooool");
                         break;
                 }
+            } else {
+                System.err.println("Error not a valid instruction " + str);
+                System.exit(42);
             }
         }
+
     }
 }
