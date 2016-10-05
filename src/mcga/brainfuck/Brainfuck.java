@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 public class Brainfuck {
     private static final String fileArg = "-p";
     static Memory memoire = new Memory();
-    static String inputStream;
 
     public static void main(String[] args) {
         Interpreter interpreter = null;
@@ -33,19 +32,5 @@ public class Brainfuck {
         System.out.println(memoire);
     }
 
-/**
- * ne sert à rien lol
- *
- * @param args
- * @return
- */
-/*    static String recoverVales(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals(fileArg)) {
-                return args[i + 1];
-            }
-        }
-        return "";
-    }*/
 
 }
