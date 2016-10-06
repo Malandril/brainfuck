@@ -16,7 +16,7 @@ public class Memory {
     }
 
     /**
-     * @return currentIndex
+     * @return currentIndex 
      */
     public int getCurrentIndex() {
         return currentIndex;

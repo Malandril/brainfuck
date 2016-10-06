@@ -1,12 +1,13 @@
 package mcga.brainfuck;
 
 /**
- * The Operation class determines the action to execute for each possible operation on the memory.
+ * Created by user on 26/09/2016.
+ *
  */
 public class Operation {
 
     /**
-     * Default constructor
+     * Constructor
      */
     public Operation() {
     }
@@ -22,7 +23,7 @@ public class Operation {
      * Decrements the memory by 1
      */
     public void decrementation() {
-        Brainfuck.memoire.addCurrentCellValue(- 1);
+        Brainfuck.memoire.addCurrentCellValue(-1);
     }
 
     /**

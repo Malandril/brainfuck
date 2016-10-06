@@ -4,8 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The Instructions enum lists the possible instructions and their different possible implementations.
- * This allows to easily launch a same action (e.g. incrementation) with a long or short instruction.
+ * Created by user on 28/09/2016.
  */
 public enum Instructions {
     INCR("INCR", "+"),
@@ -19,13 +18,8 @@ public enum Instructions {
         this.names = Arrays.asList(names);
     }
 
-    /**
-     * Checks if str corresponds to an instruction declared in the enum
-     * @param str
-     * @return
-     */
-    static public Instructions hasInstruction(String str){
-        return Arrays.stream(Instructions.values()).filter(s->{return s.names.contains(str);}).findFirst().orElse(null);
+    static public Instructions hasInstruction(String str) {
+        return Arrays.stream(Instructions.values()).filter(s -> s.names.contains(str)).findFirst().orElse(null);
     }
 
 }
