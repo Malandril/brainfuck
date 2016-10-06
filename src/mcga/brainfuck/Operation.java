@@ -1,29 +1,42 @@
 package mcga.brainfuck;
 
 /**
- * Created by user on 26/09/2016.
+ * The Operation class determines the action to execute for each possible operation on the memory.
  */
 public class Operation {
 
-    //Memory memory = new Memory();
-
+    /**
+     * Default constructor
+     */
     public Operation() {
     }
 
+    /**
+     * Increments the memory by 1
+     */
     public void incrementation() {
         Brainfuck.memoire.addCurrentCellValue(1);
     }
 
+    /**
+     * Decrements the memory by 1
+     */
     public void decrementation() {
         Brainfuck.memoire.addCurrentCellValue(- 1);
     }
 
+    /**
+     * Move the memory pointer to the right
+     */
     public void moveR() {
-        Brainfuck.memoire.changeCurrentPointerValue(1);
+        Brainfuck.memoire.changeCurrentIndex(1);
     }
 
+    /**
+     * Move the memory pointer to the left
+     */
     public void moveL() {
-        Brainfuck.memoire.changeCurrentPointerValue(- 1);
+        Brainfuck.memoire.changeCurrentIndex(-1);
     }
 
 }

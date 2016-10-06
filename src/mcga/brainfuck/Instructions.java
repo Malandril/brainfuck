@@ -20,7 +20,7 @@ public enum Instructions {
     }
 
     /**
-     *
+     * Checks if str corresponds to an instruction declared in the enum
      * @param str
      * @return
      */
