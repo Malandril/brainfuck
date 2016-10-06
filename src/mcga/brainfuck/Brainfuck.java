@@ -26,6 +26,7 @@ public class Brainfuck {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
         } else {
             interpreter = new Interpreter();
         }
