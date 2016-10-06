@@ -15,7 +15,7 @@ public class Interpreter {
      * In case a file is specified in the launching command, this constructor is called.
      * @param stream Stream from file
      */
-    // TODO: 30/09/2016 changer ce commentaire 
+    // TODO: 30/09/2016 changer ce commentaire
     public Interpreter(InputStream stream) {
         this.stream = stream;
     }
@@ -78,24 +78,21 @@ public class Interpreter {
      * Determines the operation to call depending of the instruction.
      * @param instr Instruction
      */
-    // TODO: 05/10/2016 changer return 
+    // TODO: 05/10/2016 changer return
     public void instrAction(Instructions instr) {
         if (instr != null) {
             switch (instr) {
                 case INCR:
-                    new Operation().incrementation();
+                    new Increment().interpret();
                     break;
                 case DECR:
-                    new Operation().decrementation();
+                    new Decrement().interpret();
                     break;
                 case LEFT:
-                    new Operation().moveL();
+                    new Left().interpret();
                     break;
                 case RIGHT:
-                    new Operation().moveR();
-                    break;
-                default:
-                    System.out.println("looooooool");
+                    new Right().interpret();
                     break;
             }
         }
