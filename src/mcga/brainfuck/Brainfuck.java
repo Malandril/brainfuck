@@ -10,6 +10,7 @@ import static mcga.brainfuck.Arguments.*;
  * mlo by lol on 23/09/2016.
  */
 public class Brainfuck {
+
     private static final String fileArg = "-p";
     static Memory memoire = new Memory();
 
