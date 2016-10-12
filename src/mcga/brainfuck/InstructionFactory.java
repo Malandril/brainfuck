@@ -12,7 +12,6 @@ public enum InstructionFactory {
     LEFT("LEFT", "<"),
     RIGHT("RIGHT", ">");
 
-
     List<String> names;
 
 
@@ -44,4 +43,5 @@ public enum InstructionFactory {
             throw new IllegalArgumentException(s);
         }
     }
+
 }

@@ -33,16 +33,14 @@ public class Interpreter {
      */
     public void readFile() {
         Scanner scanner = new Scanner(this.stream);
-        String firstStr;
+        String str;
         scanner.useDelimiter("\\s*");
         while (scanner.hasNext()) {
-            firstStr = scanner.next();
-            if (isUppercase(firstStr)) {
-                String line=firstStr+scanner.nextLine();
-                InstructionFactory.createInstruction(line);
-            } else {
-                InstructionFactory.createInstruction(firstStr);
+            str = scanner.next();
+            if (isUppercase(str)) {
+                str+=scanner.nextLine();
             }
+            InstructionFactory.createInstruction(str);
         }
     }
 
