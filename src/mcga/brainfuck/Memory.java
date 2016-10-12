@@ -1,5 +1,8 @@
 package mcga.brainfuck;
 
+import java.util.Arrays;
+import java.util.StringJoiner;
+
 /**
  * Created by user on 26/09/2016.
  */
@@ -85,7 +88,13 @@ public class Memory {
      */
     @Override
     public String toString() {
-        return memoire.toString();
+        StringJoiner joiner = new StringJoiner(" , ");
+        for (int i=0;i<memoire.length;i++) {
+            if(memoire[i]!=0){
+                joiner.add("C"+i+": "+memoire[i]);
+            }
+        }
+        return joiner.toString();
     }
 
     /**

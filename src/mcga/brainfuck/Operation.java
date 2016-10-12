@@ -5,18 +5,12 @@ package mcga.brainfuck;
  */
 public abstract class Operation implements Instruction{
 
-    //Memory memory = new Memory();
 
     public Operation(){
     }
 
 
-
-
-
-
     @Override
     public void interpret() {
-
     }
 }
