@@ -76,7 +76,6 @@ public class Interpreter {
         Scanner scanner = new Scanner(this.stream);
         String str;
         String strConverted = "";
-
         while (scanner.hasNext()) {
             str = scanner.nextLine();
             if (isUppercase(str)) {
