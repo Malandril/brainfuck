@@ -39,7 +39,7 @@ public class Interpreter {
             if (InstructionFactory.isLongSyntax(str)) {
                 str+=scanner.nextLine();
             }
-            InstructionFactory.createInstruction(str);
+            InstructionFactory.getInstruction(str).interpret();
         }
     }
 
