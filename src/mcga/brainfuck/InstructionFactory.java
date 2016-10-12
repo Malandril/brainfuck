@@ -13,7 +13,8 @@ public enum InstructionFactory {
     RIGHT("RIGHT", ">");
 
     List<String> names;
-
+    private static final int LONG_SYNTAX_INDEX=0;
+    private static final int SHORT_SYNTAX_INDEX=1;
 
     InstructionFactory(String... names) {
         this.names = Arrays.asList(names);
@@ -44,4 +45,12 @@ public enum InstructionFactory {
         }
     }
 
+    public static boolean isLongSyntax(String str) {
+        char firstChar = str.charAt(0);
+        return (Character.getType(firstChar) == Character.UPPERCASE_LETTER);
+    }
+
+    public static String getShortSyntax(String longStr){
+        return hasInstruction(longStr).names.get(SHORT_SYNTAX_INDEX);
+    }
 }

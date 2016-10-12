@@ -37,7 +37,7 @@ public class Interpreter {
         scanner.useDelimiter("\\s*");
         while (scanner.hasNext()) {
             str = scanner.next();
-            if (isUppercase(str)) {
+            if (InstructionFactory.isLongSyntax(str)) {
                 str+=scanner.nextLine();
             }
             InstructionFactory.createInstruction(str);
@@ -60,11 +60,6 @@ public class Interpreter {
     }
 
 
-    /**
-     * Determines the operation to call depending of the instruction.
-     * @param instr Instruction
-     */
-    // TODO: 05/10/2016 changer return
 
 
     /**
@@ -77,7 +72,7 @@ public class Interpreter {
         while (scanner.hasNext()) {
             str = scanner.nextLine();
             if (isUppercase(str)) {
-                strConverted += longToShort(str);
+                strConverted += InstructionFactory.getShortSyntax(str);
             } else {
                 strConverted += str;
             }
@@ -85,24 +80,4 @@ public class Interpreter {
         System.out.println(strConverted);
     }
 
-    /**
-     * Converts a long keyword to its shortened representation.
-     * @param str Long keyword to convert
-     * @return Shortened representation
-     */
-    // TODO: 01/10/2016 change default return
-    public String longToShort(String str) {
-        switch (str) {
-            case "INCR":
-                return "+";
-            case "DECR":
-                return "-";
-            case "LEFT":
-                return "<";
-            case "RIGHT":
-                return ">";
-            default:
-                return "?";
-        }
-    }
 }
