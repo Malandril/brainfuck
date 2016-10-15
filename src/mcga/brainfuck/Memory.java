@@ -1,11 +1,13 @@
 package mcga.brainfuck;
 
+import java.util.StringJoiner;
+
 /**
  * Created by user on 26/09/2016.
  */
 public class Memory {
+    final int MAX_SIZE = 30000;
     int currentIndex = 0;
-    final int MAX_SIZE=30000;
     private int[] memoire;
 
     /**
@@ -16,7 +18,7 @@ public class Memory {
     }
 
     /**
-     * @return currentIndex 
+     * @return currentIndex
      */
     public int getCurrentIndex() {
         return currentIndex;
@@ -24,6 +26,7 @@ public class Memory {
 
     /**
      * Check if the parameter i is between 0 and 255
+     *
      * @param i value in a memory cell
      * @return true if i is between the values, false otherwise
      */
@@ -33,6 +36,7 @@ public class Memory {
 
     /**
      * Check if the parameter i is -1 or 1
+     *
      * @param i parameter of an instruction
      * @return true if i is -1 or 1, false otherwise
      */
@@ -42,20 +46,24 @@ public class Memory {
 
     /**
      * Check if the cell exists int the memory
+     *
      * @param i index of the current cell
      * @return true if it exists, false otherwise
      */
-    boolean isValidIndex(int i) { return currentIndex+i>=0 && currentIndex+i<=MAX_SIZE;}
+    boolean isValidIndex(int i) {
+        return currentIndex + i >= 0 && currentIndex + i <= MAX_SIZE;
+    }
 
     /**
      * Add value i to the current cell
+     *
      * @param i value to add in the current cell
      * @throws InvalidValueException
      */
     void addCurrentCellValue(int i) throws InvalidValueException {
         int val = getCurrentCellValue();
-        if (isValidInput(i) && isValidNumber(val + i)) {
-            memoire[currentIndex]= val + i;
+        if (isValidNumber(val + i)) {
+            memoire[currentIndex] = val + i;
 //            System.out.println("Memory pointer : " + currentIndex + " la valeur vaut : " + memoire.get(currentIndex));
         } else {
             throw new InvalidValueException();
@@ -65,6 +73,7 @@ public class Memory {
 
     /**
      * Change the index of the current cell
+     *
      * @param i value to add to the current index
      * @throws MyIndexOutOfBoundsException
      * @throws InvalidValueException
@@ -74,7 +83,7 @@ public class Memory {
         if (!isValidInput(i)) {
             throw new InvalidValueException();
         }
-        if(!isValidIndex(i)){
+        if (!isValidIndex(i)) {
             throw new MyIndexOutOfBoundsException();
         }
         currentIndex += i;
@@ -85,13 +94,19 @@ public class Memory {
      */
     @Override
     public String toString() {
-        return memoire.toString();
+        StringJoiner joiner = new StringJoiner(" , ");
+        for (int i = 0; i < memoire.length; i++) {
+            if (memoire[i] != 0) {
+                joiner.add("C" + i + ": " + memoire[i]);
+            }
+        }
+        return joiner.toString();
     }
 
     /**
      * @return value of the current cell
      */
-    public Integer getCurrentCellValue() {
+    public int getCurrentCellValue() {
         return memoire[currentIndex];
     }
 
@@ -99,6 +114,6 @@ public class Memory {
      * Put the value of the current index to zero
      */
     public void clearCurrentCell() {
-        memoire[currentIndex]=0;
+        memoire[currentIndex] = 0;
     }
 }
