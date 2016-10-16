@@ -1,6 +1,5 @@
 package mcga.brainfuck;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,8 +13,8 @@ public enum InstructionFactory {
     RIGHT("RIGHT", ">"),
     JUMP("JUMP", "["),
     BACK("BACK", "]"),
-    IN("IN",","),
-    OUT("OUT",".");
+    IN("IN", ","),
+    OUT("OUT", ".");
 
 
     private static final int LONG_SYNTAX_INDEX = 0;
@@ -26,12 +25,12 @@ public enum InstructionFactory {
         this.identifiers = Arrays.asList(names);
     }
 
-    public static String getShortSyntax(String longStr) {
+    public static String getShortSyntax(String longStr) throws InvalidInstructionException {
         return hasInstruction(longStr).identifiers.get(SHORT_SYNTAX_INDEX);
     }
 
 
-    public static InstructionFactory hasInstruction(String str) {
+    public static InstructionFactory hasInstruction(String str) throws InvalidInstructionException {
         for (InstructionFactory instructionFactory : InstructionFactory.values()) {
             if (instructionFactory.identifiers.contains(str)) {
                 return instructionFactory;
@@ -41,7 +40,7 @@ public enum InstructionFactory {
 
     }
 
-    public static Instruction getInstruction(String s) {
+    public static Instruction getInstruction(String s) throws InvalidInstructionException {
         InstructionFactory inst = hasInstruction(s);
         Instruction instruction = null;
         switch (inst) {
@@ -62,10 +61,10 @@ public enum InstructionFactory {
             case BACK:
                 break;
             case IN:
-                instruction=new Input();
+                instruction = new Input();
                 break;
             case OUT:
-                instruction=new Output();
+                instruction = new Output();
                 break;
             default:
                 throw new InvalidInstructionException(s);

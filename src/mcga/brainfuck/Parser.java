@@ -40,11 +40,16 @@ public abstract class Parser {
             if (InstructionFactory.isLongSyntax(str)) {
                 str += scanner.nextLine();
             }
-            execute(str);
+            try {
+                execute(str);
+            } catch (InvalidInstructionException e) {
+                System.err.println(e.getMessage());
+                System.exit(42);
+            }
         }
     }
 
-    public abstract void execute(String str);
+    public abstract void execute(String str) throws InvalidInstructionException;
 
 
 }

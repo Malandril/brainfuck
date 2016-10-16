@@ -6,11 +6,13 @@ import java.io.PrintStream;
  * Created by user on 12/10/2016.
  */
 public class Output extends Affichage {
-    static PrintStream stream;
-    public Output(){
+    public static PrintStream stream;
+
+    public Output() {
+        this.stream = System.out;
     }
 
-    public void interpret(){
+    public void interpret() {
         output();
     }
 

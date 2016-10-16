@@ -20,8 +20,14 @@ public class Rewrite extends Parser {
      * Prints on the standard output the shortened representation of the program given as input.
      */
     public void execute(String str) {
-        String strConverted = InstructionFactory.getShortSyntax(str);
-        System.out.print(strConverted);
+        String strConverted = null;
+        try {
+            strConverted = InstructionFactory.getShortSyntax(str);
+            System.out.print(strConverted);
+        } catch (InvalidInstructionException e) {
+            System.err.println(e.getMessage());
+            System.exit(42);
+        }
     }
 
 }

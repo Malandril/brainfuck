@@ -20,6 +20,18 @@ public enum Arguments {
         this.expression = expression;
     }
 
+    public static Options createOptions() {
+        Options options = new Options();
+        for (Arguments arguments : Arguments.values()) {
+            if (arguments.expression.charAt(1) == '-') {
+                options.addOption(Option.builder().longOpt(arguments.expression.substring(2)).build());
+            } else {
+                options.addOption(Option.builder().longOpt(arguments.expression.substring(1)).hasArg().build());
+            }
+        }
+        return options;
+    }
+
     public String getExpression() {
         return expression;
     }
@@ -29,20 +41,5 @@ public enum Arguments {
         return "Arguments{" +
                 "expression='" + expression + '\'' +
                 '}';
-    }
-
-    public static Options createOptions(){
-        Options options = new Options();
-        for (Arguments arguments : Arguments.values()) {
-            if (arguments.expression.charAt(1) == '-'){
-                options.addOption( Option.builder().longOpt(arguments.expression.substring(2))
-                        .build());
-            }else{
-                options.addOption( Option.builder().longOpt(arguments.expression.substring(1))
-                        .hasArg()
-                        .build());
-            }
-        }
-        return options;
     }
 }

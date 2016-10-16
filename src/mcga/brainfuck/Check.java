@@ -22,14 +22,13 @@ public class Check extends Parser {
         if (this.compte != 0) {
             System.err.println("Code non valide");
             System.exit(4);
-        }
-        else {
+        } else {
             System.out.println("Code Valide");
         }
     }
 
     @Override
-    public void execute(String str) {
+    public void execute(String str) throws InvalidInstructionException {
         InstructionFactory instr = InstructionFactory.hasInstruction(str);
         if (instr != null) {
             switch (instr) {

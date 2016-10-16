@@ -6,8 +6,8 @@ import java.util.StringJoiner;
  * Created by user on 26/09/2016.
  */
 public class Memory {
-    final int MAX_SIZE = 30000;
-    int currentIndex = 0;
+    private final int MAX_SIZE = 30000;
+    private int currentIndex = 0;
     private int[] memoire;
 
     /**
@@ -30,19 +30,10 @@ public class Memory {
      * @param i value in a memory cell
      * @return true if i is between the values, false otherwise
      */
-    boolean isValidNumber(int i) {
+    private boolean isValidNumber(int i) {
         return i >= 0 && i < 256;
     }
 
-    /**
-     * Check if the parameter i is -1 or 1
-     *
-     * @param i parameter of an instruction
-     * @return true if i is -1 or 1, false otherwise
-     */
-    boolean isValidInput(int i) {
-        return (i == -1 || i == 1);
-    }
 
     /**
      * Check if the cell exists int the memory
@@ -50,7 +41,7 @@ public class Memory {
      * @param i index of the current cell
      * @return true if it exists, false otherwise
      */
-    boolean isValidIndex(int i) {
+    private boolean isValidIndex(int i) {
         return currentIndex + i >= 0 && currentIndex + i <= MAX_SIZE;
     }
 
@@ -64,9 +55,8 @@ public class Memory {
         int val = getCurrentCellValue();
         if (isValidNumber(val + i)) {
             memoire[currentIndex] = val + i;
-//            System.out.println("Memory pointer : " + currentIndex + " la valeur vaut : " + memoire.get(currentIndex));
         } else {
-            throw new InvalidValueException();
+            throw new InvalidValueException(val + " at index: " + currentIndex);
         }
 
     }
@@ -78,15 +68,13 @@ public class Memory {
      * @throws MyIndexOutOfBoundsException
      * @throws InvalidValueException
      */
-    void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException, InvalidValueException {
+    void changeCurrentIndex(int i) throws IndexOutOfBoundsException, InvalidValueException {
         int val = currentIndex;
-        if (!isValidInput(i)) {
-            throw new InvalidValueException();
-        }
         if (!isValidIndex(i)) {
-            throw new MyIndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException(val + " index must be between " + 0 + " and " + MAX_SIZE);
+        } else {
+            currentIndex += i;
         }
-        currentIndex += i;
     }
 
     /**
