@@ -6,9 +6,8 @@ import java.io.PrintStream;
  * Created by user on 12/10/2016.
  */
 public class Output extends Affichage {
-    PrintStream stream;
+    static PrintStream stream;
     public Output(){
-        this.stream=System.out;
     }
 
     public void interpret(){
@@ -16,6 +15,6 @@ public class Output extends Affichage {
     }
 
     public void output() {
-        System.out.print((char) Brainfuck.memoire.getCurrentCellValue());
+        stream.print((char) Brainfuck.memoire.getCurrentCellValue());
     }
 }

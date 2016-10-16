@@ -25,50 +25,37 @@ public class Brainfuck {
     }
 
     public static void readArguments(String[] args) {
+        Output.stream=System.out;
+        Input.stream=System.in;
         Options options=createOptions();
         CommandLineParser cParser = new DefaultParser();
         FileInputStream file = null;
         try {
-            PrintStream originalOut=System.out;
-            InputStream originalIn=System.in;
             Parser parser = new Interpreter();
             CommandLine line = cParser.parse( options, args );
             if(line.hasOption("p")){
-                try {
-                    file = new FileInputStream(line.getOptionValue("p"));
-                    if(line.hasOption("rewrite")) {
-                        parser = new Rewrite(file);
-                    }else if(line.hasOption("check")){
-                        parser= new Check(file);
-                    }else{
-                        parser = new Interpreter(file);
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                file = new FileInputStream(line.getOptionValue("p"));
+                if(line.hasOption("rewrite")) {
+                    parser = new Rewrite(file);
+                }else if(line.hasOption("check")){
+                    parser= new Check(file);
+                }else{
+                    parser = new Interpreter(file);
                 }
             }
             if( line.hasOption("i")){
-                try {
-                    FileInputStream in=new FileInputStream(line.getOptionValue("i"));
-                    System.setIn(in);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Input.stream=new FileInputStream(line.getOptionValue("i"));
             }
             if( line.hasOption("o")){
-                try {
-                    PrintStream out = new PrintStream(line.getOptionValue("o"));
-                    System.setOut(out);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Output.stream=new PrintStream(line.getOptionValue("o"));
             }
             parser.parseFile();
-            System.setOut(originalOut);
-            System.setIn(originalIn);
         }
         catch( ParseException exp ) {
             System.err.println( "Parsing failed.  Error : " + exp.getMessage() );
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
         }
     }
 }

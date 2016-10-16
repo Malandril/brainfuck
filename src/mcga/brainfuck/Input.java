@@ -9,10 +9,9 @@ import java.util.Scanner;
  * Created by user on 12/10/2016.
  */
 public class Input extends Affichage {
-    protected InputStream stream;
+    static InputStream stream;
 
     public Input() {
-        this.stream =System.in;
     }
 
     public void interpret(){
@@ -20,10 +19,8 @@ public class Input extends Affichage {
     }
 
     public void input() {
-        DataInputStream dataInputStream=new DataInputStream(stream);
         try {
-            int c=dataInputStream.read();
-            System.out.println(c);
+            int c=stream.read();
             Brainfuck.memoire.clearCurrentCell();
             Brainfuck.memoire.addCurrentCellValue(c);
         } catch (IOException e) {
