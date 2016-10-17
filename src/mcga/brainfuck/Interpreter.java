@@ -1,143 +1,91 @@
 package mcga.brainfuck;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
 /**
- * The Interpreter class contains the interpreter.
- * Its objective is to read the file containing the Brainfuck code and execute the instructions.
+ * Created by user on 12/10/2016.
  */
-public class Interpreter {
+public class Interpreter extends Parser {
+    public static final String fileSuffix = "bmp";
+    public static final int SQUARE_SIDE = 3;
+    public static final String EMPTY_INSTRUCTION = "000000";
+    private String fileName;
 
-    private InputStream stream;
-
-    /**
-     * In case a file is specified in the launching command, this constructor is called.
-     * @param stream Stream from file
-     */
-    // TODO: 30/09/2016 changer ce commentaire 
-    public Interpreter(InputStream stream) {
-        this.stream = stream;
-    }
-
-    /**
-     * Default constructor.
-     * By default, the input stream is System.in.
-     */
     public Interpreter() {
-        this(System.in);
+        super();
+        this.fileName="";
+    }
+    public Interpreter(InputStream stream, String fileName) {
+        this.stream = stream;
+        this.fileName = fileName;
     }
 
-    /**
-     * Reads the file containing the Brainfuck code.
-     */
-    public void readFile() {
-        Scanner scanner = new Scanner(this.stream);
-        String str;
+    @Override
+    public void parseFile() {
+        if (!this.fileName.endsWith(fileSuffix)) {
+            super.parseFile();
+        } else {
+            readBitmap();
+        }
+    }
 
-        while (scanner.hasNext()) {
-            str = scanner.nextLine();
-            if (readLine(str)) {
-                System.out.println(str);
-                Instructions instr = Instructions.hasInstruction(str);
-                instrAction(instr);
-            } else {
-                isolCommand(str);
+    @Override
+    public void execute(String str) throws InvalidInstructionException {
+        try {
+            InstructionFactory.getInstruction(str).interpret();
+        } catch (InvalidValueException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println(e.getMessage());
+            System.exit(2);
+        }
+    }
+
+    public void readBitmap() {
+        try {
+            BufferedImage image = ImageIO.read(stream);
+            int height = image.getHeight();
+            int width = image.getWidth();
+            if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
+                throw new InvalidBitmapException();
             }
-        }
-    }
+            String prevColor = "";
+            String hexColor = "";
+            for (int i = 0; i < height; i += SQUARE_SIDE) {
+                for (int j = 0; j < width; j += SQUARE_SIDE) {
+                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                            hexColor = "";
+                            Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
+                            hexColor += String.format("%02X", imgColor.getRed());
+                            hexColor += String.format("%02X", imgColor.getGreen());
+                            hexColor += String.format("%02X", imgColor.getBlue());
+                            if (!prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
+                                throw new InvalidBitmapException();
+                            }
+                            prevColor = hexColor;
 
-    /**
-     * Takes each character of a String and executes the action which corresponds.
-     * This method is called if the line of the file is a line of short instructions.
-     * Therefore, each character represents an instruction to execute.
-     * @param str String to split
-     */
-    public void isolCommand(String str) {
-        for (int i = 0 ; i < str.length() ; i++) {
-            Instructions strInstr = Instructions.hasInstruction(Character.toString(str.charAt(i)));
-            instrAction(strInstr);
-            System.out.println(str.charAt(i));
-        }
-    }
-
-    /**
-     * Detects if a line of is a line of short or long instructions.
-     * A long instruction is composed of uppercase letters.
-     * We just need to test if the first character is a letter.
-     * @param line Line to test
-     * @return true if long instructions, false if short instructions
-     */
-    public boolean readLine(String line) {
-        char firstChar = line.charAt(0);
-        return (Character.getType(firstChar) == Character.UPPERCASE_LETTER);
-
-    }
-
-    /**
-     * Determines the operation to call depending of the instruction.
-     * @param instr Instruction
-     */
-    // TODO: 05/10/2016 changer return 
-    public void instrAction(Instructions instr) {
-        if (instr != null) {
-            switch (instr) {
-                case INCR:
-                    new Operation().incrementation();
-                    break;
-                case DECR:
-                    new Operation().decrementation();
-                    break;
-                case LEFT:
-                    new Operation().moveL();
-                    break;
-                case RIGHT:
-                    new Operation().moveR();
-                    break;
-                default:
-                    System.out.println("looooooool");
-                    break;
+                        }
+                    }
+                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                        execute(hexColor);
+                    }
+                }
             }
-        }
-    }
-
-    /**
-     * Prints on the standard output the shortened representation of the program given as input.
-     */
-    public void rewriteFile() {
-        Scanner scanner = new Scanner(this.stream);
-        String str;
-        String strConverted = "";
-
-        while (scanner.hasNext()) {
-            str = scanner.nextLine();
-            if (readLine(str)) {
-                strConverted += longToShort(str);
-            } else {
-                strConverted += str;
-            }
-        }
-        System.out.println(strConverted);
-    }
-
-    /**
-     * Converts a long keyword to its shortened representation.
-     * @param str Long keyword to convert
-     * @return Shortened representation
-     */
-    // TODO: 01/10/2016 change default return
-    public String longToShort(String str) {
-        switch (str) {
-            case "INCR":
-                return "+";
-            case "DECR":
-                return "-";
-            case "LEFT":
-                return "<";
-            case "RIGHT":
-                return ">";
-            default:
-                return "?";
+        } catch (InvalidInstructionException e) {
+            e.printStackTrace();
+            System.exit(42);
+        } catch (InvalidBitmapException e) {
+            e.printStackTrace();
+            System.exit(14);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(3);
         }
     }
 }
