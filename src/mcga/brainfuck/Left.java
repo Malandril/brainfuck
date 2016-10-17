@@ -6,11 +6,11 @@ package mcga.brainfuck;
 public class Left extends Movement {
 
     @Override
-    public void interpret() {
+    public void interpret() throws InvalidValueException {
         moveL();
     }
 
-    private void moveL() {
+    private void moveL() throws InvalidValueException {
         Brainfuck.memoire.changeCurrentIndex(-1);
     }
 

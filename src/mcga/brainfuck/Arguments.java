@@ -1,7 +1,8 @@
 package mcga.brainfuck;
 
 
-import java.util.Arrays;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 
 /**
  * Created by user on 06/10/2016.
@@ -15,8 +16,20 @@ public enum Arguments {
 
     String expression;
 
-    Arguments(String lol) {
-        this.expression = lol;
+    Arguments(String expression) {
+        this.expression = expression;
+    }
+
+    public static Options createOptions() {
+        Options options = new Options();
+        for (Arguments arguments : Arguments.values()) {
+            if (arguments.expression.charAt(1) == '-') {
+                options.addOption(Option.builder().longOpt(arguments.expression.substring(2)).build());
+            } else {
+                options.addOption(Option.builder().longOpt(arguments.expression.substring(1)).hasArg().build());
+            }
+        }
+        return options;
     }
 
     public String getExpression() {

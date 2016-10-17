@@ -6,7 +6,6 @@ package mcga.brainfuck;
 public class MyIndexOutOfBoundsException extends IndexOutOfBoundsException {
     public MyIndexOutOfBoundsException() {
         super();
-        System.exit(2);
     }
 
     public MyIndexOutOfBoundsException(String str) {

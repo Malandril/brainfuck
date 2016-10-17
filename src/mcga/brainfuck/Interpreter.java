@@ -1,66 +1,91 @@
 package mcga.brainfuck;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
 /**
- * The Interpreter class contains the interpreter.
- * Its objective is to read the file containing the Brainfuck code and execute the instructions.
+ * Created by user on 12/10/2016.
  */
-public class Interpreter {
+public class Interpreter extends Parser {
+    public static final String fileSuffix = "bmp";
+    public static final int SQUARE_SIDE = 3;
+    public static final String EMPTY_INSTRUCTION = "000000";
+    private String fileName;
 
-    private InputStream stream;
-
-    /**
-     * In case a file is specified in the launching command, this constructor is called.
-     * @param stream Stream from file
-     */
-    public Interpreter(InputStream stream) {
-        this.stream = stream;
-    }
-
-    /**
-     * Default constructor.
-     * By default, the input stream is System.in.
-     */
     public Interpreter() {
-        this(System.in);
+        super();
+        this.fileName="";
+    }
+    public Interpreter(InputStream stream, String fileName) {
+        this.stream = stream;
+        this.fileName = fileName;
     }
 
-    /**
-     * Reads the file containing the Brainfuck code.
-     */
-    public void readFile() {
-        Scanner scanner = new Scanner(this.stream);
-        String str;
-        scanner.useDelimiter("\\s*");
-        while (scanner.hasNext()) {
-            str = scanner.next();
-            if (InstructionFactory.isLongSyntax(str)) {
-                str+=scanner.nextLine();
-            }
+    @Override
+    public void parseFile() {
+        if (!this.fileName.endsWith(fileSuffix)) {
+            super.parseFile();
+        } else {
+            readBitmap();
+        }
+    }
+
+    @Override
+    public void execute(String str) throws InvalidInstructionException {
+        try {
             InstructionFactory.getInstruction(str).interpret();
+        } catch (InvalidValueException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println(e.getMessage());
+            System.exit(2);
         }
     }
 
-
-
-    /**
-     * Prints on the standard output the shortened representation of the program given as input.
-     */
-    public void rewriteFile() {
-        Scanner scanner = new Scanner(this.stream);
-        String str;
-        String strConverted = "";
-        while (scanner.hasNext()) {
-            str = scanner.nextLine();
-            if (InstructionFactory.isLongSyntax(str)) {
-                strConverted += InstructionFactory.getShortSyntax(str);
-            } else {
-                strConverted += str;
+    public void readBitmap() {
+        try {
+            BufferedImage image = ImageIO.read(stream);
+            int height = image.getHeight();
+            int width = image.getWidth();
+            if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
+                throw new InvalidBitmapException();
             }
-        }
-        System.out.println(strConverted);
-    }
+            String prevColor = "";
+            String hexColor = "";
+            for (int i = 0; i < height; i += SQUARE_SIDE) {
+                for (int j = 0; j < width; j += SQUARE_SIDE) {
+                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                            hexColor = "";
+                            Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
+                            hexColor += String.format("%02X", imgColor.getRed());
+                            hexColor += String.format("%02X", imgColor.getGreen());
+                            hexColor += String.format("%02X", imgColor.getBlue());
+                            if (!prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
+                                throw new InvalidBitmapException();
+                            }
+                            prevColor = hexColor;
 
+                        }
+                    }
+                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                        execute(hexColor);
+                    }
+                }
+            }
+        } catch (InvalidInstructionException e) {
+            e.printStackTrace();
+            System.exit(42);
+        } catch (InvalidBitmapException e) {
+            e.printStackTrace();
+            System.exit(14);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(3);
+        }
+    }
 }

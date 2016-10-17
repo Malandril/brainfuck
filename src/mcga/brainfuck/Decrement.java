@@ -5,10 +5,11 @@ package mcga.brainfuck;
  */
 public class Decrement extends Operation {
     @Override
-    public void interpret() {
+    public void interpret() throws InvalidValueException {
         decrementation();
     }
-    private void decrementation() {
+
+    private void decrementation() throws InvalidValueException {
         Brainfuck.memoire.addCurrentCellValue(-1);
     }
 
