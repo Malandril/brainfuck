@@ -11,10 +11,10 @@ public enum InstructionFactory {
     DECR("DECR", "-","4B0082"),
     LEFT("LEFT", "<","9400D3"),
     RIGHT("RIGHT", ">","0000FF"),
-    JUMP("JUMP", "[","00FF00"),
-    BACK("BACK", "]","FFFF00"),
-    IN("IN", ",","FF7F00"),
-    OUT("OUT", ".","FF0000");
+    IN("IN", ",","FFFF00"),
+    OUT("OUT", ".","00FF00"),
+    JUMP("JUMP", "[","FF7F00"),
+    BACK("BACK", "]","FF0000");
 
 
     private static final int LONG_SYNTAX_INDEX = 0;
@@ -30,6 +30,9 @@ public enum InstructionFactory {
         return hasInstruction(longStr).identifiers.get(SHORT_SYNTAX_INDEX);
     }
 
+    public static String getBitmapColorIndex(String syntax) throws InvalidInstructionException {
+        return hasInstruction(syntax).identifiers.get(BITMAP_COLOR_INDEX);
+    }
 
     public static InstructionFactory hasInstruction(String str) throws InvalidInstructionException {
         for (InstructionFactory instructionFactory : InstructionFactory.values()) {
