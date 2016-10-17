@@ -7,18 +7,19 @@ import java.util.List;
  * Created by user on 28/09/2016.
  */
 public enum InstructionFactory {
-    INCR("INCR", "+"),
-    DECR("DECR", "-"),
-    LEFT("LEFT", "<"),
-    RIGHT("RIGHT", ">"),
-    JUMP("JUMP", "["),
-    BACK("BACK", "]"),
-    IN("IN", ","),
-    OUT("OUT", ".");
+    INCR("INCR", "+","FFFFFF"),
+    DECR("DECR", "-","4B0082"),
+    LEFT("LEFT", "<","9400D3"),
+    RIGHT("RIGHT", ">","0000FF"),
+    JUMP("JUMP", "[","00FF00"),
+    BACK("BACK", "]","FFFF00"),
+    IN("IN", ",","FF7F00"),
+    OUT("OUT", ".","FF0000");
 
 
     private static final int LONG_SYNTAX_INDEX = 0;
     private static final int SHORT_SYNTAX_INDEX = 1;
+    public static final int BITMAP_COLOR_INDEX=2;
     List<String> identifiers;
 
     InstructionFactory(String... names) {
@@ -72,8 +73,10 @@ public enum InstructionFactory {
         return instruction;
     }
 
+
     public static boolean isLongSyntax(String str) {
         char firstChar = str.charAt(0);
         return (Character.getType(firstChar) == Character.UPPERCASE_LETTER);
     }
+
 }

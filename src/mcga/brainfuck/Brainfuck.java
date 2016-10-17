@@ -3,6 +3,7 @@ package mcga.brainfuck;
 
 import org.apache.commons.cli.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -38,7 +39,7 @@ public class Brainfuck {
                 } else if (line.hasOption("check")) {
                     parser = new Check(file);
                 } else {
-                    parser = new Interpreter(file);
+                    parser = new Interpreter(file,line.getOptionValue("p"));
                 }
             }
             if (line.hasOption("i")) {

@@ -16,8 +16,10 @@ public class Rewrite extends Parser {
         super();
     }
 
+
     /**
      * Prints on the standard output the shortened representation of the program given as input.
+     * @param str string to convert
      */
     public void execute(String str) {
         String strConverted = null;
