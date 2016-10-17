@@ -17,8 +17,8 @@ public class Interpreter extends Parser {
 
     public Interpreter() {
         super();
+        this.fileName="";
     }
-
     public Interpreter(InputStream stream, String fileName) {
         this.stream = stream;
         this.fileName = fileName;
