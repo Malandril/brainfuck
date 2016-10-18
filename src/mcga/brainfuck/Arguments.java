@@ -32,10 +32,6 @@ public enum Arguments {
         return options;
     }
 
-    public String getExpression() {
-        return expression;
-    }
-
     @Override
     public String toString() {
         return "Arguments{" +

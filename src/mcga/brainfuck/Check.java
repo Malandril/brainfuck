@@ -28,6 +28,17 @@ public class Check extends Parser {
     }
 
     @Override
+    public void readBitmap() {
+        super.readBitmap();
+        if (this.compte != 0) {
+            System.err.println("Code non valide");
+            System.exit(4);
+        } else {
+            System.out.println("Code Valide");
+        }
+    }
+
+    @Override
     public void execute(String str) throws InvalidInstructionException {
         InstructionFactory instr = InstructionFactory.hasInstruction(str);
         if (instr != null) {

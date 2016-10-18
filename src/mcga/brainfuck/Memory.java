@@ -68,7 +68,7 @@ public class Memory {
      * @throws MyIndexOutOfBoundsException
      * @throws InvalidValueException
      */
-    void changeCurrentIndex(int i) throws IndexOutOfBoundsException, InvalidValueException {
+    void changeCurrentIndex(int i) throws IndexOutOfBoundsException {
         int val = currentIndex;
         if (!isValidIndex(i)) {
             throw new IndexOutOfBoundsException(val + " index must be between " + 0 + " and " + MAX_SIZE);
