@@ -61,8 +61,10 @@ public enum InstructionFactory {
                 instruction = new Right();
                 break;
             case JUMP:
+                instruction = new Jump();
                 break;
             case BACK:
+                instruction = new Back();
                 break;
             case IN:
                 instruction = new Input();

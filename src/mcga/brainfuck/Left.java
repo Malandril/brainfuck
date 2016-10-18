@@ -11,7 +11,7 @@ public class Left extends Movement {
     }
 
     private void moveL() throws InvalidValueException {
-        Brainfuck.memoire.changeCurrentIndex(-1);
+        Brainfuck.memoire.changeCurrentIndex(- 1);
     }
 
 }
