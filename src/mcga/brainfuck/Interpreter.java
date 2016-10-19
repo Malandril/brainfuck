@@ -17,7 +17,12 @@ public class Interpreter extends Parser {
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
     public static List <Instruction> executionList;
+    public static List <List <Instruction>> executionLists = new ArrayList <>();
     public static Stack <Instruction> executionStack = new Stack <>();
+    public static boolean inLoop = false;
+    public static int count = 0;
+    public static int countJump = 0;
+    public static int countBack = 0;
     private String fileName;
 
     public Interpreter() {
@@ -45,24 +50,51 @@ public class Interpreter extends Parser {
             Instruction instruction = InstructionFactory.getInstruction(str);
             executionList = new ArrayList <>();
             if (instruction.getClass().equals(Jump.class)) {
-                if(Brainfuck.memoire.getCurrentCellValue() != 0){
-
+                count++;
+                inLoop = true;
+            } else if (instruction.getClass().equals(Back.class)) {
+                count--;
+                if (count == 0) {
+                    inLoop = false;
                 }
-                executionStack.push(instruction);
-                System.out.println(executionStack);
-            } else if(instruction.getClass().equals(Back.class)){
-                executionStack.push(instruction);
-                System.out.println(executionStack);
-
-            } else {
-                instruction.interpret();
             }
+            if (inLoop) {
+                executionList.add(instruction);
+                executionLists.add(executionList);
+                System.out.println(executionList);
+                //executeList(executionLists);
+            }
+            instruction.interpret();
         } catch (InvalidValueException e) {
             System.err.println(e.getMessage());
             System.exit(1);
         } catch (IndexOutOfBoundsException e) {
             System.err.println(e.getMessage());
             System.exit(2);
+        }
+    }
+
+    public void executeList(List <List <Instruction>> list) throws InvalidInstructionException {
+        for (List <Instruction> list1 : list) {
+            for (Instruction instruction : list1) {
+                int counter = 0;
+                executionList = new ArrayList <>();
+                if (instruction.getClass().equals(Jump.class)) {
+                    counter++;
+                    inLoop = true;
+                } else if (instruction.getClass().equals(Back.class)) {
+                    counter--;
+                    if (counter == 0) {
+                        inLoop = false;
+                    }
+                }
+                if (inLoop) {
+                    list.add(list1);
+                }
+
+            }
+            System.out.println(list);
+            System.out.println(list1);
         }
     }
 
@@ -108,4 +140,6 @@ public class Interpreter extends Parser {
             System.exit(3);
         }
     }
+
+
 }

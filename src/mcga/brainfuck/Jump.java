@@ -11,6 +11,9 @@ public class Jump extends Loop {
 
     private void jump() {
         int value = Brainfuck.memoire.getCurrentCellValue();
+        if (value == 0){
+
+        }
 
     }
 }
