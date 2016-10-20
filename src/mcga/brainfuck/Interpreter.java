@@ -24,14 +24,6 @@ public class Interpreter extends Parser {
         super(stream);
     }
 
-    /**
-     * Calls Parser#parseFile
-     * @see Parser#parseFile()
-     */
-    @Override
-    public void parseFile() {
-        super.parseFile();
-    }
 
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction

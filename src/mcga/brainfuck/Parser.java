@@ -76,12 +76,12 @@ public abstract class Parser {
             String hexColor = "";
             for (int i = 0; i < height; i += SQUARE_SIDE) {
                 for (int j = 0; j < width; j += SQUARE_SIDE) {
-                    prevColor = colorToHex(new Color(image.getRGB(j, i)));
+                    prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
                     for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
                         for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
                             hexColor = colorToHex(imgColor);
-                            if (!prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
+                            if (!prevColor.equals(hexColor)) {
                                 throw new InvalidBitmapException();
                             }
                         }
@@ -103,6 +103,11 @@ public abstract class Parser {
         }
     }
 
+    /**
+     * Converts a Color object to its hexadecimal value.
+     * @param color Color to convert.
+     * @return String corresponding hexadecimal value
+     */
     public String colorToHex(Color color) {
         String hexColor = "";
         hexColor += String.format("%02X", color.getRed());
@@ -111,6 +116,15 @@ public abstract class Parser {
         return hexColor;
     }
 
+    /**
+     * This method is overriden in all subclasses.
+     * @param str string value of the argument to interpret
+     * @throws InvalidInstructionException
+     * @see Check#execute(String)
+     * @see Interpreter#execute(String)
+     * @see Rewrite#execute(String)
+     * @see Translate#execute(String)
+     */
     public abstract void execute(String str) throws InvalidInstructionException;
 
 

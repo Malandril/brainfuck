@@ -21,7 +21,8 @@ public enum Arguments {
 
     /**
      * Constructor of the enum.
-     * @param expression parameter
+     * @param expression String form of the argument
+     * @param hasArgs true if it needs a file argument
      */
 
     Arguments(String expression,boolean hasArgs) {
@@ -45,10 +46,4 @@ public enum Arguments {
         return options;
     }
 
-    @Override
-    public String toString() {
-        return "Arguments{" +
-                "expression='" + expression + '\'' +
-                '}';
-    }
 }

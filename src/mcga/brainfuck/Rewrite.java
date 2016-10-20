@@ -24,7 +24,7 @@ public class Rewrite extends Parser {
      */
     @Override
     public void execute(String str) {
-        String strConverted = null;
+        String strConverted;
         try {
             strConverted = InstructionFactory.getShortSyntax(str);
             System.out.print(strConverted);

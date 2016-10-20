@@ -20,17 +20,10 @@ public class Input extends DataIO {
 
     /**
      * Overrides the method defined in the Instruction interface to execute the input action.
+     *
      * @throws InvalidValueException
      */
     public void interpret() throws InvalidValueException {
-        input();
-    }
-
-    /**
-     * Defines the action of the input instruction.
-     * @throws InvalidValueException
-     */
-    public void input() throws InvalidValueException {
         try {
             int c = stream.read();
             Brainfuck.memory.clearCurrentCell();
@@ -40,4 +33,5 @@ public class Input extends DataIO {
             System.exit(3);
         }
     }
+
 }

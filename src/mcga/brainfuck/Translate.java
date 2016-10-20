@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static java.awt.image.BufferedImage.TYPE_INT_BGR;
 
@@ -16,59 +16,54 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
  * Because this class reads a file, it extends Parser.
  */
 public class Translate extends Parser {
-    List<Color> colorList=new ArrayList<>();
-    public static final String FILE_FORMAT="bmp";
+    public static final String FILE_FORMAT = "bmp";
+    Queue<Color> colorFifo = new LinkedList<>();
 
-    /**
-     * Default constructor.
-     * @see Parser#Parser()
-     */
-    public Translate(){
-        super();
-    }
 
     /**
      * Constructor of the class.
+     *
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
-    public Translate(InputStream stream){
+    public Translate(InputStream stream) {
         super(stream);
     }
 
     /**
-     * For each instruction, adds to colorList the corresponding color.
+     * For each instruction, adds to colorFifo the corresponding color.
+     *
      * @param str String corresponding to an instruction
      * @throws InvalidInstructionException
      * @see Parser#execute(String)
      */
     public void execute(String str) throws InvalidInstructionException {
-        colorList.add(Color.decode(InstructionFactory.getBitmapColorIndex(str)));
+        colorFifo.add(Color.decode(InstructionFactory.getBitmapColorIndex(str)));
     }
 
     /**
      * Creates the bitmap image and draws each instruction.
+     *
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile(){
+    public void parseFile() {
         super.parseFile();
-        int cote=(int) Math.ceil(Math.sqrt(colorList.size()))*SQUARE_SIDE;
-        BufferedImage image=new BufferedImage(cote,cote,TYPE_INT_BGR);
-        int indexList=0;
+        int cote = (int) Math.ceil(Math.sqrt(colorFifo.size())) * SQUARE_SIDE;
+        BufferedImage image = new BufferedImage(cote, cote, TYPE_INT_BGR);
         for (int i = 0; i < cote; i += SQUARE_SIDE) {
-            for (int j = 0; j < cote && indexList<colorList.size(); j += SQUARE_SIDE) {
+            for (int j = 0; j < cote && !colorFifo.isEmpty(); j += SQUARE_SIDE) {
+                int colorInt = colorFifo.poll().getRGB();
                 for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
                     for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
-                        image.setRGB(j+jSquare,i+iSquare,colorList.get(indexList).getRGB());
+                        image.setRGB(j + jSquare, i + iSquare, colorInt);
                     }
                 }
-                indexList++;
             }
         }
-        File file = new File("translation."+FILE_FORMAT);
+        File file = new File("translation." + FILE_FORMAT);
         try {
-            ImageIO.write(image,FILE_FORMAT,file);
+            ImageIO.write(image, FILE_FORMAT, file);
         } catch (IOException e) {
             e.printStackTrace();
         }

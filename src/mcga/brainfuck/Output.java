@@ -14,20 +14,13 @@ public class Output extends DataIO {
      * Constructor defining System.out as the output stream
      */
     public Output() {
-        this.stream = System.out;
     }
 
     /**
      * Overrides the method defined in the Instruction interface to execute the output action.
      */
     public void interpret() {
-        output();
-    }
-
-    /**
-     * Defines the action of the output instruction.
-     */
-    public void output() {
         stream.print((char) Brainfuck.memory.getCurrentCellValue());
     }
+
 }

@@ -11,6 +11,7 @@ public class Check extends Parser {
 
     /**
      * Constructor of the class.
+     *
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
@@ -21,6 +22,7 @@ public class Check extends Parser {
     /**
      * Overrides the main class method so that after its execution and the number of brackets counted,
      * it determines depending on count's value if the code is correctly written.
+     *
      * @see Parser#parseFile()
      */
     @Override
@@ -42,6 +44,7 @@ public class Check extends Parser {
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it only counts the number of opening
      * and closing brackets.
+     *
      * @param str String corresponding to an instruction
      * @throws InvalidInstructionException
      * @see Parser#execute(String)
@@ -49,15 +52,17 @@ public class Check extends Parser {
     @Override
     public void execute(String str) throws InvalidInstructionException {
         InstructionFactory instr = InstructionFactory.hasInstruction(str);
-        if (instr != null) {
-            switch (instr) {
-                case JUMP:
-                    count++;
-                    break;
-                case BACK:
-                    count--;
-                    break;
-            }
+        switch (instr) {
+            case JUMP:
+                count++;
+                break;
+            case BACK:
+                count--;
+                break;
+        }
+        if (count < 0) {
+            System.err.println("Code non valide");
+            System.exit(4);
         }
     }
 
@@ -67,6 +72,7 @@ public class Check extends Parser {
      */
     public void checkCount() {
         if (this.count != 0) {
+            System.err.println("Code non valide");
             System.exit(4);
         }
     }

@@ -56,7 +56,7 @@ public class Memory {
         if (isValidNumber(val + i)) {
             memoire[currentIndex] = val + i;
         } else {
-            throw new InvalidValueException(val + " at index: " + currentIndex);
+            throw new InvalidValueException(val +i+ " at index: " + currentIndex);
         }
 
     }
@@ -64,12 +64,12 @@ public class Memory {
     /**
      * Changes the index of the current cell.
      * @param i value to add to the current index.
-     * @throws MyIndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException
      */
     void changeCurrentIndex(int i) throws IndexOutOfBoundsException {
         int val = currentIndex;
         if (! isValidIndex(i)) {
-            throw new IndexOutOfBoundsException(val + " index must be between " + 0 + " and " + MAX_SIZE);
+            throw new IndexOutOfBoundsException(val+i + " index must be between " + 0 + " and " + MAX_SIZE);
         } else {
             currentIndex += i;
         }
