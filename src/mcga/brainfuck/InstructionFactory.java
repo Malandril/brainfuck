@@ -46,7 +46,7 @@ public enum InstructionFactory {
      * @throws InvalidInstructionException
      */
     public static String getBitmapColorIndex(String syntax) throws InvalidInstructionException {
-        return hasInstruction(syntax).identifiers.get(BITMAP_COLOR_INDEX);
+        return "#"+hasInstruction(syntax).identifiers.get(BITMAP_COLOR_INDEX);
     }
 
     /**

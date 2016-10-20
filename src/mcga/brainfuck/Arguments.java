@@ -8,19 +8,20 @@ import org.apache.commons.cli.Options;
  * This enum links the arguments passed in parameter in the command line to the actions they correspond to.
  */
 public enum Arguments {
-    P("-p"),
-    IN("-i"),
-    OUT("-o"),
-    REWRITE("--rewrite"),
-    CHECK("--check");
+    P("p",true),
+    INPUT("i",true),
+    OUTPUT("o",true),
+    REWRITE("rewrite",false),
+    CHECK("check",false),
+    TRANSLATE("translate",false);
 
     String expression;
-
+    boolean hasArgs;
     /**
      * Constructor of the enum.
      * @param expression parameter
      */
-    Arguments(String expression) {
+    Arguments(String expression,boolean hasArgs) {
         this.expression = expression;
     }
 
@@ -30,13 +31,14 @@ public enum Arguments {
      */
     public static Options createOptions() {
         Options options = new Options();
-        for (Arguments arguments : Arguments.values()) {
-            if (arguments.expression.charAt(1) == '-') {
-                options.addOption(Option.builder().longOpt(arguments.expression.substring(2)).build());
+        for (Arguments argument : Arguments.values()) {
+            if (!argument.hasArgs) {
+                options.addOption(Option.builder().longOpt(argument.expression).build());
             } else {
-                options.addOption(Option.builder().longOpt(arguments.expression.substring(1)).hasArg().build());
+                options.addOption(Option.builder().longOpt(argument.expression).hasArg().build());
             }
         }
         return options;
     }
+
 }

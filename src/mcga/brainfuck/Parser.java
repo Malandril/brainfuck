@@ -72,26 +72,21 @@ public abstract class Parser {
                 throw new InvalidBitmapException();
             }
 
-            String prevColor = "";
+            String prevColor;
             String hexColor = "";
-            for (int i = 0 ; i < height ; i += SQUARE_SIDE) {
-                for (int j = 0 ; j < width ; j += SQUARE_SIDE) {
-
-                    for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
-                        for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
-                            hexColor = "";
+            for (int i = 0; i < height; i += SQUARE_SIDE) {
+                for (int j = 0; j < width; j += SQUARE_SIDE) {
+                    prevColor = colorToHex(new Color(image.getRGB(j, i)));
+                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
-                            hexColor += String.format("%02X", imgColor.getRed());
-                            hexColor += String.format("%02X", imgColor.getGreen());
-                            hexColor += String.format("%02X", imgColor.getBlue());
-                            if (! prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
+                            hexColor = colorToHex(imgColor);
+                            if (!prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
                                 throw new InvalidBitmapException();
                             }
-                            prevColor = hexColor;
-
                         }
                     }
-                    if (! hexColor.equals(EMPTY_INSTRUCTION)) {
+                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
                     }
                 }
@@ -108,15 +103,14 @@ public abstract class Parser {
         }
     }
 
-    /**
-     * Defines the actions to execute when a new object from the class is created.
-     * Overriden in each subclass.
-     * @param str String corresponding to an instruction
-     * @throws InvalidInstructionException
-     * @see Check#execute(String)
-     * @see Interpreter#execute(String)
-     * @see Rewrite#execute(String)
-     */
+    public String colorToHex(Color color) {
+        String hexColor = "";
+        hexColor += String.format("%02X", color.getRed());
+        hexColor += String.format("%02X", color.getGreen());
+        hexColor += String.format("%02X", color.getBlue());
+        return hexColor;
+    }
+
     public abstract void execute(String str) throws InvalidInstructionException;
 
 

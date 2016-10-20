@@ -3,7 +3,7 @@ package mcga.brainfuck;
 import java.io.InputStream;
 
 /**
- * Class defining the actions to do when the user wants to convert its long syntax Brainf*ck code in short syntax.
+ * Class defining the actions to do when the user wants to convert his long syntax Brainf*ck code in short syntax.
  * Because this class reads a file, it extends Parser.
  */
 public class Rewrite extends Parser {
