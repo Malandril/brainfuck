@@ -33,12 +33,13 @@ public class Brainfuck {
      * Reads the provided arguments, determines the actions they correspond to and executes them.
      * @param args
      */
+
     public static void readArguments(String[] args) {
         Output.stream = System.out;
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();
-        FileInputStream file;
+        FileInputStream file = null;
         try {
             Parser parser = new Interpreter();
             CommandLine line = commandParser.parse(options, args);

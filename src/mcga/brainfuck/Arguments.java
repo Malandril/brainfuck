@@ -15,14 +15,18 @@ public enum Arguments {
     CHECK("check",false),
     TRANSLATE("translate",false);
 
+
     String expression;
     boolean hasArgs;
+
     /**
      * Constructor of the enum.
      * @param expression parameter
      */
+
     Arguments(String expression,boolean hasArgs) {
         this.expression = expression;
+        this.hasArgs=hasArgs;
     }
 
     /**
@@ -41,4 +45,10 @@ public enum Arguments {
         return options;
     }
 
+    @Override
+    public String toString() {
+        return "Arguments{" +
+                "expression='" + expression + '\'' +
+                '}';
+    }
 }

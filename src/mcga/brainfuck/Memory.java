@@ -8,7 +8,7 @@ import java.util.StringJoiner;
 public class Memory {
     static final int MAX_SIZE = 30000;
     static final int MIN_CELL_VALUE = 0;
-    static final int MAX_CELL_VALUE = 256;
+    static final int MAX_CELL_VALUE = 255;
     private int currentIndex = 0;
     private int[] memoire;
 

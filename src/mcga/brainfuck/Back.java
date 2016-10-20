@@ -20,6 +20,5 @@ public class Back extends Loop {
      * Defines the actions of a back instruction.
      */
     private void back() {
-        int value = Brainfuck.memory.getCurrentCellValue();
     }
 }

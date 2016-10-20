@@ -20,10 +20,5 @@ public class Jump extends Loop {
      * Defines the actions of a jump instruction.
      */
     private void jump() {
-        int value = Brainfuck.memory.getCurrentCellValue();
-        if (value == 0){
-
-        }
-
     }
 }
