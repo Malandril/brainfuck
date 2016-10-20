@@ -63,6 +63,7 @@ public class Check extends Parser {
 
     /**
      * Checks the value of the count to determine if the code is well written or not.
+     * If the count is different from zero, the program exits with the error code 4.
      */
     public void checkCount() {
         if (this.count != 0) {

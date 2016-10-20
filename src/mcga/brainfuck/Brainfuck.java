@@ -38,7 +38,7 @@ public class Brainfuck {
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();
-        FileInputStream file = null;
+        FileInputStream file;
         try {
             Parser parser = new Interpreter();
             CommandLine line = commandParser.parse(options, args);

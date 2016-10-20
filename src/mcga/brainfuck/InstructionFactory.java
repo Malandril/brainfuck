@@ -17,7 +17,6 @@ public enum InstructionFactory {
     BACK("BACK", "]","FF0000");
 
 
-    private static final int LONG_SYNTAX_INDEX = 0;
     private static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX=2;
     List<String> identifiers;
@@ -74,7 +73,7 @@ public enum InstructionFactory {
      */
     public static Instruction createInstruction(String s) throws InvalidInstructionException {
         InstructionFactory inst = hasInstruction(s);
-        Instruction instruction = null;
+        Instruction instruction;
         switch (inst) {
             case INCR:
                 instruction = new Increment();
