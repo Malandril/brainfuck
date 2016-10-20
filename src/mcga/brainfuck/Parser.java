@@ -8,17 +8,17 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 /**
- * The Interpreter class contains the interpreter.
- * Its objective is to read the file containing the Brainfuck code and execute the instructions.
+ * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
+ * and execute the code.
  */
 public abstract class Parser {
 
     protected InputStream stream;
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
+
     /**
      * In case a file is specified in the launching command, this constructor is called.
-     *
      * @param stream Stream from file
      */
     public Parser(InputStream stream) {
@@ -34,7 +34,10 @@ public abstract class Parser {
     }
 
     /**
-     * Reads the file containing the Brainfuck code.
+     * Reads the file containing the Brainfuck code. This method is called in each subclass, with some
+     * additions depending on the subclass.
+     * @see Check#parseFile()
+     * @see Interpreter#parseFile()
      */
     public void parseFile() {
         Scanner scanner = new Scanner(this.stream);
@@ -54,6 +57,12 @@ public abstract class Parser {
         }
     }
 
+    /**
+     * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
+     * additions depending on the subclass.
+     * @see Check#readBitmap()
+     * @see Interpreter#readBitmap()
+     */
     public void readBitmap() {
         try {
             BufferedImage image = ImageIO.read(stream);
@@ -65,24 +74,24 @@ public abstract class Parser {
 
             String prevColor = "";
             String hexColor = "";
-            for (int i = 0; i < height; i += SQUARE_SIDE) {
-                for (int j = 0; j < width; j += SQUARE_SIDE) {
+            for (int i = 0 ; i < height ; i += SQUARE_SIDE) {
+                for (int j = 0 ; j < width ; j += SQUARE_SIDE) {
 
-                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
-                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                    for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
+                        for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
                             hexColor = "";
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
                             hexColor += String.format("%02X", imgColor.getRed());
                             hexColor += String.format("%02X", imgColor.getGreen());
                             hexColor += String.format("%02X", imgColor.getBlue());
-                            if (!prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
+                            if (! prevColor.equals(hexColor) && iSquare != 0 && jSquare != 0) {
                                 throw new InvalidBitmapException();
                             }
                             prevColor = hexColor;
 
                         }
                     }
-                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                    if (! hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
                     }
                 }
@@ -99,6 +108,15 @@ public abstract class Parser {
         }
     }
 
+    /**
+     * Defines the actions to execute when a new object from the class is created.
+     * Overriden in each subclass.
+     * @param str String corresponding to an instruction
+     * @throws InvalidInstructionException
+     * @see Check#execute(String)
+     * @see Interpreter#execute(String)
+     * @see Rewrite#execute(String)
+     */
     public abstract void execute(String str) throws InvalidInstructionException;
 
 

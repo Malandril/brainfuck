@@ -5,7 +5,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 /**
- * Created by user on 06/10/2016.
+ * This enum links the arguments passed in parameter in the command line to the actions they correspond to.
  */
 public enum Arguments {
     P("-p"),
@@ -16,10 +16,18 @@ public enum Arguments {
 
     String expression;
 
+    /**
+     * Constructor of the enum.
+     * @param expression parameter
+     */
     Arguments(String expression) {
         this.expression = expression;
     }
 
+    /**
+     * Builds an Options object from the arguments.
+     * @return Options object i.e. a list containing the arguments.
+     */
     public static Options createOptions() {
         Options options = new Options();
         for (Arguments arguments : Arguments.values()) {
@@ -30,12 +38,5 @@ public enum Arguments {
             }
         }
         return options;
-    }
-
-    @Override
-    public String toString() {
-        return "Arguments{" +
-                "expression='" + expression + '\'' +
-                '}';
     }
 }

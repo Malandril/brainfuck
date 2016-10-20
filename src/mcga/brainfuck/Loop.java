@@ -1,7 +1,7 @@
 package mcga.brainfuck;
 
 /**
- * Created by user on 18/10/2016.
+ * Superclass of the Back and Jump classes.
  */
 public abstract class Loop implements Instruction {
 
