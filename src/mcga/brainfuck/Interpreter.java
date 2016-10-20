@@ -16,7 +16,7 @@ public class Interpreter extends Parser {
     public static final String fileSuffix = "bmp";
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
-    public static List <Instruction> executionList;
+    public static List <Instruction> executionList = new ArrayList <>();
     public static List <List <Instruction>> executionLists = new ArrayList <>();
     public static Stack <Instruction> executionStack = new Stack <>();
     public static boolean inLoop = false;
@@ -48,7 +48,6 @@ public class Interpreter extends Parser {
     public void execute(String str) throws InvalidInstructionException {
         try {
             Instruction instruction = InstructionFactory.getInstruction(str);
-            executionList = new ArrayList <>();
             if (instruction.getClass().equals(Jump.class)) {
                 count++;
                 inLoop = true;
@@ -61,7 +60,6 @@ public class Interpreter extends Parser {
             if (inLoop) {
                 executionList.add(instruction);
                 executionLists.add(executionList);
-                System.out.println(executionList);
                 //executeList(executionLists);
             }
             instruction.interpret();
@@ -72,6 +70,7 @@ public class Interpreter extends Parser {
             System.err.println(e.getMessage());
             System.exit(2);
         }
+        System.out.println(executionList);
     }
 
     public void executeList(List <List <Instruction>> list) throws InvalidInstructionException {
