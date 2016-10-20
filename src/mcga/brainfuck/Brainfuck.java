@@ -3,7 +3,6 @@ package mcga.brainfuck;
 
 import org.apache.commons.cli.*;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -16,7 +15,7 @@ import static mcga.brainfuck.Arguments.createOptions;
 public class Brainfuck {
 
     static Memory memoire = new Memory();
-
+    public static final String FILE_SUFFIX="bmp";
     public static void main(String[] args) {
         readArguments(args);
         System.out.println();
@@ -27,11 +26,11 @@ public class Brainfuck {
         Output.stream = System.out;
         Input.stream = System.in;
         Options options = createOptions();
-        CommandLineParser cParser = new DefaultParser();
+        CommandLineParser commandParser = new DefaultParser();
         FileInputStream file = null;
         try {
             Parser parser = new Interpreter();
-            CommandLine line = cParser.parse(options, args);
+            CommandLine line = commandParser.parse(options, args);
             if (line.hasOption("p")) {
                 file = new FileInputStream(line.getOptionValue("p"));
                 if (line.hasOption("rewrite")) {
@@ -39,7 +38,7 @@ public class Brainfuck {
                 } else if (line.hasOption("check")) {
                     parser = new Check(file);
                 } else {
-                    parser = new Interpreter(file,line.getOptionValue("p"));
+                    parser = new Interpreter(file);
                 }
             }
             if (line.hasOption("i")) {
@@ -48,7 +47,12 @@ public class Brainfuck {
             if (line.hasOption("o")) {
                 Output.stream = new PrintStream(line.getOptionValue("o"));
             }
-            parser.parseFile();
+            if(line.hasOption("p")&&line.getOptionValue("p").endsWith(FILE_SUFFIX)){
+                parser.readBitmap();
+            }
+            else {
+                parser.parseFile();
+            }
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());
         } catch (FileNotFoundException e) {
