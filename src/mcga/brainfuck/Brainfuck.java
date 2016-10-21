@@ -21,7 +21,7 @@ public class Brainfuck {
     static Memory memory = new Memory();
 
     /**
-     * Main method, which executes the readArguments method and displays the values of the memory's cells.
+     * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
      *
      * @param args DIfferent perameters accepted
      */

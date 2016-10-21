@@ -49,6 +49,13 @@ public class Translate extends Parser {
     @Override
     public void parseFile() {
         super.parseFile();
+        writeBitmap();
+    }
+
+    /**
+     * Writes the color queue into a buffered image and writes the buffered image into a bmp file
+     */
+    public void writeBitmap(){
         int cote = (int) Math.ceil(Math.sqrt(colorFifo.size())) * SQUARE_SIDE;
         BufferedImage image = new BufferedImage(cote, cote, TYPE_INT_BGR);
         for (int i = 0; i < cote; i += SQUARE_SIDE) {
@@ -67,5 +74,6 @@ public class Translate extends Parser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
     }
 }
