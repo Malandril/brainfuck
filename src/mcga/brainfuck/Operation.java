@@ -1,7 +1,7 @@
 package mcga.brainfuck;
 
 /**
- * Created by user on 26/09/2016.
+ * Superclass of the Decrement and Increment classes.
  */
 public abstract class Operation implements Instruction {
 

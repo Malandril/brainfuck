@@ -5,41 +5,45 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 /**
- * Created by user on 06/10/2016.
+ * This enum links the arguments passed in parameter in the command line to the actions they correspond to.
  */
 public enum Arguments {
-    P("-p"),
-    IN("-i"),
-    OUT("-o"),
-    REWRITE("--rewrite"),
-    CHECK("--check");
+    P("p",true),
+    INPUT("i",true),
+    OUTPUT("o",true),
+    REWRITE("rewrite",false),
+    CHECK("check",false),
+    TRANSLATE("translate",false);
+
 
     String expression;
+    boolean hasArgs;
 
-    Arguments(String expression) {
+    /**
+     * Constructor of the enum.
+     * @param expression String form of the argument
+     * @param hasArgs true if it needs a file argument
+     */
+
+    Arguments(String expression,boolean hasArgs) {
         this.expression = expression;
+        this.hasArgs=hasArgs;
     }
 
+    /**
+     * Builds an Options object from the arguments.
+     * @return Options object i.e. a list containing the arguments.
+     */
     public static Options createOptions() {
         Options options = new Options();
-        for (Arguments arguments : Arguments.values()) {
-            if (arguments.expression.charAt(1) == '-') {
-                options.addOption(Option.builder().longOpt(arguments.expression.substring(2)).build());
+        for (Arguments argument : Arguments.values()) {
+            if (!argument.hasArgs) {
+                options.addOption(Option.builder().longOpt(argument.expression).build());
             } else {
-                options.addOption(Option.builder().longOpt(arguments.expression.substring(1)).hasArg().build());
+                options.addOption(Option.builder().longOpt(argument.expression).hasArg().build());
             }
         }
         return options;
     }
 
-    public String getExpression() {
-        return expression;
-    }
-
-    @Override
-    public String toString() {
-        return "Arguments{" +
-                "expression='" + expression + '\'' +
-                '}';
-    }
 }
