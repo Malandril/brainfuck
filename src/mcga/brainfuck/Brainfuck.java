@@ -3,37 +3,40 @@ package mcga.brainfuck;
 
 import org.apache.commons.cli.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.*;
 
 import static mcga.brainfuck.Arguments.*;
 
 /**
  * Main class of the project.
  * Contains the main method.
- *
  * @author Team Make Coding Great Again
  */
 public class Brainfuck {
 
     public static final String FILE_SUFFIX = "bmp";
     static Memory memory = new Memory();
+    static Parser parser;
 
     /**
      * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
-     *
      * @param args DIfferent perameters accepted
      */
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+
         readArguments(args);
         System.out.println();
         System.out.println(memory);
+        System.out.println();
+
+        long endTime = System.currentTimeMillis();
+        Parser.EXEC_TIME = endTime - startTime;
+        System.out.println(parser.printMetrics());
     }
 
     /**
      * Reads the provided arguments, determines the actions they correspond to and executes them.
-     *
      * @param args
      */
 
@@ -44,7 +47,7 @@ public class Brainfuck {
         CommandLineParser commandParser = new DefaultParser();
         FileInputStream file;
         try {
-            Parser parser = new Interpreter();
+            parser = new Interpreter();
             CommandLine line = commandParser.parse(options, args);
             if (line.hasOption(P.expression)) {
                 file = new FileInputStream(line.getOptionValue(P.expression));
@@ -54,6 +57,9 @@ public class Brainfuck {
                     parser = new Check(file);
                 } else if (line.hasOption(TRANSLATE.expression)) {
                     parser = new Translate(file);
+                } else if (line.hasOption(TRACE.expression)) {
+                    PrintStream printStream = new PrintStream(line.getOptionValue(P.expression));
+                    parser = new Trace(file);
                 } else {
                     parser = new Interpreter(file);
                 }

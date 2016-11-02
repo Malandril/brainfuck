@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import static mcga.brainfuck.InstructionFactory.*;
+
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
@@ -16,6 +18,13 @@ public abstract class Parser {
     protected InputStream stream;
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
+
+    public static long PROG_SIZE;
+    public static long EXEC_TIME;
+    private static int EXEC_MOVE;
+    private static int DATA_MOVE;
+    private static int DATA_WRITE;
+    private static int DATA_READ;
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
@@ -50,6 +59,8 @@ public abstract class Parser {
             }
             try {
                 execute(str);
+                metrics(str);
+                PROG_SIZE++;
             } catch (InvalidInstructionException e) {
                 System.err.println(e.getMessage());
                 System.exit(42);
@@ -74,19 +85,19 @@ public abstract class Parser {
 
             String prevColor;
             String hexColor = "";
-            for (int i = 0; i < height; i += SQUARE_SIDE) {
-                for (int j = 0; j < width; j += SQUARE_SIDE) {
+            for (int i = 0 ; i < height ; i += SQUARE_SIDE) {
+                for (int j = 0 ; j < width ; j += SQUARE_SIDE) {
                     prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
-                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
-                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                    for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
+                        for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
                             hexColor = colorToHex(imgColor);
-                            if (!prevColor.equals(hexColor)) {
+                            if (! prevColor.equals(hexColor)) {
                                 throw new InvalidBitmapException();
                             }
                         }
                     }
-                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                    if (! hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
                     }
                 }
@@ -114,6 +125,27 @@ public abstract class Parser {
         hexColor += String.format("%02X", color.getGreen());
         hexColor += String.format("%02X", color.getBlue());
         return hexColor;
+    }
+
+    private void metrics(String str) throws InvalidInstructionException {
+        InstructionFactory instruction = InstructionFactory.hasInstruction(str);
+        if (instruction == INCR || instruction == DECR || instruction == IN) {
+            DATA_WRITE++;
+        } else if (instruction == JUMP || instruction == BACK || instruction == OUT) {
+            DATA_READ++;
+        } else if (instruction == LEFT || instruction == RIGHT) {
+            DATA_MOVE++;
+        }
+        EXEC_MOVE++;
+    }
+
+    public String printMetrics() {
+        return "PROG_SIZE = " + PROG_SIZE + '\n' +
+                "EXEC_TIME = " + EXEC_TIME + " ms" + '\n' +
+                "EXEC_MOVE = " + EXEC_MOVE + '\n' +
+                "DATA_MOVE = " + DATA_MOVE + '\n' +
+                "DATA_READ = " + DATA_READ + '\n' +
+                "DATA_WRITE = " + DATA_WRITE + '\n';
     }
 
     /**
