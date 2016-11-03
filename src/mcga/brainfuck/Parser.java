@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import static mcga.brainfuck.InstructionFactory.*;
@@ -19,12 +20,12 @@ public abstract class Parser {
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
 
-    public static long PROG_SIZE;
-    public static long EXEC_TIME;
-    private static int EXEC_MOVE;
-    private static int DATA_MOVE;
-    private static int DATA_WRITE;
-    private static int DATA_READ;
+    static long PROG_SIZE;
+    static double EXEC_TIME;
+    static int EXEC_MOVE;
+    static int DATA_MOVE;
+    static int DATA_WRITE;
+    static int DATA_READ;
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
@@ -33,6 +34,7 @@ public abstract class Parser {
     public Parser(InputStream stream) {
         this.stream = stream;
     }
+
 
     /**
      * Default constructor.
@@ -141,7 +143,7 @@ public abstract class Parser {
 
     public String printMetrics() {
         return "PROG_SIZE = " + PROG_SIZE + '\n' +
-                "EXEC_TIME = " + EXEC_TIME + " ms" + '\n' +
+                "EXEC_TIME = " + EXEC_TIME + " s" + '\n' +
                 "EXEC_MOVE = " + EXEC_MOVE + '\n' +
                 "DATA_MOVE = " + DATA_MOVE + '\n' +
                 "DATA_READ = " + DATA_READ + '\n' +

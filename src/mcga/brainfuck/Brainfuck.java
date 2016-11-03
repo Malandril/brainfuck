@@ -23,15 +23,15 @@ public class Brainfuck {
      * @param args DIfferent perameters accepted
      */
     public static void main(String[] args) {
-        long startTime = System.currentTimeMillis();
+        double startTime = System.nanoTime();
 
         readArguments(args);
         System.out.println();
         System.out.println(memory);
         System.out.println();
 
-        long endTime = System.currentTimeMillis();
-        Parser.EXEC_TIME = endTime - startTime;
+        double endTime = System.nanoTime();
+        Parser.EXEC_TIME = (endTime - startTime)*Math.pow(10, -9);
         System.out.println(parser.printMetrics());
     }
 
@@ -58,8 +58,8 @@ public class Brainfuck {
                 } else if (line.hasOption(TRANSLATE.expression)) {
                     parser = new Translate(file);
                 } else if (line.hasOption(TRACE.expression)) {
-                    PrintStream printStream = new PrintStream(line.getOptionValue(P.expression));
-                    parser = new Trace(file);
+                    String logFile = line.getOptionValue(P.expression).split("\\.(?=[^.]+$)")[0]+".log";
+                    parser = new Trace(file, new PrintStream(logFile));
                 } else {
                     parser = new Interpreter(file);
                 }
@@ -70,6 +70,7 @@ public class Brainfuck {
             if (line.hasOption(OUTPUT.expression)) {
                 Output.stream = new PrintStream(line.getOptionValue(OUTPUT.expression));
             }
+
             if (line.hasOption(P.expression) && line.getOptionValue(P.expression).endsWith(FILE_SUFFIX)) {
                 parser.readBitmap();
             } else {

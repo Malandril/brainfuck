@@ -7,6 +7,9 @@ import java.io.InputStream;
  */
 public class Interpreter extends Parser {
 
+    //Trace trace = new Trace();
+
+
     /**
      * Default constructor of the class.
      * @see Parser#Parser()
