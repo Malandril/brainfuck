@@ -6,6 +6,10 @@ package mcga.brainfuck;
  */
 public class Jump extends Loop {
 
+    public Jump() {
+        Interpreter.jumpIndexStack.add(Interpreter.instructions.size());
+    }
+
     /**
      * Overrides the method defined in the Instruction interface to execute the jump action.
      * @throws InvalidValueException
@@ -20,5 +24,8 @@ public class Jump extends Loop {
      * Defines the actions of a jump instruction.
      */
     private void jump() {
+        if(Brainfuck.memory.getCurrentCellValue()==0){
+            Interpreter.backToJumpIndex=boundLoopIndex;
+        }
     }
 }

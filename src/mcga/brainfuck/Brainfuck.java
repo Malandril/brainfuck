@@ -26,9 +26,13 @@ public class Brainfuck {
      * @param args DIfferent perameters accepted
      */
     public static void main(String[] args) {
+        long time=System.nanoTime();
+        System.out.println((float)(System.nanoTime()-time)/1000000000);
+
         readArguments(args);
         System.out.println();
         System.out.println(memory);
+        System.out.println((float)(System.nanoTime()-time)/1000000000);
     }
 
     /**

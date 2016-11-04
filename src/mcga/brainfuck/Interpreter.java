@@ -3,6 +3,7 @@ package mcga.brainfuck;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * This class extends Parser. It rewrites the methods from the superclass to interpret the parsed actions.
@@ -15,8 +16,9 @@ public class Interpreter extends Parser {
      *
      * @see Parser#Parser()
      */
-    private static List<Instruction> instructions = new ArrayList<>();
-    public static boolean test=true;
+    public static List<Instruction> instructions = new ArrayList<>();
+    public static Stack<Integer> jumpIndexStack = new Stack<>();
+    public static int backToJumpIndex = 0;
 
     public Interpreter() {
         super();
@@ -37,7 +39,8 @@ public class Interpreter extends Parser {
         super.parseFile();
         for (int i = 0; i < instructions.size(); i++) {
             try {
-                if(test) {
+                if (i >= backToJumpIndex) {
+                    backToJumpIndex=0;
                     instructions.get(i).interpret();
                 }
             } catch (InvalidValueException e) {
