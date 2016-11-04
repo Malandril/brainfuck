@@ -6,9 +6,9 @@ package mcga.brainfuck;
  */
 public class Back extends Loop {
     public Back() {
-        index = Interpreter.instructions.size();
-        boundLoopIndex = Interpreter.jumpIndexStack.pop();
-        ((Loop) Interpreter.instructions.get(boundLoopIndex)).boundLoopIndex = index;
+        index = Interpreter.getInstructions().size();
+        boundLoopIndex = Interpreter.getJumpIndexStack().pop().index;
+        ((Loop) Interpreter.getInstructions().get(boundLoopIndex)).boundLoopIndex = index;
     }
 
     /**
@@ -28,11 +28,10 @@ public class Back extends Loop {
     private void back() throws InvalidValueException {
         while(Brainfuck.memory.getCurrentCellValue() != 0) {
             for (int i = boundLoopIndex + 1; i < index; i++) {
-                if (i >= Interpreter.backToJumpIndex) {
-                    Interpreter.backToJumpIndex = 0;
-                    Interpreter.instructions.get(i).interpret();
+                if (i >= Interpreter.ignoredUntilIndex) {
+                    Interpreter.ignoredUntilIndex = 0;
+                    Interpreter.getInstructions().get(i).interpret();
                 }
-
             }
         }
     }

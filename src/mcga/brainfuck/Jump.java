@@ -7,7 +7,8 @@ package mcga.brainfuck;
 public class Jump extends Loop {
 
     public Jump() {
-        Interpreter.jumpIndexStack.add(Interpreter.instructions.size());
+        index=Interpreter.getInstructions().size();
+        Interpreter.getJumpIndexStack().add(this);
     }
 
     /**
@@ -25,7 +26,7 @@ public class Jump extends Loop {
      */
     private void jump() {
         if(Brainfuck.memory.getCurrentCellValue()==0){
-            Interpreter.backToJumpIndex=boundLoopIndex;
+            Interpreter.ignoredUntilIndex =boundLoopIndex;
         }
     }
 }

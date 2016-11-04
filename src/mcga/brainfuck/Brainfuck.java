@@ -27,12 +27,10 @@ public class Brainfuck {
      */
     public static void main(String[] args) {
         long time=System.nanoTime();
-        System.out.println((float)(System.nanoTime()-time)/1000000000);
-
         readArguments(args);
         System.out.println();
         System.out.println(memory);
-        System.out.println((float)(System.nanoTime()-time)/1000000000);
+        System.out.println(((System.nanoTime()-time))/1000000000.0);
     }
 
     /**

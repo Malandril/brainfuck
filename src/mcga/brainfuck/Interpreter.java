@@ -16,9 +16,9 @@ public class Interpreter extends Parser {
      *
      * @see Parser#Parser()
      */
-    public static List<Instruction> instructions = new ArrayList<>();
-    public static Stack<Integer> jumpIndexStack = new Stack<>();
-    public static int backToJumpIndex = 0;
+    private static List<Instruction> instructions = new ArrayList<>();
+    private static Stack<Jump> jumpIndexStack = new Stack<>();
+    public static int ignoredUntilIndex = 0;
 
     public Interpreter() {
         super();
@@ -39,8 +39,8 @@ public class Interpreter extends Parser {
         super.parseFile();
         for (int i = 0; i < instructions.size(); i++) {
             try {
-                if (i >= backToJumpIndex) {
-                    backToJumpIndex=0;
+                if (i >= ignoredUntilIndex) {
+                    ignoredUntilIndex =0;
                     instructions.get(i).interpret();
                 }
             } catch (InvalidValueException e) {
@@ -62,5 +62,11 @@ public class Interpreter extends Parser {
         instructions.add(InstructionFactory.createInstruction(str));
     }
 
+    public static List<Instruction> getInstructions() {
+        return instructions;
+    }
 
+    public static Stack<Jump> getJumpIndexStack() {
+        return jumpIndexStack;
+    }
 }
