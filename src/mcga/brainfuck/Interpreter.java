@@ -11,15 +11,12 @@ import java.util.Stack;
 
 public class Interpreter extends Parser {
 
-    //Trace trace = new Trace();
-
-
     /**
      * Default constructor of the class.
      *
      * @see Parser#Parser()
      */
-    private static List<Instruction> instructions = new ArrayList<>();
+    static List<Instruction> instructions = new ArrayList<>();
     private static Stack<Jump> jumpIndexStack = new Stack<>();
     public static int ignoredUntilIndex = 0;
 
