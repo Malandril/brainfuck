@@ -11,14 +11,17 @@ import java.util.Stack;
 
 public class Interpreter extends Parser {
 
+    //Trace trace = new Trace();
+
+
+    public static int ignoredUntilIndex = 0;
     /**
      * Default constructor of the class.
      *
      * @see Parser#Parser()
      */
-    static List<Instruction> instructions = new ArrayList<>();
+    private static List<Instruction> instructions = new ArrayList<>();
     private static Stack<Jump> jumpIndexStack = new Stack<>();
-    public static int ignoredUntilIndex = 0;
 
     public Interpreter() {
         super();
@@ -34,19 +37,21 @@ public class Interpreter extends Parser {
         super(stream);
     }
 
+    public static List<Instruction> getInstructions() {
+        return instructions;
+    }
+
+    public static Stack<Jump> getJumpIndexStack() {
+        return jumpIndexStack;
+    }
+
     @Override
     public void parseFile() {
         super.parseFile();
         for (int i = 0; i < instructions.size(); i++) {
-            try {
-                if (i >= ignoredUntilIndex) {
-                    ignoredUntilIndex =0;
-                    instructions.get(i).interpret();
-                }
-            } catch (InvalidValueException e) {
-                e.printStackTrace();
-            }
+            interpretation(i);
         }
+        Parser.PROG_SIZE = instructions.size();
     }
 
     /**
@@ -62,11 +67,18 @@ public class Interpreter extends Parser {
         instructions.add(InstructionFactory.createInstruction(str));
     }
 
-    public static List<Instruction> getInstructions() {
-        return instructions;
+    public void interpretation(int i) {
+        try {
+            if (i >= ignoredUntilIndex) {
+                ignoredUntilIndex = 0;
+                instructions.get(i).interpret();
+                EXEC_POS = i + 1;
+                EXEC_MOVE++;
+            }
+        } catch (InvalidValueException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static Stack<Jump> getJumpIndexStack() {
-        return jumpIndexStack;
-    }
+
 }

@@ -18,6 +18,7 @@ public class Jump extends Loop {
      */
     @Override
     public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
+        super.interpret();
         jump();
     }
 

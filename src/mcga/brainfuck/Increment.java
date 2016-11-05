@@ -13,6 +13,7 @@ public class Increment extends Operation {
      */
     @Override
     public void interpret() throws InvalidValueException {
+        super.interpret();
         incrementation();
     }
 

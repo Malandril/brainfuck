@@ -31,10 +31,11 @@ public class Brainfuck {
 
         readArguments(args);
         System.out.println();
-        System.out.println(memory);
+
         System.out.println();
 
         double endTime = System.nanoTime();
+        System.out.println(memory);
         Parser.EXEC_TIME = (endTime - startTime)*Math.pow(10, -9);
         System.out.println(parser.printMetrics());
     }
@@ -64,7 +65,7 @@ public class Brainfuck {
                     parser = new Translate(file);
                 } else if (line.hasOption(TRACE.expression)) {
                     String bfFile = line.getOptionValue(P.expression);
-                    String logFile = bfFile.substring(0,bfFile.lastIndexOf("."))+".log";
+                    String logFile = bfFile+".log";
                     parser = new Trace(file, new PrintStream(logFile));
                 } else {
                     parser = new Interpreter(file);

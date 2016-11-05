@@ -24,6 +24,7 @@ public class Input extends DataIO {
      * @throws InvalidValueException
      */
     public void interpret() throws InvalidValueException {
+        Parser.DATA_WRITE++;
         try {
             int c = stream.read();
             Brainfuck.memory.clearCurrentCell();

@@ -1,5 +1,6 @@
 package mcga.brainfuck;
 
+import javax.xml.crypto.Data;
 import java.io.PrintStream;
 
 /**
@@ -20,6 +21,7 @@ public class Output extends DataIO {
      * Overrides the method defined in the Instruction interface to execute the output action.
      */
     public void interpret() {
+        Parser.DATA_READ++;
         stream.print((char) Brainfuck.memory.getCurrentCellValue());
     }
 

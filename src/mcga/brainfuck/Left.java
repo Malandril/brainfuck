@@ -13,6 +13,7 @@ public class Left extends Movement {
      */
     @Override
     public void interpret() throws InvalidValueException {
+        super.interpret();
         moveL();
     }
 

@@ -5,10 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.Scanner;
-
-import static mcga.brainfuck.InstructionFactory.*;
 
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
@@ -16,16 +13,17 @@ import static mcga.brainfuck.InstructionFactory.*;
  */
 public abstract class Parser {
 
-    protected InputStream stream;
+    static long PROG_SIZE=0;
+    static double EXEC_TIME=0;
+    static int EXEC_POS =0;
+    static int DATA_MOVE=0;
+    static int DATA_WRITE=0;
+    static int DATA_READ=0;
+    static int EXEC_MOVE=0;
+
+    private InputStream stream;
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
-
-    static long PROG_SIZE;
-    static double EXEC_TIME;
-    static int EXEC_MOVE;
-    static int DATA_MOVE;
-    static int DATA_WRITE;
-    static int DATA_READ;
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
@@ -61,8 +59,6 @@ public abstract class Parser {
             }
             try {
                 execute(str);
-                metrics(str);
-                PROG_SIZE++;
             } catch (InvalidInstructionException e) {
                 System.err.println(e.getMessage());
                 System.exit(42);
@@ -129,26 +125,6 @@ public abstract class Parser {
         return hexColor;
     }
 
-    private void metrics(String str) throws InvalidInstructionException {
-        InstructionFactory instruction = InstructionFactory.hasInstruction(str);
-        if (instruction == INCR || instruction == DECR || instruction == IN) {
-            DATA_WRITE++;
-        } else if (instruction == JUMP || instruction == BACK || instruction == OUT) {
-            DATA_READ++;
-        } else if (instruction == LEFT || instruction == RIGHT) {
-            DATA_MOVE++;
-        }
-        EXEC_MOVE++;
-    }
-
-    public String printMetrics() {
-        return "PROG_SIZE = " + PROG_SIZE + '\n' +
-                "EXEC_TIME = " + EXEC_TIME + " s" + '\n' +
-                "EXEC_MOVE = " + EXEC_MOVE + '\n' +
-                "DATA_MOVE = " + DATA_MOVE + '\n' +
-                "DATA_READ = " + DATA_READ + '\n' +
-                "DATA_WRITE = " + DATA_WRITE + '\n';
-    }
 
     /**
      * This method is overriden in all subclasses.
@@ -161,5 +137,13 @@ public abstract class Parser {
      */
     public abstract void execute(String str) throws InvalidInstructionException;
 
+    public String printMetrics() {
+        return "PROG_SIZE = " + PROG_SIZE + '\n' +
+                "EXEC_TIME = " + EXEC_TIME + " s" + '\n' +
+                "EXEC_POS = " + EXEC_MOVE + '\n' +
+                "DATA_MOVE = " + DATA_MOVE + '\n' +
+                "DATA_READ = " + DATA_READ + '\n' +
+                "DATA_WRITE = " + DATA_WRITE + '\n';
+    }
 
 }

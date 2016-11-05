@@ -9,18 +9,21 @@ public class Right extends Movement {
 
     /**
      * Overrides the method defined in the Instruction interface to shift the memory pointer to the right.
+     *
      * @throws IndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws IndexOutOfBoundsException {
+    public void interpret() throws InvalidValueException {
+        super.interpret();
         moveR();
     }
 
     /**
      * Defines the actions of shifting the memory pointer to the right.
-     * @throws IndexOutOfBoundsException
+     *
+     * @throws
      */
-    private void moveR() throws IndexOutOfBoundsException {
+    private void moveR() {
         Brainfuck.memory.changeCurrentIndex(1);
     }
 

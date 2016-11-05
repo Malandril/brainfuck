@@ -6,4 +6,9 @@ package mcga.brainfuck;
 public abstract class Loop implements Instruction {
     protected int boundLoopIndex;
     protected int index;
+
+    @Override
+    public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
+        Parser.DATA_READ++;
+    }
 }

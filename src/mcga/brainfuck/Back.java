@@ -18,7 +18,8 @@ public class Back extends Loop {
      * @throws IndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
+    public void interpret() throws InvalidValueException {
+        super.interpret();
         back();
     }
 
@@ -26,12 +27,17 @@ public class Back extends Loop {
      * Defines the actions of a back instruction.
      */
     private void back() throws InvalidValueException {
-        while(Brainfuck.memory.getCurrentCellValue() != 0) {
+        while (Brainfuck.memory.getCurrentCellValue() != 0) {
             for (int i = boundLoopIndex + 1; i < index; i++) {
                 if (i >= Interpreter.ignoredUntilIndex) {
                     Interpreter.ignoredUntilIndex = 0;
                     Interpreter.getInstructions().get(i).interpret();
                 }
+                Parser.EXEC_POS =i+1;
+                Parser.EXEC_MOVE++;
+                Trace.logFileStream.println("Exec step => " + Integer.toString(Parser.EXEC_POS)
+                        + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
+                        + '\t' + '\t' + "Memory => " + Brainfuck.memory);
             }
         }
     }

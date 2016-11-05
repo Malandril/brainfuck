@@ -3,19 +3,17 @@ package mcga.brainfuck;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import static mcga.brainfuck.Interpreter.instructions;
-
 /**
  * Created by user on 02/11/2016.
  */
-public class Trace extends Parser {
+public class Trace extends Interpreter {
 
-    public static PrintStream printStream;
+    public static PrintStream logFileStream;
 
 
-    public Trace(InputStream stream, PrintStream printStream) {
+    public Trace(InputStream stream, PrintStream logFileStream) {
         super(stream);
-        this.printStream = printStream;
+        this.logFileStream = logFileStream;
     }
 
     @Override
@@ -24,17 +22,12 @@ public class Trace extends Parser {
     }
 
     @Override
-    public void execute(String str) throws InvalidInstructionException {
-        try {
-            if (Parser.EXEC_MOVE > 0) {
-                printStream.println("Exec step => " + Integer.toString(Parser.EXEC_MOVE)
-                        + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
-                        + '\t' + '\t' + "Memory => " + Brainfuck.memory);
-            }
-            InstructionFactory.createInstruction(str).interpret();
-            instructions.add(InstructionFactory.createInstruction(str));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void interpretation(int i){
+        super.interpretation(i);
+            logFileStream.println("Exec step => " + Integer.toString(Parser.EXEC_POS)
+                    + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
+                    + '\t' + '\t' + "Memory => " + Brainfuck.memory);
+
+
     }
 }
