@@ -63,7 +63,8 @@ public class Brainfuck {
                 } else if (line.hasOption(TRANSLATE.expression)) {
                     parser = new Translate(file);
                 } else if (line.hasOption(TRACE.expression)) {
-                    String logFile = line.getOptionValue(P.expression).split("\\.(?=[^.]+$)")[0]+".log";
+                    String bfFile = line.getOptionValue(P.expression);
+                    String logFile = bfFile.substring(0,bfFile.lastIndexOf("."))+".log";
                     parser = new Trace(file, new PrintStream(logFile));
                 } else {
                     parser = new Interpreter(file);

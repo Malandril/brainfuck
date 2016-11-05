@@ -24,10 +24,10 @@ public class Trace extends Parser {
     @Override
     public void execute(String str) throws InvalidInstructionException {
         try {
-            InstructionFactory.createInstruction(str).interpret();
             printStream.println("Exec step => " + Integer.toString(Parser.EXEC_MOVE + 1)
                     + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
                     + '\t' + '\t' + "Memory => " + Brainfuck.memory);
+            InstructionFactory.createInstruction(str).interpret();
         } catch (Exception e) {
             e.printStackTrace();
         }
