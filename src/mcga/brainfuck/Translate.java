@@ -17,7 +17,7 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
  */
 public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
-    Queue<Color> colorFifo = new LinkedList<>();
+    private Queue<Color> colorFifo = new LinkedList<>();
 
 
     /**

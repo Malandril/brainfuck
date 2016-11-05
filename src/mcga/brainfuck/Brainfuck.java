@@ -3,13 +3,16 @@ package mcga.brainfuck;
 
 import org.apache.commons.cli.*;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 import static mcga.brainfuck.Arguments.*;
 
 /**
  * Main class of the project.
  * Contains the main method.
+ *
  * @author Team Make Coding Great Again
  */
 public class Brainfuck {
@@ -20,6 +23,7 @@ public class Brainfuck {
 
     /**
      * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
+     *
      * @param args DIfferent perameters accepted
      */
     public static void main(String[] args) {
@@ -37,6 +41,7 @@ public class Brainfuck {
 
     /**
      * Reads the provided arguments, determines the actions they correspond to and executes them.
+     *
      * @param args
      */
 
