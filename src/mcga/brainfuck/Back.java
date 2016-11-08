@@ -35,9 +35,9 @@ public class Back extends Loop {
                 }
                 Parser.EXEC_POS =i+1;
                 Parser.EXEC_MOVE++;
-                Trace.logFileStream.println("Exec step => " + Integer.toString(Parser.EXEC_POS)
-                        + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
-                        + '\t' + '\t' + "Memory => " + Brainfuck.memory);
+//                Trace.logFileStream.println("Exec step => " + Integer.toString(Parser.EXEC_POS)
+//                        + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
+//                        + '\t' + '\t' + "Memory => " + Brainfuck.memory);
             }
         }
     }

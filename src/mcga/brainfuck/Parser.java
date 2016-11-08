@@ -15,11 +15,11 @@ public abstract class Parser {
 
     static long PROG_SIZE=0;
     static double EXEC_TIME=0;
-    static int EXEC_POS =0;
-    static int DATA_MOVE=0;
-    static int DATA_WRITE=0;
-    static int DATA_READ=0;
-    static int EXEC_MOVE=0;
+    static long EXEC_POS =0;
+    static long DATA_MOVE=0;
+    static long DATA_WRITE=0;
+    static long DATA_READ=0;
+    static long EXEC_MOVE=0;
 
     private InputStream stream;
     public static final int SQUARE_SIDE = 3;
