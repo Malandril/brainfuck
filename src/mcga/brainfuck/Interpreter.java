@@ -45,13 +45,26 @@ public class Interpreter extends Parser {
         return jumpIndexStack;
     }
 
+    public static void interpretation(int i) {
+        try {
+            if (i >= ignoredUntilIndex) {
+                ignoredUntilIndex = 0;
+                instructions.get(i).interpret();
+                Metrics.EXEC_POS = i + 1;
+                Metrics.EXEC_MOVE++;
+            }
+        } catch (InvalidValueException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void parseFile() {
         super.parseFile();
         for (int i = 0; i < instructions.size(); i++) {
             interpretation(i);
         }
-        Parser.PROG_SIZE = instructions.size();
+        Metrics.PROG_SIZE = instructions.size();
     }
 
     /**
@@ -65,19 +78,6 @@ public class Interpreter extends Parser {
     @Override
     public void execute(String str) throws InvalidInstructionException {
         instructions.add(InstructionFactory.createInstruction(str));
-    }
-
-    public void interpretation(int i) {
-        try {
-            if (i >= ignoredUntilIndex) {
-                ignoredUntilIndex = 0;
-                instructions.get(i).interpret();
-                EXEC_POS = i + 1;
-                EXEC_MOVE++;
-            }
-        } catch (InvalidValueException e) {
-            e.printStackTrace();
-        }
     }
 
 

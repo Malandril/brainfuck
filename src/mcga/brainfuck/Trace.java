@@ -21,13 +21,9 @@ public class Trace extends Interpreter {
         super.parseFile();
     }
 
-    @Override
-    public void interpretation(int i){
-        super.interpretation(i);
-            logFileStream.println("Exec step => " + Long.toString(Parser.EXEC_POS)
-                    + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
-                    + '\t' + '\t' + "Memory => " + Brainfuck.memory);
-
-
-    }
+//    @Override
+//    public void interpretation(int i){
+//        super.interpretation(i);
+//        Metrics.logMetrics();
+//    }
 }

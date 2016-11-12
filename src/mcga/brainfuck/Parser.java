@@ -13,20 +13,13 @@ import java.util.Scanner;
  */
 public abstract class Parser {
 
-    static long PROG_SIZE=0;
-    static double EXEC_TIME=0;
-    static long EXEC_POS =0;
-    static long DATA_MOVE=0;
-    static long DATA_WRITE=0;
-    static long DATA_READ=0;
-    static long EXEC_MOVE=0;
-
-    private InputStream stream;
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
+    private InputStream stream;
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
+     *
      * @param stream Stream from file
      */
     public Parser(InputStream stream) {
@@ -45,6 +38,7 @@ public abstract class Parser {
     /**
      * Reads the file containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
+     *
      * @see Check#parseFile()
      * @see Interpreter#parseFile()
      */
@@ -69,6 +63,7 @@ public abstract class Parser {
     /**
      * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
+     *
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
@@ -83,19 +78,19 @@ public abstract class Parser {
 
             String prevColor;
             String hexColor = "";
-            for (int i = 0 ; i < height ; i += SQUARE_SIDE) {
-                for (int j = 0 ; j < width ; j += SQUARE_SIDE) {
+            for (int i = 0; i < height; i += SQUARE_SIDE) {
+                for (int j = 0; j < width; j += SQUARE_SIDE) {
                     prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
-                    for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
-                        for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
+                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
                             hexColor = colorToHex(imgColor);
-                            if (! prevColor.equals(hexColor)) {
+                            if (!prevColor.equals(hexColor)) {
                                 throw new InvalidBitmapException();
                             }
                         }
                     }
-                    if (! hexColor.equals(EMPTY_INSTRUCTION)) {
+                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
                     }
                 }
@@ -114,6 +109,7 @@ public abstract class Parser {
 
     /**
      * Converts a Color object to its hexadecimal value.
+     *
      * @param color Color to convert.
      * @return String corresponding hexadecimal value
      */
@@ -128,6 +124,7 @@ public abstract class Parser {
 
     /**
      * This method is overriden in all subclasses.
+     *
      * @param str string value of the argument to interpret
      * @throws InvalidInstructionException
      * @see Check#execute(String)
@@ -136,14 +133,5 @@ public abstract class Parser {
      * @see Translate#execute(String)
      */
     public abstract void execute(String str) throws InvalidInstructionException;
-
-    public String printMetrics() {
-        return "PROG_SIZE = " + PROG_SIZE + '\n' +
-                "EXEC_TIME = " + EXEC_TIME + " s" + '\n' +
-                "EXEC_POS = " + EXEC_MOVE + '\n' +
-                "DATA_MOVE = " + DATA_MOVE + '\n' +
-                "DATA_READ = " + DATA_READ + '\n' +
-                "DATA_WRITE = " + DATA_WRITE + '\n';
-    }
 
 }

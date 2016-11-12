@@ -25,6 +25,7 @@ public class Jump extends Loop {
     /**
      * Defines the actions of a jump instruction.
      */
+
     private void jump() {
         if(Brainfuck.memory.getCurrentCellValue()==0){
             Interpreter.ignoredUntilIndex =boundLoopIndex;

@@ -6,6 +6,6 @@ package mcga.brainfuck;
 public abstract class Movement implements Instruction {
     @Override
     public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
-        Parser.DATA_MOVE++;
+        Metrics.DATA_MOVE++;
     }
 }

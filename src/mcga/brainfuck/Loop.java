@@ -9,6 +9,6 @@ public abstract class Loop implements Instruction {
 
     @Override
     public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
-        Parser.DATA_READ++;
+        Metrics.DATA_READ++;
     }
 }

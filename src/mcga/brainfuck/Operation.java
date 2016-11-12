@@ -6,6 +6,6 @@ package mcga.brainfuck;
 public abstract class Operation implements Instruction {
     @Override
     public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
-        Parser.DATA_WRITE++;
+        Metrics.DATA_WRITE++;
     }
 }

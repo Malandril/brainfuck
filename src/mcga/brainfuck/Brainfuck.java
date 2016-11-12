@@ -6,6 +6,8 @@ import org.apache.commons.cli.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static mcga.brainfuck.Arguments.*;
 
@@ -19,7 +21,7 @@ public class Brainfuck {
 
     public static final String FILE_SUFFIX = "bmp";
     static Memory memory = new Memory();
-    static Parser parser;
+    static List<Parser> parsers = new ArrayList<>();
 
     /**
      * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
@@ -36,8 +38,8 @@ public class Brainfuck {
 
         double endTime = System.nanoTime();
         System.out.println(memory);
-        Parser.EXEC_TIME = (endTime - startTime)*Math.pow(10, -9);
-        System.out.println(parser.printMetrics());
+        Metrics.EXEC_TIME = (endTime - startTime) * Math.pow(10, -9);
+        System.out.println(Metrics.printMetrics());
     }
 
     /**
@@ -53,22 +55,29 @@ public class Brainfuck {
         CommandLineParser commandParser = new DefaultParser();
         FileInputStream file;
         try {
-            parser = new Interpreter();
             CommandLine line = commandParser.parse(options, args);
             if (line.hasOption(P.expression)) {
                 file = new FileInputStream(line.getOptionValue(P.expression));
                 if (line.hasOption(REWRITE.expression)) {
-                    parser = new Rewrite(file);
-                } else if (line.hasOption(CHECK.expression)) {
-                    parser = new Check(file);
-                } else if (line.hasOption(TRANSLATE.expression)) {
-                    parser = new Translate(file);
-                } else if (line.hasOption(TRACE.expression)) {
+                    parsers.add(new Rewrite(file));
+                }
+                if (line.hasOption(CHECK.expression)) {
+                    parsers.add(new Check(file));
+                }
+                if (line.hasOption(TRANSLATE.expression)) {
+                    parsers.add(new Translate(file));
+                }
+                if (line.hasOption(TRACE.expression)) {
+                    int index = line.getOptionValue(P.expression).lastIndexOf(".");
                     String bfFile = line.getOptionValue(P.expression);
-                    String logFile = bfFile+".log";
-                    parser = new Trace(file, new PrintStream(logFile));
-                } else {
-                    parser = new Interpreter(file);
+                    if (index > 0) {
+                        bfFile = bfFile.substring(0, index);
+                    }
+                    String logFile = bfFile + ".log";
+                    parsers.add(new Trace(file, new PrintStream(logFile)));
+                }
+                if (parsers.isEmpty()) {
+                    parsers.add(new Interpreter(file));
                 }
             }
             if (line.hasOption(INPUT.expression)) {
@@ -77,11 +86,15 @@ public class Brainfuck {
             if (line.hasOption(OUTPUT.expression)) {
                 Output.stream = new PrintStream(line.getOptionValue(OUTPUT.expression));
             }
-
-            if (line.hasOption(P.expression) && line.getOptionValue(P.expression).endsWith(FILE_SUFFIX)) {
-                parser.readBitmap();
-            } else {
-                parser.parseFile();
+            if (parsers.isEmpty()) {
+                parsers.add(new Interpreter());
+            }
+            for (Parser parser : parsers) {
+                if (line.hasOption(P.expression) && line.getOptionValue(P.expression).endsWith(FILE_SUFFIX)) {
+                    parser.readBitmap();
+                } else {
+                    parser.parseFile();
+                }
             }
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());
