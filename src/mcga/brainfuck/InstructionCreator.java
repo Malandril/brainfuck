@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * This enum links the keywords in the Brainf*ck code to the instruction they correspond to.
  */
-public enum InstructionFactory {
+public enum InstructionCreator {
     INCR("INCR", "+","FFFFFF"),
     DECR("DECR", "-","4B0082"),
     LEFT("LEFT", "<","9400D3"),
@@ -25,7 +25,7 @@ public enum InstructionFactory {
      * Constructor of the enum
      * @param names List<String> containing the possible syntax for each instruction.
      */
-    InstructionFactory(String... names) {
+    InstructionCreator(String... names) {
         this.identifiers = Arrays.asList(names);
     }
 
@@ -55,10 +55,10 @@ public enum InstructionFactory {
      * @return Instruction corresponding
      * @throws InvalidInstructionException
      */
-    public static InstructionFactory hasInstruction(String str) throws InvalidInstructionException {
-        for (InstructionFactory instructionFactory : InstructionFactory.values()) {
-            if (instructionFactory.identifiers.contains(str)) {
-                return instructionFactory;
+    public static InstructionCreator hasInstruction(String str) throws InvalidInstructionException {
+        for (InstructionCreator instructionCreator : InstructionCreator.values()) {
+            if (instructionCreator.identifiers.contains(str)) {
+                return instructionCreator;
             }
         }
         throw new InvalidInstructionException(str);
@@ -72,7 +72,7 @@ public enum InstructionFactory {
      * @throws InvalidInstructionException
      */
     public static Instruction createInstruction(String s) throws InvalidInstructionException {
-        InstructionFactory inst = hasInstruction(s);
+        InstructionCreator inst = hasInstruction(s);
         Instruction instruction;
         switch (inst) {
             case INCR:

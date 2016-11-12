@@ -3,6 +3,8 @@ package mcga.brainfuck;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -16,6 +18,13 @@ public abstract class Parser {
     public static final int SQUARE_SIDE = 3;
     public static final String EMPTY_INSTRUCTION = "000000";
     private InputStream stream;
+    private String fileName;
+
+
+    public Parser(String fileName) throws FileNotFoundException {
+        this(new FileInputStream(fileName));
+        this.fileName = fileName;
+    }
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
@@ -25,7 +34,6 @@ public abstract class Parser {
     public Parser(InputStream stream) {
         this.stream = stream;
     }
-
 
     /**
      * Default constructor.
@@ -48,7 +56,7 @@ public abstract class Parser {
         scanner.useDelimiter("\\s*");
         while (scanner.hasNext()) {
             str = scanner.next();
-            if (InstructionFactory.isLongSyntax(str)) {
+            if (InstructionCreator.isLongSyntax(str)) {
                 str += scanner.nextLine();
             }
             try {

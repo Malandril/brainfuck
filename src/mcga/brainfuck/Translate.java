@@ -4,8 +4,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -19,6 +20,9 @@ public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
     private Queue<Color> colorFifo = new LinkedList<>();
 
+    public Translate(String fileName) throws FileNotFoundException {
+        super(fileName);
+    }
 
     /**
      * Constructor of the class.
@@ -26,7 +30,7 @@ public class Translate extends Parser {
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
-    public Translate(InputStream stream) {
+    public Translate(FileInputStream stream) {
         super(stream);
     }
 
@@ -38,7 +42,7 @@ public class Translate extends Parser {
      * @see Parser#execute(String)
      */
     public void execute(String str) throws InvalidInstructionException {
-        colorFifo.add(Color.decode(InstructionFactory.getBitmapColorIndex(str)));
+        colorFifo.add(Color.decode(InstructionCreator.getBitmapColorIndex(str)));
     }
 
     /**

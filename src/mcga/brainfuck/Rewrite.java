@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
-import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Class defining the actions to do when the user wants to convert his long syntax Brainf*ck code in short syntax.
@@ -8,12 +9,17 @@ import java.io.InputStream;
  */
 public class Rewrite extends Parser {
 
+    public Rewrite(String fileName) throws FileNotFoundException {
+        super(fileName);
+    }
+
     /**
+
      * Constructor of the class.
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
-    public Rewrite(InputStream stream) {
+    public Rewrite(FileInputStream stream) {
         super(stream);
     }
 
@@ -26,7 +32,7 @@ public class Rewrite extends Parser {
     public void execute(String str) {
         String strConverted;
         try {
-            strConverted = InstructionFactory.getShortSyntax(str);
+            strConverted = InstructionCreator.getShortSyntax(str);
             System.out.print(strConverted);
         } catch (InvalidInstructionException e) {
             System.err.println(e.getMessage());

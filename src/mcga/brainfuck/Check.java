@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
-import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Class defining the actions to do when the user wants to check if the Brainf*ck code is correctly written.
@@ -9,13 +10,17 @@ import java.io.InputStream;
 public class Check extends Parser {
     private long count = 0;
 
+    public Check(String fileName) throws FileNotFoundException {
+        super(fileName);
+    }
+
     /**
      * Constructor of the class.
      *
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
-    public Check(InputStream stream) {
+    public Check(FileInputStream stream) {
         super(stream);
     }
 
@@ -51,7 +56,7 @@ public class Check extends Parser {
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
-        InstructionFactory instr = InstructionFactory.hasInstruction(str);
+        InstructionCreator instr = InstructionCreator.hasInstruction(str);
         switch (instr) {
             case JUMP:
                 count++;

@@ -1,5 +1,7 @@
 package mcga.brainfuck;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -8,12 +10,12 @@ import java.io.PrintStream;
  */
 public class Trace extends Interpreter {
 
-    public static PrintStream logFileStream;
+    public PrintStream logFileStream;
 
 
-    public Trace(InputStream stream, PrintStream logFileStream) {
-        super(stream);
-        this.logFileStream = logFileStream;
+    public Trace(String fileName) throws FileNotFoundException {
+        super(fileName);
+        logFileStream = logFileStream;
     }
 
     @Override
@@ -21,9 +23,9 @@ public class Trace extends Interpreter {
         super.parseFile();
     }
 
-//    @Override
-//    public void interpretation(int i){
-//        super.interpretation(i);
-//        Metrics.logMetrics();
-//    }
+    @Override
+    public void  interpretation(int i){
+        super.interpretation(i);
+        Metrics.logMetrics();
+    }
 }

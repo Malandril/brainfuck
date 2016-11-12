@@ -1,9 +1,10 @@
 package mcga.brainfuck;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * This class extends Parser. It rewrites the methods from the superclass to interpret the parsed actions.
@@ -13,39 +14,52 @@ public class Interpreter extends Parser {
 
     //Trace trace = new Trace();
 
-
-    public static int ignoredUntilIndex = 0;
+    public int ignoredUntilIndex = 0;
+    private int index = 0;
     /**
      * Default constructor of the class.
      *
      * @see Parser#Parser()
      */
-    private static List<Instruction> instructions = new ArrayList<>();
-    private static Stack<Jump> jumpIndexStack = new Stack<>();
+    private List<Instruction> instructions = new ArrayList<>();
 
     public Interpreter() {
         super();
+    }
+
+    public Interpreter(String fileName) throws FileNotFoundException {
+        super(fileName);
     }
 
     /**
      * Constructor defining the stream in parameter as the input stream.
      *
      * @param stream
-     * @see Parser#Parser(InputStream)
+     * @see Parser(InputStream)
      */
-    public Interpreter(InputStream stream) {
+    public Interpreter(FileInputStream stream) {
         super(stream);
     }
 
-    public static List<Instruction> getInstructions() {
-        return instructions;
+    public int getIndex() {
+        return index;
     }
 
-    public static Stack<Jump> getJumpIndexStack() {
-        return jumpIndexStack;
+
+    @Override
+    public void parseFile() {
+        super.parseFile();
+        interpretList(0, instructions.size());
+        Metrics.PROG_SIZE = instructions.size();
     }
 
-    public static void interpretation(int i) {
+    public void interpretList(int start, int end) {
+        for (int i = start; i < end; i++) {
+            interpretation(i);
+        }
+    }
+
+    public void interpretation(int i) {
         try {
             if (i >= ignoredUntilIndex) {
                 ignoredUntilIndex = 0;
@@ -55,16 +69,12 @@ public class Interpreter extends Parser {
             }
         } catch (InvalidValueException e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
-    @Override
-    public void parseFile() {
-        super.parseFile();
-        for (int i = 0; i < instructions.size(); i++) {
-            interpretation(i);
-        }
-        Metrics.PROG_SIZE = instructions.size();
+    public Instruction getInstruction(int i){
+        return instructions.get(i);
     }
 
     /**
@@ -77,7 +87,8 @@ public class Interpreter extends Parser {
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
-        instructions.add(InstructionFactory.createInstruction(str));
+        index=instructions.size();
+        instructions.add(InstructionCreator.createInstruction(str));
     }
 
 

@@ -33,7 +33,7 @@ public class Memory {
      * @return true if i is between the values, false otherwise.
      */
     private boolean isValidNumber(int i) {
-        return i >= MIN_CELL_VALUE && i < MAX_CELL_VALUE;
+        return i >= MIN_CELL_VALUE && i <=MAX_CELL_VALUE;
     }
 
 
@@ -43,7 +43,7 @@ public class Memory {
      * @return true if it exists, false otherwise.
      */
     private boolean isValidIndex(int i) {
-        return currentIndex + i >= 0 && currentIndex + i <= MAX_SIZE;
+        return currentIndex + i >= 0 && currentIndex + i < MAX_SIZE;
     }
 
     /**

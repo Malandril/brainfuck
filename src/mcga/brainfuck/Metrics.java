@@ -13,14 +13,14 @@ public class Metrics {
     static long EXEC_MOVE = 0;
 
     public static void logMetrics() {
-        Trace.logFileStream.println("Exec step => " + Double.toString(Metrics.EXEC_POS)
+        System.err.println("Exec step => " + Double.toString(Metrics.EXEC_POS)
                 + '\t' + '\t' + "Data pointer loc => " + Brainfuck.memory.getCurrentIndex()
                 + '\t' + '\t' + "Memory => " + Brainfuck.memory);
     }
 
     public static String printMetrics() {
         return "PROG_SIZE = " + PROG_SIZE + '\n' +
-                "EXEC_TIME = " + EXEC_TIME + " s" + '\n' +
+                "EXEC_TIME = " + EXEC_TIME + " ms" + '\n' +
                 "EXEC_MOVE = " + EXEC_MOVE + '\n' +
                 "DATA_MOVE = " + DATA_MOVE + '\n' +
                 "DATA_READ = " + DATA_READ + '\n' +

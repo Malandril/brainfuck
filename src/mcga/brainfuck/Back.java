@@ -5,10 +5,11 @@ package mcga.brainfuck;
  * This class, as well as the Jump class, extends Loop, as they both define a loop in a Brainf*ck program.
  */
 public class Back extends Loop {
+
     public Back() {
-        index = Interpreter.getInstructions().size();
-        boundLoopIndex = Interpreter.getJumpIndexStack().pop().index;
-        ((Loop) Interpreter.getInstructions().get(boundLoopIndex)).boundLoopIndex = index;
+        index = interpreter.getIndex();
+        boundLoopIndex = Jump.popJumpStack().index;
+        ((Loop) interpreter.getInstruction(boundLoopIndex)).boundLoopIndex = index;
     }
 
     /**
@@ -28,10 +29,7 @@ public class Back extends Loop {
      */
     private void back() throws InvalidValueException {
         while (Brainfuck.memory.getCurrentCellValue() != 0) {
-            for (int i = boundLoopIndex + 1; i < index; i++) {
-                Interpreter.interpretation(i);
-
-            }
+            interpreter.interpretList(boundLoopIndex, index);
         }
     }
 }

@@ -38,7 +38,7 @@ public class Brainfuck {
 
         double endTime = System.nanoTime();
         System.out.println(memory);
-        Metrics.EXEC_TIME = (endTime - startTime) * Math.pow(10, -9);
+        Metrics.EXEC_TIME = (endTime - startTime) * Math.pow(10, -6);
         System.out.println(Metrics.printMetrics());
     }
 
@@ -53,31 +53,34 @@ public class Brainfuck {
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();
-        FileInputStream file;
         try {
             CommandLine line = commandParser.parse(options, args);
+            String pValue = line.getOptionValue(P.expression);
             if (line.hasOption(P.expression)) {
-                file = new FileInputStream(line.getOptionValue(P.expression));
-                if (line.hasOption(REWRITE.expression)) {
-                    parsers.add(new Rewrite(file));
-                }
-                if (line.hasOption(CHECK.expression)) {
-                    parsers.add(new Check(file));
-                }
-                if (line.hasOption(TRANSLATE.expression)) {
-                    parsers.add(new Translate(file));
-                }
                 if (line.hasOption(TRACE.expression)) {
-                    int index = line.getOptionValue(P.expression).lastIndexOf(".");
-                    String bfFile = line.getOptionValue(P.expression);
+                    int index = pValue.lastIndexOf(".");
+                    String bfFile = pValue;
                     if (index > 0) {
                         bfFile = bfFile.substring(0, index);
                     }
                     String logFile = bfFile + ".log";
-                    parsers.add(new Trace(file, new PrintStream(logFile)));
+                    System.setErr(new PrintStream(logFile));
+                    parsers.add(new Trace(pValue));
                 }
-                if (parsers.isEmpty()) {
-                    parsers.add(new Interpreter(file));
+                else {
+                    if (line.hasOption(REWRITE.expression)) {
+                        parsers.add(new Rewrite(pValue));
+                    }
+                    if (line.hasOption(CHECK.expression)) {
+                        parsers.add(new Check(pValue));
+                    }
+                    if (line.hasOption(TRANSLATE.expression)) {
+                        parsers.add(new Translate(pValue));
+                    }
+
+                    if (parsers.isEmpty()) {
+                        parsers.add(new Interpreter(pValue));
+                    }
                 }
             }
             if (line.hasOption(INPUT.expression)) {
@@ -90,7 +93,7 @@ public class Brainfuck {
                 parsers.add(new Interpreter());
             }
             for (Parser parser : parsers) {
-                if (line.hasOption(P.expression) && line.getOptionValue(P.expression).endsWith(FILE_SUFFIX)) {
+                if (line.hasOption(P.expression) && pValue.endsWith(FILE_SUFFIX)) {
                     parser.readBitmap();
                 } else {
                     parser.parseFile();
