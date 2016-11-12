@@ -34,7 +34,7 @@ public class Interpreter extends Parser {
     /**
      * Constructor defining the stream in parameter as the input stream.
      *
-     * @param stream
+     * @param stream inputStream
      * @see Parser(InputStream)
      */
     public Interpreter(FileInputStream stream) {
@@ -50,7 +50,6 @@ public class Interpreter extends Parser {
     public void parseFile() {
         super.parseFile();
         interpretList(0, instructions.size());
-        Metrics.PROG_SIZE = instructions.size();
     }
 
     public void interpretList(int start, int end) {

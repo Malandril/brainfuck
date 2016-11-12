@@ -57,7 +57,22 @@ public class Brainfuck {
             CommandLine line = commandParser.parse(options, args);
             String pValue = line.getOptionValue(P.expression);
             if (line.hasOption(P.expression)) {
-                if (line.hasOption(TRACE.expression)) {
+                boolean hasTrace = line.hasOption(TRACE.expression);
+                boolean hasRewrite = line.hasOption(REWRITE.expression);
+                boolean hasCheck = line.hasOption(CHECK.expression);
+                boolean hasTranslate = line.hasOption(TRANSLATE.expression);
+                if (hasCheck || hasRewrite || hasTranslate) {
+                    if (hasRewrite) {
+                        parsers.add(new Rewrite(pValue));
+                    }
+                    if (hasCheck) {
+                        parsers.add(new Check(pValue));
+                    }
+                    if (hasTranslate) {
+                        parsers.add(new Translate(pValue));
+                    }
+
+                } else if (hasTrace) {
                     int index = pValue.lastIndexOf(".");
                     String bfFile = pValue;
                     if (index > 0) {
@@ -67,20 +82,8 @@ public class Brainfuck {
                     System.setErr(new PrintStream(logFile));
                     parsers.add(new Trace(pValue));
                 }
-                else {
-                    if (line.hasOption(REWRITE.expression)) {
-                        parsers.add(new Rewrite(pValue));
-                    }
-                    if (line.hasOption(CHECK.expression)) {
-                        parsers.add(new Check(pValue));
-                    }
-                    if (line.hasOption(TRANSLATE.expression)) {
-                        parsers.add(new Translate(pValue));
-                    }
-
-                    if (parsers.isEmpty()) {
-                        parsers.add(new Interpreter(pValue));
-                    }
+                if (parsers.isEmpty()) {
+                    parsers.add(new Interpreter(pValue));
                 }
             }
             if (line.hasOption(INPUT.expression)) {

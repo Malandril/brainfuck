@@ -51,6 +51,7 @@ public abstract class Parser {
      * @see Interpreter#parseFile()
      */
     public void parseFile() {
+        Metrics.PROG_SIZE=0;
         Scanner scanner = new Scanner(this.stream);
         String str;
         scanner.useDelimiter("\\s*");
@@ -61,6 +62,7 @@ public abstract class Parser {
             }
             try {
                 execute(str);
+                Metrics.PROG_SIZE++;
             } catch (InvalidInstructionException e) {
                 System.err.println(e.getMessage());
                 System.exit(42);
@@ -77,6 +79,7 @@ public abstract class Parser {
      */
     public void readBitmap() {
         try {
+            Metrics.PROG_SIZE=0;
             BufferedImage image = ImageIO.read(stream);
             int height = image.getHeight();
             int width = image.getWidth();
@@ -100,6 +103,7 @@ public abstract class Parser {
                     }
                     if (!hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
+                        Metrics.PROG_SIZE++;
                     }
                 }
             }

@@ -9,7 +9,6 @@ public interface Instruction {
     /**
      * Defines the actions to execute when the instruction is encountered.
      * @throws InvalidValueException
-     * @throws IndexOutOfBoundsException
      */
-    void interpret() throws InvalidValueException, IndexOutOfBoundsException;
+    void interpret() throws InvalidValueException;
 }
