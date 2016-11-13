@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 public class MemoryTest {
     Memory memory;
 
+
     @Before
     public void setUp() throws Exception {
         memory=new Memory();
