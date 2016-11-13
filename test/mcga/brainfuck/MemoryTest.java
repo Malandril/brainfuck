@@ -60,7 +60,9 @@ public class MemoryTest {
     public void testExceptionChangeCurentIndex(){
         try{
             memory.changeCurrentIndex(-2);
-        }catch (IndexOutOfBoundsException expectedException){}
+        }catch (IndexOutOfBoundsException expectedException){
+
+        }
     }
 
     @Test
