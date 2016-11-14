@@ -45,6 +45,9 @@ public class MemoryTest {
         try {
             memory.addCurrentCellValue(300);
         }catch (InvalidValueException expectedException){}
+        try {
+            memory.addCurrentCellValue(-10);
+        }catch (InvalidValueException expectedException){}
     }
 
     @Test
@@ -58,9 +61,10 @@ public class MemoryTest {
     public void testExceptionChangeCurentIndex(){
         try{
             memory.changeCurrentIndex(-2);
-        }catch (IndexOutOfBoundsException expectedException){
-
-        }
+        }catch (IndexOutOfBoundsException expectedException){}
+        try{
+            memory.changeCurrentIndex(2);
+        }catch (IndexOutOfBoundsException expectedException){}
     }
 
     @Test
