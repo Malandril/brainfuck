@@ -37,7 +37,7 @@ public class Brainfuck {
     /**
      * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
      *
-     * @param args DIfferent perameters accepted
+     * @param args Different parameters accepted
      */
     public static void main(String[] args) {
         double startTime = System.nanoTime();
