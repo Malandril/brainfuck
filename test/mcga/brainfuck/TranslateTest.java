@@ -1,7 +1,9 @@
 package mcga.brainfuck;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,14 +18,18 @@ public class TranslateTest {
 
     @Before
     public void setUp() throws Exception {
+        File file=new File("test.bf");
+        file.createNewFile();
         translate=new Translate("test.bf");
     }
 
+    @Rule
+    public ExpectedException expectedException=ExpectedException.none();
+
     @Test
-    public void testFileNotFoundExceptionInstantiation(){
-        try{
-            translate=new Translate("inexistantFile");
-        }catch(FileNotFoundException exceptedException){}
+    public void testFileNotFoundExceptionInstantiation() throws FileNotFoundException {
+        expectedException.expect(FileNotFoundException.class);
+        translate=new Translate("inexistantFile");
     }
 
     @Test
@@ -32,10 +38,9 @@ public class TranslateTest {
     }
 
     @Test
-    public void testExecuteInvalidInstructionException(){
-        try{
-            translate.execute("a");
-        }catch(InvalidInstructionException expectedException){}
+    public void testExecuteInvalidInstructionException() throws InvalidInstructionException {
+        expectedException.expect(InvalidInstructionException.class);
+        translate.execute("a");
     }
 
     @Test

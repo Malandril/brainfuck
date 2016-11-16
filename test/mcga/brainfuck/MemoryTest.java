@@ -1,7 +1,9 @@
 package mcga.brainfuck;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 
 import static org.junit.Assert.assertEquals;
@@ -17,6 +19,9 @@ public class MemoryTest {
     public void setUp() throws Exception {
         memory=new Memory();
     }
+
+    @Rule
+    public ExpectedException expectedException=ExpectedException.none();
 
     @Test
     public void testInstantiation() throws Exception{
@@ -41,14 +46,11 @@ public class MemoryTest {
     }
 
     @Test
-    public void testExceptionAddCurrentCellValue() {
-        try {
-            memory.addCurrentCellValue(300);
-        }catch (InvalidValueException expectedException){}
-        try {
-            memory.addCurrentCellValue(-10);
-        }catch (InvalidValueException expectedException){}
-    }
+    public void testExceptionAddCurrentCellValue() throws InvalidValueException {
+        expectedException.expect(InvalidValueException.class);
+        memory.addCurrentCellValue(300);
+        memory.addCurrentCellValue(-10);
+        }
 
     @Test
     public void testChangeCurrentIndex() throws Exception {
@@ -57,14 +59,17 @@ public class MemoryTest {
         assertEquals(tmp+6,memory.getCurrentIndex());
     }
 
+
     @Test
-    public void testExceptionChangeCurentIndex(){
-        try{
-            memory.changeCurrentIndex(-2);
-        }catch (IndexOutOfBoundsException expectedException){}
-        try{
-            memory.changeCurrentIndex(2);
-        }catch (IndexOutOfBoundsException expectedException){}
+    public void testExceptionLowChangeCurentIndex(){
+        expectedException.expect(IndexOutOfBoundsException.class);
+        memory.changeCurrentIndex(-2);
+    }
+
+    @Test
+    public void testExceptionHightChangeCurrentIndex(){
+        expectedException.expect(IndexOutOfBoundsException.class);
+        memory.changeCurrentIndex(30000);
     }
 
     @Test
