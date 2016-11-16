@@ -1,4 +1,4 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
 
 
 /**

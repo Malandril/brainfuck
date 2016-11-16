@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +33,7 @@ public class Right extends Movement {
      * @throws
      */
     private void moveR() {
-        Brainfuck.memory.changeCurrentIndex(1);
+        Brainfuck.getMemory().changeCurrentIndex(1);
     }
 
 }

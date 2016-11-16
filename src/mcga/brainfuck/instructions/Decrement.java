@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +30,7 @@ public class Decrement extends Operation {
      * @throws InvalidValueException
      */
     private void decrementation() throws InvalidValueException {
-        Brainfuck.memory.addCurrentCellValue(-1);
+        Brainfuck.getMemory().addCurrentCellValue(-1);
     }
 
 }

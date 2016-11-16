@@ -1,8 +1,8 @@
-package mcga.brainfuck;
+package mcga.brainfuck.processing;
 
-import java.io.FileInputStream;
+import mcga.brainfuck.Metrics;
+
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.PrintStream;
 
 /**

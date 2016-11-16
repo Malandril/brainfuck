@@ -1,4 +1,10 @@
-package mcga.brainfuck;
+package mcga.brainfuck.processing;
+
+import mcga.brainfuck.InstructionCreator;
+import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InvalidInstructionException;
+import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.instructions.Instruction;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -63,8 +69,8 @@ public class Interpreter extends Parser {
             if (i >= ignoredUntilIndex) {
                 ignoredUntilIndex = 0;
                 instructions.get(i).interpret();
-                Metrics.EXEC_POS = i + 1;
-                Metrics.EXEC_MOVE++;
+                Metrics.setExecPos(i + 1);
+                Metrics.setExecMove(Metrics.getExecMove() + 1);
             }
         } catch (InvalidValueException e) {
             e.printStackTrace();

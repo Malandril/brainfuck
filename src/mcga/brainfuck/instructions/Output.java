@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.Metrics;
 
 import java.io.PrintStream;
 
@@ -20,8 +23,8 @@ public class Output extends DataIO {
      * Overrides the method defined in the Instruction interface to execute the output action.
      */
     public void interpret() {
-        Metrics.DATA_READ++;
-        stream.print((char) Brainfuck.memory.getCurrentCellValue());
+        Metrics.setDataRead(Metrics.getDataRead() + 1);
+        stream.print((char) Brainfuck.getMemory().getCurrentCellValue());
     }
 
 }

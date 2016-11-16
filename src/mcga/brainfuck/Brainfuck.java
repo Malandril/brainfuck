@@ -1,6 +1,9 @@
 package mcga.brainfuck;
 
 
+import mcga.brainfuck.instructions.Input;
+import mcga.brainfuck.instructions.Output;
+import mcga.brainfuck.processing.*;
 import org.apache.commons.cli.*;
 
 import java.io.FileInputStream;
@@ -19,9 +22,17 @@ import static mcga.brainfuck.Arguments.*;
  */
 public class Brainfuck {
 
-    public static final String FILE_SUFFIX = "bmp";
-    static Memory memory = new Memory();
-    static List<Parser> parsers = new ArrayList<>();
+    private static final String FILE_SUFFIX = "bmp";
+    private static Memory memory = new Memory();
+    private static List<mcga.brainfuck.processing.Parser> parsers = new ArrayList<>();
+
+    public static Memory getMemory() {
+        return memory;
+    }
+
+    public static Interpreter getInterpreter() {
+        return (Interpreter) parsers.get(0);
+    }
 
     /**
      * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
@@ -33,12 +44,9 @@ public class Brainfuck {
 
         readArguments(args);
         System.out.println();
-
-        System.out.println();
-
         double endTime = System.nanoTime();
         System.out.println(memory);
-        Metrics.EXEC_TIME = (endTime - startTime) * Math.pow(10, -6);
+        Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
         System.out.println(Metrics.printMetrics());
     }
 
@@ -95,7 +103,7 @@ public class Brainfuck {
             if (parsers.isEmpty()) {
                 parsers.add(new Interpreter());
             }
-            for (Parser parser : parsers) {
+            for (mcga.brainfuck.processing.Parser parser : parsers) {
                 if (line.hasOption(P.expression) && pValue.endsWith(FILE_SUFFIX)) {
                     parser.readBitmap();
                 } else {

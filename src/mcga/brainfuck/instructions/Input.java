@@ -1,5 +1,9 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
 
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +14,7 @@ import java.io.InputStream;
  * program.
  */
 public class Input extends DataIO {
-    static InputStream stream;
+    public static InputStream stream;
 
     /**
      * Default constructor
@@ -24,11 +28,11 @@ public class Input extends DataIO {
      * @throws InvalidValueException
      */
     public void interpret() throws InvalidValueException {
-        Metrics.DATA_WRITE++;
+        Metrics.setDataWrite(Metrics.getDataWrite() + 1);
         try {
             int c = stream.read();
-            Brainfuck.memory.clearCurrentCell();
-            Brainfuck.memory.addCurrentCellValue(c);
+            Brainfuck.getMemory().clearCurrentCell();
+            Brainfuck.getMemory().addCurrentCellValue(c);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(3);

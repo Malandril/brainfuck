@@ -1,4 +1,4 @@
-package mcga.brainfuck;
+package mcga.brainfuck.exceptions;
 
 /**
  * This exception is called if the bitmap structure is invalid :

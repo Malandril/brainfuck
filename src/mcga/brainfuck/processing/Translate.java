@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.processing;
+
+import mcga.brainfuck.InstructionCreator;
+import mcga.brainfuck.exceptions.InvalidInstructionException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

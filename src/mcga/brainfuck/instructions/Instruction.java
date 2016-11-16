@@ -1,4 +1,6 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 /**
  * This interface defines the method interpret, which is common to the 8 instructions the Brainf*ck

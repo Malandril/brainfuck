@@ -1,5 +1,8 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.InvalidInstructionException;
+import mcga.brainfuck.instructions.*;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public enum InstructionCreator {
 
 
     private static final int SHORT_SYNTAX_INDEX = 1;
-    public static final int BITMAP_COLOR_INDEX=2;
+    private static final int BITMAP_COLOR_INDEX = 2;
     List<String> identifiers;
 
     /**

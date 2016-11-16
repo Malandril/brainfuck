@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 /**
  * Class defining the action corresponding to the shift of the memory pointer to the left.
@@ -22,7 +25,7 @@ public class Left extends Movement {
      * @throws InvalidValueException
      */
     private void moveL() throws InvalidValueException {
-        Brainfuck.memory.changeCurrentIndex(- 1);
+        Brainfuck.getMemory().changeCurrentIndex(-1);
     }
 
 }

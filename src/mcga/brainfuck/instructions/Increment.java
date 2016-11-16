@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 /**
  * Class defining the action corresponding to the incrementation of the value of a cell.
@@ -22,7 +25,7 @@ public class Increment extends Operation {
      * @throws InvalidValueException
      */
     private void incrementation() throws InvalidValueException {
-        Brainfuck.memory.addCurrentCellValue(1);
+        Brainfuck.getMemory().addCurrentCellValue(1);
     }
 
 }

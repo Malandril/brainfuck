@@ -1,5 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.exceptions;
 
+
+import mcga.brainfuck.Memory;
 
 /**
  * This exception is called if the value of a memory cell exceeds 255 or becomes negative.

@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 import java.util.Stack;
 
@@ -36,7 +39,7 @@ public class Jump extends Loop {
      */
 
     private void jump() {
-        if (Brainfuck.memory.getCurrentCellValue() == 0) {
+        if (Brainfuck.getMemory().getCurrentCellValue() == 0) {
             interpreter.ignoredUntilIndex = boundLoopIndex;
         }
     }

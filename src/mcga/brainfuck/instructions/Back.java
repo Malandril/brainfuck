@@ -1,4 +1,7 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
+
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.InvalidValueException;
 
 /**
  * Class defining the action corresponding to the end of a loop.
@@ -8,8 +11,9 @@ public class Back extends Loop {
 
     public Back() {
         index = interpreter.getIndex();
-        boundLoopIndex = Jump.popJumpStack().index;
-        ((Loop) interpreter.getInstruction(boundLoopIndex)).boundLoopIndex = index;
+        Jump boundLoop = Jump.popJumpStack();
+        boundLoopIndex = boundLoop.index;
+        boundLoop.boundLoopIndex = index;
     }
 
     /**
@@ -28,7 +32,7 @@ public class Back extends Loop {
      * Defines the actions of a back instruction.
      */
     private void back() throws InvalidValueException {
-        while (Brainfuck.memory.getCurrentCellValue() != 0) {
+        while (Brainfuck.getMemory().getCurrentCellValue() != 0) {
             interpreter.interpretList(boundLoopIndex, index);
         }
     }

@@ -1,4 +1,9 @@
-package mcga.brainfuck;
+package mcga.brainfuck.processing;
+
+import mcga.brainfuck.InstructionCreator;
+import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InvalidBitmapException;
+import mcga.brainfuck.exceptions.InvalidInstructionException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -51,7 +56,7 @@ public abstract class Parser {
      * @see Interpreter#parseFile()
      */
     public void parseFile() {
-        Metrics.PROG_SIZE=0;
+        Metrics.setProgSize(0);
         Scanner scanner = new Scanner(this.stream);
         String str;
         scanner.useDelimiter("\\s*");
@@ -62,7 +67,7 @@ public abstract class Parser {
             }
             try {
                 execute(str);
-                Metrics.PROG_SIZE++;
+                Metrics.setProgSize(Metrics.getProgSize() + 1);
             } catch (InvalidInstructionException e) {
                 System.err.println(e.getMessage());
                 System.exit(42);
@@ -79,7 +84,7 @@ public abstract class Parser {
      */
     public void readBitmap() {
         try {
-            Metrics.PROG_SIZE=0;
+            Metrics.setProgSize(0);
             BufferedImage image = ImageIO.read(stream);
             int height = image.getHeight();
             int width = image.getWidth();
@@ -103,7 +108,7 @@ public abstract class Parser {
                     }
                     if (!hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
-                        Metrics.PROG_SIZE++;
+                        Metrics.setProgSize(Metrics.getProgSize() + 1);
                     }
                 }
             }

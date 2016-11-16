@@ -1,4 +1,4 @@
-package mcga.brainfuck;
+package mcga.brainfuck.exceptions;
 
 /**
  * This exception is called if the instruction written in the file doesn't correspond to a Brainf*ck instruction.
