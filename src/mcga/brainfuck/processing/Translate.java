@@ -75,9 +75,8 @@ public class Translate extends Parser {
                 }
             }
         }
-        File file = new File("translation." + FILE_FORMAT);
         try {
-            ImageIO.write(image, FILE_FORMAT, file);
+            ImageIO.write(image, FILE_FORMAT, System.out);
         } catch (IOException e) {
             e.printStackTrace();
         }
