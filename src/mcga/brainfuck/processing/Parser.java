@@ -4,7 +4,6 @@ import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.instructions.Instruction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,21 +12,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Queue;
 
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
  */
 public abstract class Parser {
-
-    protected static final int SQUARE_SIDE = 3;
+    public static final String MACRO = "$";
+    static final int SQUARE_SIDE = 3;
+    private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
+    Map<String, String> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
-    Map<String,String> macroMap= new HashMap<>();
+    private Queue<String> currentQueue = new LinkedList<>();
+
 
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
@@ -71,11 +72,15 @@ public abstract class Parser {
      */
     public static boolean isLongSyntax(String str) {
         char firstChar = str.charAt(0);
-        return (Character.getType(firstChar) == Character.UPPERCASE_LETTER);
+        return Character.isLetter(firstChar);
     }
 
-    public static boolean isMacro(String str) {
+    public static boolean isMacroDeclaration(String str) {
         return str.startsWith("$");
+    }
+
+    public static boolean isComments(String str) throws InvalidInstructionException {
+        return str.equals(COM);
     }
 
     /**
@@ -89,30 +94,48 @@ public abstract class Parser {
         Metrics.setProgSize(0);
         Scanner scanner = new Scanner(this.stream);
         String str;
-        String[] macro;
-        String macroName;
-        String macroCode;
+        String macro[];
+        scanner.useDelimiter("\\s*");
         try {
-            scanner.useDelimiter("\\s*");
             while (scanner.hasNext()) {
                 str = scanner.next();
                 if (isLongSyntax(str)) {
                     str += scanner.nextLine();
-                }if (isMacro(str)) {
+                    str = getLongSyntax(str);
+                    if (InstructionCreator.hasInstruction(str) == null) {
+                        for (int i = 0; i < str.length(); i++) {
+                            execute(Character.toString(str.charAt(i)));
+                        }
+                    } else {
+                        execute(str);
+                    }
+
+                } else if (isComments(str)) {
+                    scanner.nextLine();
+                } else if (isMacroDeclaration(str)) {
                     macro = scanner.nextLine().split("=");
-                    macroName = macro[0];
-                    macroCode = macro[1];
-                    macroMap.put(macroName,macroCode);
+                    macroMap.put(macro[0], macro[1]);
                 }
                 else {
                     execute(str);
                 }
-                Metrics.setProgSize(Metrics.getProgSize() + 1);
-
             }
         } catch (InvalidInstructionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @param str
+     * @return
+     * @throws InvalidInstructionException
+     */
+    public String getLongSyntax(String str) throws InvalidInstructionException {
+        String s = str.replaceAll("\\s*#.*", "");
+        for (Map.Entry<String, String> entry : macroMap.entrySet()) {
+            s = s.replaceAll(entry.getKey(), entry.getValue());
+        }
+        return s;
     }
 
     /**
@@ -154,10 +177,10 @@ public abstract class Parser {
             }
         } catch (InvalidInstructionException e) {
             e.printStackTrace();
-            System.exit(e.EXIT_CODE);
+            System.exit(InvalidInstructionException.EXIT_CODE);
         } catch (InvalidBitmapException e) {
             e.printStackTrace();
-            System.exit(e.EXIT_CODE);
+            System.exit(InvalidBitmapException.EXIT_CODE);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(3);
