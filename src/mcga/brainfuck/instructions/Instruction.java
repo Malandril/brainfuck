@@ -1,6 +1,7 @@
 package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 
 /**
  * This interface defines the method interpret, which is common to the 8 instructions the Brainf*ck
@@ -12,5 +13,5 @@ public interface Instruction {
      * Defines the actions to execute when the instruction is encountered.
      * @throws InvalidValueException
      */
-    void interpret() throws InvalidValueException;
+    void interpret() throws InvalidValueException, MyIndexOutOfBoundsException;
 }

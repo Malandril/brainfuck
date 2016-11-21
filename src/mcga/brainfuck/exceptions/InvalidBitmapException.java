@@ -7,4 +7,5 @@ package mcga.brainfuck.exceptions;
  * </ul>
  */
 public class InvalidBitmapException extends Exception {
+    public static final int EXIT_CODE =14;
 }

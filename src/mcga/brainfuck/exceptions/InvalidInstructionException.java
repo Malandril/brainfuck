@@ -9,6 +9,7 @@ public class InvalidInstructionException extends Exception {
      * @param message String to display when the exception is thrown.
      * @see Exception#Exception()
      */
+    public static final int EXIT_CODE=42;
     public InvalidInstructionException(String message) {
         super("Instruction Invalide: " + message);
     }

@@ -4,6 +4,7 @@ import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
+import mcga.brainfuck.instructions.Instruction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -20,11 +23,11 @@ import java.util.Scanner;
  */
 public abstract class Parser {
 
-    public static final int SQUARE_SIDE = 3;
-    public static final String EMPTY_INSTRUCTION = "000000";
+    protected static final int SQUARE_SIDE = 3;
+    private static final String EMPTY_INSTRUCTION = "000000";
     private InputStream stream;
     private String fileName;
-
+    Map<String,String> macroMap= new HashMap<>();
 
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
@@ -49,6 +52,33 @@ public abstract class Parser {
     }
 
     /**
+     * Searches for the short syntax representation corresponding to a long syntax representation.
+     *
+     * @param longStr String corresponding to the long syntax of an instruction.
+     * @return String corresponding to the short representation of the instruction.
+     * @throws InvalidInstructionException
+     */
+    public static String getShortSyntax(String longStr) throws InvalidInstructionException {
+        return InstructionCreator.hasInstruction(longStr).getIdentifier(InstructionCreator.SHORT_SYNTAX_INDEX);
+    }
+
+    /**
+     * Tests the first character to determine if the String is made of several short syntax instructions
+     * or a single long syntax instruction.
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isLongSyntax(String str) {
+        char firstChar = str.charAt(0);
+        return (Character.getType(firstChar) == Character.UPPERCASE_LETTER);
+    }
+
+    public static boolean isMacro(String str) {
+        return str.startsWith("$");
+    }
+
+    /**
      * Reads the file containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
      *
@@ -59,19 +89,29 @@ public abstract class Parser {
         Metrics.setProgSize(0);
         Scanner scanner = new Scanner(this.stream);
         String str;
-        scanner.useDelimiter("\\s*");
-        while (scanner.hasNext()) {
-            str = scanner.next();
-            if (InstructionCreator.isLongSyntax(str)) {
-                str += scanner.nextLine();
-            }
-            try {
-                execute(str);
+        String[] macro;
+        String macroName;
+        String macroCode;
+        try {
+            scanner.useDelimiter("\\s*");
+            while (scanner.hasNext()) {
+                str = scanner.next();
+                if (isLongSyntax(str)) {
+                    str += scanner.nextLine();
+                }if (isMacro(str)) {
+                    macro = scanner.nextLine().split("=");
+                    macroName = macro[0];
+                    macroCode = macro[1];
+                    macroMap.put(macroName,macroCode);
+                }
+                else {
+                    execute(str);
+                }
                 Metrics.setProgSize(Metrics.getProgSize() + 1);
-            } catch (InvalidInstructionException e) {
-                System.err.println(e.getMessage());
-                System.exit(42);
+
             }
+        } catch (InvalidInstructionException e) {
+            e.printStackTrace();
         }
     }
 
@@ -114,10 +154,10 @@ public abstract class Parser {
             }
         } catch (InvalidInstructionException e) {
             e.printStackTrace();
-            System.exit(42);
+            System.exit(e.EXIT_CODE);
         } catch (InvalidBitmapException e) {
             e.printStackTrace();
-            System.exit(14);
+            System.exit(e.EXIT_CODE);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(3);
