@@ -1,5 +1,7 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.instructions.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,17 +14,19 @@ import java.io.PrintStream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+
 /**
  * Created by user on 15/11/2016.
  */
 public class InstructionTest {
+    private final String testFileName = "test";
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
     Instruction instruction;
 
     @Before
     public void setUp() throws Exception {
-        Brainfuck.memory = new Memory();
+        Brainfuck.setMemory(new Memory());
     }
 
     @Test
@@ -30,7 +34,7 @@ public class InstructionTest {
         instruction = new Increment();
         assertNotNull(instruction);
         instruction.interpret();
-        assertEquals(Brainfuck.memory.getCurrentCellValue(), 1);
+        assertEquals(Brainfuck.getMemory().getCurrentCellValue(), 1);
     }
 
     @Test
@@ -47,7 +51,7 @@ public class InstructionTest {
         new Increment().interpret();
         new Increment().interpret();
         instruction.interpret();
-        assertEquals(Brainfuck.memory.getCurrentCellValue(), 1);
+        assertEquals(Brainfuck.getMemory().getCurrentCellValue(), 1);
     }
 
     @Test
@@ -64,7 +68,7 @@ public class InstructionTest {
         new Right().interpret();
         new Right().interpret();
         instruction.interpret();
-        assertEquals(Brainfuck.memory.getCurrentIndex(), 1);
+        assertEquals(Brainfuck.getMemory().getCurrentIndex(), 1);
     }
 
     @Test
@@ -72,29 +76,34 @@ public class InstructionTest {
         instruction = new Right();
         assertNotNull(instruction);
         instruction.interpret();
-        assertEquals(Brainfuck.memory.getCurrentIndex(), 1);
+        assertEquals(Brainfuck.getMemory().getCurrentIndex(), 1);
     }
 
     @Test
     public void testIn() throws Exception {
-        PrintStream printStream = new PrintStream("test.bf");
+        PrintStream printStream = new PrintStream(testFileName);
         printStream.println("a");
-        InputStream inputStream = new FileInputStream("test.bf");
+        InputStream inputStream = new FileInputStream(testFileName);
         Input.stream = inputStream;
         instruction = new Input();
         assertNotNull(instruction);
         instruction.interpret();
-        assertEquals(97, Brainfuck.memory.getCurrentCellValue());
+        assertEquals(97, Brainfuck.getMemory().getCurrentCellValue());
     }
 
     @Test
     public void testOut() throws Exception {
-        PrintStream printStream = new PrintStream("test.bf");
-        Output.stream = printStream;
+        PrintStream printStream = new PrintStream(testFileName);
+        System.setOut(printStream);
         instruction = new Output();
         assertNotNull(instruction);
         instruction.interpret();
-        InputStream inputStream = new FileInputStream("test.bf");
-        assertEquals(0,inputStream.read());
+        InputStream inputStream = new FileInputStream(testFileName);
+        assertEquals(0, inputStream.read());
     }
+
+/*     @Test
+    public void testJump() throws Exception{
+         Jump jump=new Jump();
+     }*/
 }

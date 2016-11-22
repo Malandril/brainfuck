@@ -12,8 +12,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.Queue;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
@@ -27,8 +28,6 @@ public abstract class Parser {
     Map<String, String> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
-    private Queue<String> currentQueue = new LinkedList<>();
-
 
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
@@ -104,7 +103,8 @@ public abstract class Parser {
                     str = getLongSyntax(str);
                     if (InstructionCreator.hasInstruction(str) == null) {
                         for (int i = 0; i < str.length(); i++) {
-                            execute(Character.toString(str.charAt(i)));
+                            String in = str.substring(i, i + 1);
+                            execute(in);
                         }
                     } else {
                         execute(str);
@@ -131,7 +131,7 @@ public abstract class Parser {
      * @throws InvalidInstructionException
      */
     public String getLongSyntax(String str) throws InvalidInstructionException {
-        String s = str.replaceAll("\\s*#.*", "");
+        String s = str.replaceAll("\\s*|\\s*#.*", "");
         for (Map.Entry<String, String> entry : macroMap.entrySet()) {
             s = s.replaceAll(entry.getKey(), entry.getValue());
         }

@@ -2,7 +2,6 @@ package mcga.brainfuck;
 
 
 import mcga.brainfuck.instructions.Input;
-import mcga.brainfuck.instructions.Output;
 import mcga.brainfuck.processing.*;
 import org.apache.commons.cli.*;
 
@@ -30,6 +29,10 @@ public class Brainfuck {
         return memory;
     }
 
+    public static void setMemory(Memory memory) {
+        Brainfuck.memory = memory;
+    }
+
     public static Interpreter getInterpreter() {
         return (Interpreter) parsers.get(0);
     }
@@ -41,7 +44,6 @@ public class Brainfuck {
      */
     public static void main(String[] args) {
         double startTime = System.nanoTime();
-
         readArguments(args);
         System.out.println();
         double endTime = System.nanoTime();
