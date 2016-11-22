@@ -10,18 +10,18 @@ import java.util.List;
  * This enum links the keywords in the Brainf*ck code to the instruction they correspond to.
  */
 public enum InstructionCreator {
-    INCR("INCR", "+","FFFFFF"),
-    DECR("DECR", "-","4B0082"),
-    LEFT("LEFT", "<","9400D3"),
-    RIGHT("RIGHT", ">","0000FF"),
-    IN("IN", ",","FFFF00"),
-    OUT("OUT", ".","00FF00"),
-    JUMP("JUMP", "[","FF7F00"),
-    BACK("BACK", "]","FF0000");
+    INCR("INCR", "+", "FFFFFF"),
+    DECR("DECR", "-", "4B0082"),
+    LEFT("LEFT", "<", "9400D3"),
+    RIGHT("RIGHT", ">", "0000FF"),
+    IN("IN", ",", "FFFF00"),
+    OUT("OUT", ".", "00FF00"),
+    JUMP("JUMP", "[", "FF7F00"),
+    BACK("BACK", "]", "FF0000");
 
 
-    private static final int SHORT_SYNTAX_INDEX = 1;
-    private static final int BITMAP_COLOR_INDEX = 2;
+    public static final int SHORT_SYNTAX_INDEX = 1;
+    public static final int BITMAP_COLOR_INDEX = 2;
     List<String> identifiers;
 
     /**
@@ -58,13 +58,13 @@ public enum InstructionCreator {
      * @return Instruction corresponding
      * @throws InvalidInstructionException
      */
-    public static InstructionCreator hasInstruction(String str) throws InvalidInstructionException {
+    public static InstructionCreator hasInstruction(String str) {
         for (InstructionCreator instructionCreator : InstructionCreator.values()) {
             if (instructionCreator.identifiers.contains(str)) {
                 return instructionCreator;
             }
         }
-        throw new InvalidInstructionException(str);
+        return null;
 
     }
 
@@ -77,46 +77,44 @@ public enum InstructionCreator {
     public static Instruction createInstruction(String s) throws InvalidInstructionException {
         InstructionCreator inst = hasInstruction(s);
         Instruction instruction;
-        switch (inst) {
-            case INCR:
-                instruction = new Increment();
-                break;
-            case DECR:
-                instruction = new Decrement();
-                break;
-            case LEFT:
-                instruction = new Left();
-                break;
-            case RIGHT:
-                instruction = new Right();
-                break;
-            case JUMP:
-                instruction = new Jump();
-                break;
-            case BACK:
-                instruction = new Back();
-                break;
-            case IN:
-                instruction = new Input();
-                break;
-            case OUT:
-                instruction = new Output();
-                break;
-            default:
-                throw new InvalidInstructionException(s);
+        if (inst != null) {
+            switch (inst) {
+                case INCR:
+                    instruction = new Increment();
+                    break;
+                case DECR:
+                    instruction = new Decrement();
+                    break;
+                case LEFT:
+                    instruction = new Left();
+                    break;
+                case RIGHT:
+                    instruction = new Right();
+                    break;
+                case JUMP:
+                    instruction = new Jump();
+                    break;
+                case BACK:
+                    instruction = new Back();
+                    break;
+                case IN:
+                    instruction = new Input();
+                    break;
+                case OUT:
+                    instruction = new Output();
+                    break;
+                default:
+                    throw new InvalidInstructionException(s);
+            }
+            return instruction;
         }
-        return instruction;
+        throw new InvalidInstructionException(s);
     }
 
-    /**
-     * Tests the first character to determine if the String is made of several short syntax instructions
-     * or a single long syntax instruction.
-     * @param str
-     * @return
-     */
-    public static boolean isLongSyntax(String str) {
-        char firstChar = str.charAt(0);
-        return (Character.getType(firstChar) == Character.UPPERCASE_LETTER);
+
+    public String getIdentifier(int i) {
+        return this.identifiers.get(i);
     }
+
 
 }

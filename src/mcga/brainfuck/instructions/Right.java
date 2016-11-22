@@ -2,6 +2,7 @@ package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,18 +23,10 @@ public class Right extends Movement {
     static List<String> identifiers = Arrays.asList("RIGHT", ">", "FFFF00");
 
     @Override
-    public void interpret() throws InvalidValueException {
+    public void interpret() throws InvalidValueException, MyIndexOutOfBoundsException {
         super.interpret();
-        moveR();
-    }
-
-    /**
-     * Defines the actions of shifting the memory pointer to the right.
-     *
-     * @throws
-     */
-    private void moveR() {
         Brainfuck.getMemory().changeCurrentIndex(1);
     }
+
 
 }

@@ -4,6 +4,7 @@ import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Instruction;
 
 import java.io.FileInputStream;
@@ -72,13 +73,16 @@ public class Interpreter extends Parser {
                 Metrics.setExecPos(i + 1);
                 Metrics.setExecMove(Metrics.getExecMove() + 1);
             }
+        } catch (MyIndexOutOfBoundsException e) {
+            System.err.println(e.getMessage());
+            System.exit(MyIndexOutOfBoundsException.EXIT_CODE);
         } catch (InvalidValueException e) {
-            e.printStackTrace();
-            System.exit(1);
+            System.err.println(e.getMessage());
+            System.exit(InvalidValueException.EXIT_CODE);
         }
     }
 
-    public Instruction getInstruction(int i){
+    public Instruction getInstruction(int i) {
         return instructions.get(i);
     }
 
@@ -92,7 +96,7 @@ public class Interpreter extends Parser {
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
-        index=instructions.size();
+        index = instructions.size();
         instructions.add(InstructionCreator.createInstruction(str));
     }
 

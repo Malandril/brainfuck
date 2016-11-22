@@ -11,8 +11,6 @@ import java.io.PrintStream;
  * both permit to interact with the Brainf*ck program.
  */
 public class Output extends DataIO {
-    public static PrintStream stream;
-
     /**
      * Constructor defining System.out as the output stream
      */
@@ -24,7 +22,7 @@ public class Output extends DataIO {
      */
     public void interpret() {
         Metrics.setDataRead(Metrics.getDataRead() + 1);
-        stream.print((char) Brainfuck.getMemory().getCurrentCellValue());
+        System.out.print((char) Brainfuck.getMemory().getCurrentCellValue());
     }
 
 }

@@ -57,7 +57,6 @@ public class Brainfuck {
      */
 
     public static void readArguments(String[] args) {
-        Output.stream = System.out;
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();
@@ -98,7 +97,7 @@ public class Brainfuck {
                 Input.stream = new FileInputStream(line.getOptionValue(INPUT.expression));
             }
             if (line.hasOption(OUTPUT.expression)) {
-                Output.stream = new PrintStream(line.getOptionValue(OUTPUT.expression));
+                System.setOut(new PrintStream(line.getOptionValue(OUTPUT.expression)));
             }
             if (parsers.isEmpty()) {
                 parsers.add(new Interpreter());

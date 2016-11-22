@@ -12,18 +12,22 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Queue;
 
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
  */
 public abstract class Parser {
-
-    public static final int SQUARE_SIDE = 3;
-    public static final String EMPTY_INSTRUCTION = "000000";
+    public static final String MACRO = "$";
+    static final int SQUARE_SIDE = 3;
+    private static final String COM = "#";
+    private static final String EMPTY_INSTRUCTION = "000000";
+    Map<String, String> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
+    private Queue<String> currentQueue = new LinkedList<>();
 
 
     public Parser(String fileName) throws FileNotFoundException {
@@ -49,6 +53,37 @@ public abstract class Parser {
     }
 
     /**
+     * Searches for the short syntax representation corresponding to a long syntax representation.
+     *
+     * @param longStr String corresponding to the long syntax of an instruction.
+     * @return String corresponding to the short representation of the instruction.
+     * @throws InvalidInstructionException
+     */
+    public static String getShortSyntax(String longStr) throws InvalidInstructionException {
+        return InstructionCreator.hasInstruction(longStr).getIdentifier(InstructionCreator.SHORT_SYNTAX_INDEX);
+    }
+
+    /**
+     * Tests the first character to determine if the String is made of several short syntax instructions
+     * or a single long syntax instruction.
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isLongSyntax(String str) {
+        char firstChar = str.charAt(0);
+        return Character.isLetter(firstChar);
+    }
+
+    public static boolean isMacroDeclaration(String str) {
+        return str.startsWith("$");
+    }
+
+    public static boolean isComments(String str) throws InvalidInstructionException {
+        return str.equals(COM);
+    }
+
+    /**
      * Reads the file containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
      *
@@ -59,20 +94,48 @@ public abstract class Parser {
         Metrics.setProgSize(0);
         Scanner scanner = new Scanner(this.stream);
         String str;
+        String macro[];
         scanner.useDelimiter("\\s*");
-        while (scanner.hasNext()) {
-            str = scanner.next();
-            if (InstructionCreator.isLongSyntax(str)) {
-                str += scanner.nextLine();
+        try {
+            while (scanner.hasNext()) {
+                str = scanner.next();
+                if (isLongSyntax(str)) {
+                    str += scanner.nextLine();
+                    str = getLongSyntax(str);
+                    if (InstructionCreator.hasInstruction(str) == null) {
+                        for (int i = 0; i < str.length(); i++) {
+                            execute(Character.toString(str.charAt(i)));
+                        }
+                    } else {
+                        execute(str);
+                    }
+
+                } else if (isComments(str)) {
+                    scanner.nextLine();
+                } else if (isMacroDeclaration(str)) {
+                    macro = scanner.nextLine().split("=");
+                    macroMap.put(macro[0], macro[1]);
+                }
+                else {
+                    execute(str);
+                }
             }
-            try {
-                execute(str);
-                Metrics.setProgSize(Metrics.getProgSize() + 1);
-            } catch (InvalidInstructionException e) {
-                System.err.println(e.getMessage());
-                System.exit(42);
-            }
+        } catch (InvalidInstructionException e) {
+            e.printStackTrace();
         }
+    }
+
+    /**
+     * @param str
+     * @return
+     * @throws InvalidInstructionException
+     */
+    public String getLongSyntax(String str) throws InvalidInstructionException {
+        String s = str.replaceAll("\\s*#.*", "");
+        for (Map.Entry<String, String> entry : macroMap.entrySet()) {
+            s = s.replaceAll(entry.getKey(), entry.getValue());
+        }
+        return s;
     }
 
     /**
@@ -114,10 +177,10 @@ public abstract class Parser {
             }
         } catch (InvalidInstructionException e) {
             e.printStackTrace();
-            System.exit(42);
+            System.exit(InvalidInstructionException.EXIT_CODE);
         } catch (InvalidBitmapException e) {
             e.printStackTrace();
-            System.exit(14);
+            System.exit(InvalidBitmapException.EXIT_CODE);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(3);

@@ -7,6 +7,8 @@ import mcga.brainfuck.Memory;
  * This exception is called if the value of a memory cell exceeds 255 or becomes negative.
  */
 public class InvalidValueException extends Exception {
+
+    public static final int EXIT_CODE=1;
     /**
      * Calls the superclass constructor with a default message.
      * @see Exception#Exception()

@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
 import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 
 import java.util.StringJoiner;
 
@@ -62,7 +63,7 @@ public class Memory {
         if (isValidNumber(val + i)) {
             memoire[currentIndex] = val + i;
         } else {
-           throw new InvalidValueException(val +i+ " at index: " + currentIndex);
+            throw new InvalidValueException(val +i+ " at index: " + currentIndex);
         }
 
     }
@@ -73,10 +74,10 @@ public class Memory {
      * @param i value to add to the current index.
      * @throws IndexOutOfBoundsException
      */
-    public void changeCurrentIndex(int i) throws IndexOutOfBoundsException {
+    public void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException {
         int val = currentIndex;
         if (!isValidIndex(i)) {
-            throw new IndexOutOfBoundsException(val + i + " index must be between " + 0 + " and " + MAX_SIZE);
+            throw new MyIndexOutOfBoundsException(val + i + " index must be between " + 0 + " and " + MAX_SIZE);
         } else {
             currentIndex += i;
         }
