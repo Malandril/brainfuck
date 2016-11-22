@@ -82,4 +82,8 @@ public class Metrics {
     public static void setExecMove(long execMove) {
         EXEC_MOVE = execMove;
     }
+
+    public static void incrProgSize() {
+        PROG_SIZE++;
+    }
 }

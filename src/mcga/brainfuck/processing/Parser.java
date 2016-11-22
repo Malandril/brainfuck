@@ -29,6 +29,7 @@ public abstract class Parser {
     private InputStream stream;
     private String fileName;
 
+
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
         this.fileName = fileName;
@@ -104,19 +105,20 @@ public abstract class Parser {
                     if (InstructionCreator.hasInstruction(str) == null) {
                         for (int i = 0; i < str.length(); i++) {
                             String in = str.substring(i, i + 1);
+                            Metrics.incrProgSize();
                             execute(in);
                         }
                     } else {
+                        Metrics.incrProgSize();
                         execute(str);
                     }
-
                 } else if (isComments(str)) {
                     scanner.nextLine();
                 } else if (isMacroDeclaration(str)) {
                     macro = scanner.nextLine().split("=");
-                    macroMap.put(macro[0], macro[1]);
-                }
-                else {
+                    macroMap.put(macro[0], getLongSyntax(macro[1]));
+                } else {
+                    Metrics.incrProgSize();
                     execute(str);
                 }
             }
@@ -171,7 +173,7 @@ public abstract class Parser {
                     }
                     if (!hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
-                        Metrics.setProgSize(Metrics.getProgSize() + 1);
+                        Metrics.incrProgSize();
                     }
                 }
             }
