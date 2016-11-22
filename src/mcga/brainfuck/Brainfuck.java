@@ -38,7 +38,7 @@ public class Brainfuck {
     }
 
     /**
-     * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
+     * Main method, which executes the readArguments method and displays the values of the memory's cells.
      *
      * @param args Different parameters accepted
      */

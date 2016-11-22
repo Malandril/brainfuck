@@ -16,15 +16,17 @@ import static org.junit.Assert.assertTrue;
  * Created by user on 14/11/2016.
  */
 public class TranslateTest {
+    private final String testFileName = "test.bf";
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
     Translate translate;
 
     @Before
     public void setUp() throws Exception {
-        File file = new File("test.bf");
+        File file = new File(testFileName);
         file.createNewFile();
-        translate = new Translate("test.bf");
+        translate = new Translate(testFileName);
     }
 
     @Test
