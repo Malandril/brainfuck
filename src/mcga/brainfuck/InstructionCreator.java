@@ -49,7 +49,11 @@ public enum InstructionCreator {
      * @throws InvalidInstructionException
      */
     public static String getBitmapColorIndex(String syntax) throws InvalidInstructionException {
-        return "#"+hasInstruction(syntax).identifiers.get(BITMAP_COLOR_INDEX);
+        InstructionCreator inst = hasInstruction(syntax);
+        if (inst != null) {
+            return "#" + inst.identifiers.get(BITMAP_COLOR_INDEX);
+        }
+        throw new InvalidInstructionException(syntax);
     }
 
     /**
