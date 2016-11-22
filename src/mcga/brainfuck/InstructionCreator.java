@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * This enum links the keywords in the Brainf*ck code to the instruction they correspond to.
+ *
+ *  @author Team Make Coding Great Again
  */
 public enum InstructionCreator {
     INCR("INCR", "+", "FFFFFF"),

@@ -19,6 +19,8 @@ import java.util.Scanner;
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
+ *
+ * @author Team Make Coding Great Again
  */
 public abstract class Parser {
     public static final String MACRO = "$";
@@ -67,24 +69,37 @@ public abstract class Parser {
      * Tests the first character to determine if the String is made of several short syntax instructions
      * or a single long syntax instruction.
      *
-     * @param str
-     * @return
+     * @param str String of command
+     * @return true if it is a long syntax, false otherwise
      */
     public static boolean isLongSyntax(String str) {
         char firstChar = str.charAt(0);
         return Character.isLetter(firstChar);
     }
 
+    /**
+     * Tests if the String is a macro declaration beginning with a '$'
+     *
+     * @param str String to test
+     * @return true if it is a macro declaration, false otherwise
+     */
     public static boolean isMacroDeclaration(String str) {
         return str.startsWith(MACRO);
     }
 
+    /**
+     * Tests if the String is the start of a comment
+     *
+     * @param str String to test
+     * @return true if it is a '#', false otherwise
+     * @throws InvalidInstructionException
+     */
     public static boolean isComments(String str) throws InvalidInstructionException {
         return str.equals(COM);
     }
 
     /**
-     * Reads the file containing the Brainfuck code. This method is called in each subclass, with some
+     * Reads the file containing the Brainf*ck code. This method is called in each subclass, with some
      * additions depending on the subclass.
      *
      * @see Check#parseFile()
@@ -128,8 +143,10 @@ public abstract class Parser {
     }
 
     /**
-     * @param str
-     * @return
+     * Replaces the macros by their command values
+     *
+     * @param str String to modify
+     * @return String after the modification of the macros
      * @throws InvalidInstructionException
      */
     public String getLongSyntax(String str) throws InvalidInstructionException {

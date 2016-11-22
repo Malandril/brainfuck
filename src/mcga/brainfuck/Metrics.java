@@ -1,7 +1,9 @@
 package mcga.brainfuck;
 
 /**
- * Created by user on 09/11/2016.
+ *  Creates and controls the metrics related to the execution of the program
+ *
+ *  @author Team Make Coding Great Again
  */
 public class Metrics {
     private static long PROG_SIZE = 0;
@@ -12,12 +14,19 @@ public class Metrics {
     private static long DATA_READ = 0;
     private static long EXEC_MOVE = 0;
 
+    /**
+     * Prints the metric values for the Trace option
+     */
     public static void logMetrics() {
         System.err.println("Exec step => " + Double.toString(Metrics.getExecPos())
                 + '\t' + '\t' + "Data pointer loc => " + Brainfuck.getMemory().getCurrentIndex()
                 + '\t' + '\t' + "Memory => " + Brainfuck.getMemory());
     }
 
+    /**
+     * Sets the toString to print at the end of the execution of the program
+     * @return String to print at the end
+     */
     public static String printMetrics() {
         return "PROG_SIZE = " + getProgSize() + '\n' +
                 "EXEC_TIME = " + getExecTime() + " ms" + '\n' +
@@ -26,6 +35,10 @@ public class Metrics {
                 "DATA_READ = " + getDataRead() + '\n' +
                 "DATA_WRITE = " + getDataWrite() + '\n';
     }
+
+    /**
+     * Getters and setters of the metrics
+     */
 
     public static long getProgSize() {
         return PROG_SIZE;
