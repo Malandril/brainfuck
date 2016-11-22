@@ -33,6 +33,10 @@ public class Jump extends Loop {
         return jumpIndexStack.pop();
     }
 
+    public static boolean isJumpStackEmpty() {
+        return jumpIndexStack.isEmpty();
+    }
+
     /**
      * Overrides the method defined in the Instruction interface to execute the jump action.
      *

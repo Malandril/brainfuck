@@ -3,7 +3,6 @@ package mcga.brainfuck.processing;
 import mcga.brainfuck.Metrics;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
 /**
  * Class defining the actions to do when the user wants to trace the execution of his program
@@ -12,6 +11,8 @@ import java.io.PrintStream;
  * @author Team Make Coding Great Again
  */
 public class Trace extends Interpreter {
+
+
     /**
      * Constructor of the class Trace using the constructor of the Interpreter class
      *

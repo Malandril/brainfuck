@@ -30,6 +30,10 @@ public class Translate extends Parser {
      * @see Parser#Parser()
      * @throws FileNotFoundException
      */
+
+    public Translate() {
+    }
+
     public Translate(String fileName) throws FileNotFoundException {
         super(fileName);
     }
@@ -49,6 +53,7 @@ public class Translate extends Parser {
      *
      * @param str String corresponding to an instruction
      * @throws InvalidInstructionException
+     * @see Parser#execute(String)
      */
     public void execute(String str) throws InvalidInstructionException {
         colorFifo.add(Color.decode(InstructionCreator.getBitmapColorIndex(str)));

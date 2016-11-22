@@ -80,12 +80,7 @@ public class Check extends Parser {
                 break;
         }
         if (count < 0) {
-            try {
-                throw new InvalidCodeException();
-            } catch (InvalidCodeException e) {
-                System.err.println(e.getMessage());
-                System.exit(e.EXIT_CODE);
-            }
+            throw new InvalidCodeException();
         }
     }
 
@@ -93,14 +88,10 @@ public class Check extends Parser {
      * Checks the value of the count to determine if the code is well written or not.
      * If the count is different from zero, the program exits with the error code 4.
      */
-    public void checkCount(){
-        try {
-            if (this.count != 0) {
-                throw new InvalidCodeException();
-            }
-        } catch (InvalidCodeException e) {
-            System.err.println(e.getMessage());
-            System.exit(e.EXIT_CODE);
+    public void checkCount() {
+        if (this.count != 0) {
+            throw new InvalidCodeException();
         }
+
     }
 }

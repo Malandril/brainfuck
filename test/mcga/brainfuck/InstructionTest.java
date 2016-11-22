@@ -4,6 +4,7 @@ import mcga.brainfuck.exceptions.InvalidValueException;
 import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -104,8 +105,9 @@ public class InstructionTest {
         assertEquals(0, inputStream.read());
     }
 
-/*     @Test
+    @Ignore
+    @Test
     public void testJump() throws Exception{
          Jump jump=new Jump();
-     }*/
+    }
 }

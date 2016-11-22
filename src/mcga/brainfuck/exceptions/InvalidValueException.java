@@ -19,10 +19,10 @@ public class InvalidValueException extends Exception {
 
     /**
      * Calls the superclass constructor with the message in parameter.
-     * @param message String to display when the exception is thrown.
+     * @param value String to display when the exception is thrown.
      * @see Exception#Exception(String)
      */
-    public InvalidValueException(String message) {
-        super("Value must be between " + Memory.MIN_CELL_VALUE + " and " + Memory.MAX_CELL_VALUE);
+    public InvalidValueException(String value) {
+        super("Invalid value: " + value + " , value must be between " + Memory.MIN_CELL_VALUE + " and " + Memory.MAX_CELL_VALUE);
     }
 }

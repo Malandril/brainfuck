@@ -1,6 +1,5 @@
-package mcga.brainfuck.processing;
+package mcga.brainfuck;
 
-import mcga.brainfuck.Memory;
 import mcga.brainfuck.exceptions.InvalidValueException;
 import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import org.junit.Before;
@@ -41,30 +40,33 @@ public class MemoryTest {
 
     @Test
     public void testAddCurrentCellValue() throws Exception {
-        int tmp = memory.getCurrentCellValue();
         memory.addCurrentCellValue(6);
-        assertEquals(tmp + 6, memory.getCurrentCellValue());
+        assertEquals(6, memory.getCurrentCellValue());
     }
 
     @Test
-    public void testExceptionAddCurrentCellValue() throws InvalidValueException {
+    public void testSuperiorValueExceptionAddCurrentCellValue() throws InvalidValueException {
         expectedException.expect(InvalidValueException.class);
-        memory.addCurrentCellValue(300);
-        memory.addCurrentCellValue(-10);
+        memory.addCurrentCellValue(256);
+    }
+
+    @Test
+    public void testInferiorValueExceptionAddCurrentCellValue() throws InvalidValueException {
+        expectedException.expect(InvalidValueException.class);
+        memory.addCurrentCellValue(-1);
     }
 
     @Test
     public void testChangeCurrentIndex() throws Exception {
-        int tmp = memory.getCurrentIndex();
         memory.changeCurrentIndex(6);
-        assertEquals(tmp + 6, memory.getCurrentIndex());
+        assertEquals(6, memory.getCurrentIndex());
     }
 
 
     @Test
     public void testExceptionLowChangeCurentIndex() throws MyIndexOutOfBoundsException {
         expectedException.expect(MyIndexOutOfBoundsException.class);
-        memory.changeCurrentIndex(-2);
+        memory.changeCurrentIndex(-1);
     }
 
     @Test
@@ -76,10 +78,13 @@ public class MemoryTest {
     @Test
     public void TestToString() throws Exception {
         assertEquals(memory.toString(), "");
+        memory.addCurrentCellValue(1);
+        assertEquals("C0: 1", memory.toString());
     }
 
     @Test
     public void clearCurrentCell() throws Exception {
+        memory.addCurrentCellValue(1);
         memory.clearCurrentCell();
         assertEquals(memory.getCurrentCellValue(), 0);
     }

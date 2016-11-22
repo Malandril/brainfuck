@@ -2,10 +2,12 @@ package mcga.brainfuck.processing;
 
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 import mcga.brainfuck.exceptions.InvalidValueException;
 import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Instruction;
+import mcga.brainfuck.instructions.Jump;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,10 +23,9 @@ import java.util.List;
 
 public class Interpreter extends Parser {
 
-    private List<Instruction> instructions = new ArrayList<>();
     public int ignoredUntilIndex = 0;
+    private List<Instruction> instructions = new ArrayList<>();
     private int index = 0;
-
     /**
      * Default constructor of the class.
      *
@@ -66,6 +67,9 @@ public class Interpreter extends Parser {
     @Override
     public void parseFile() {
         super.parseFile();
+        if (!Jump.isJumpStackEmpty()) {
+            throw new InvalidCodeException();
+        }
         interpretList(0, instructions.size());
     }
 
