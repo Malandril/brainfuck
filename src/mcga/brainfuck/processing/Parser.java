@@ -76,7 +76,7 @@ public abstract class Parser {
     }
 
     public static boolean isMacroDeclaration(String str) {
-        return str.startsWith("$");
+        return str.startsWith(MACRO);
     }
 
     public static boolean isComments(String str) throws InvalidInstructionException {

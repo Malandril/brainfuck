@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
 import mcga.brainfuck.exceptions.InvalidValueException;
+import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,7 +20,8 @@ import static org.junit.Assert.assertNotNull;
  * Created by user on 15/11/2016.
  */
 public class InstructionTest {
-    private final String testFileName = "test";
+    private final String testFileName = "test.bf";
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
     Instruction instruction;
@@ -57,7 +59,7 @@ public class InstructionTest {
     @Test
     public void testExceptionLeft() throws Exception {
         instruction = new Left();
-        expectedException.expect(IndexOutOfBoundsException.class);
+        expectedException.expect(MyIndexOutOfBoundsException.class);
         instruction.interpret();
     }
 
