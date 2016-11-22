@@ -15,25 +15,31 @@ import java.util.List;
 
 /**
  * This class extends Parser. It rewrites the methods from the superclass to interpret the parsed actions.
+ *
+ * @author Team Make Coding Great Again
  */
 
 public class Interpreter extends Parser {
 
-    //Trace trace = new Trace();
-
+    private List<Instruction> instructions = new ArrayList<>();
     public int ignoredUntilIndex = 0;
     private int index = 0;
+
     /**
      * Default constructor of the class.
      *
      * @see Parser#Parser()
      */
-    private List<Instruction> instructions = new ArrayList<>();
-
     public Interpreter() {
         super();
     }
 
+    /**
+     * Constructor with a file name
+     *
+     * @param fileName String file to interpret
+     * @throws FileNotFoundException
+     */
     public Interpreter(String fileName) throws FileNotFoundException {
         super(fileName);
     }
@@ -52,19 +58,34 @@ public class Interpreter extends Parser {
         return index;
     }
 
-
+    /**
+     * Overrides the method of the Parser class to interpret the list of commands
+     *
+     * @see Parser#parseFile()
+     */
     @Override
     public void parseFile() {
         super.parseFile();
         interpretList(0, instructions.size());
     }
 
+    /**
+     * Interpret each command between the two index start and end
+     *
+     * @param start int representing the beginning of the list to interpret
+     * @param end int representing the end of the list to interpret
+     */
     public void interpretList(int start, int end) {
         for (int i = start; i < end; i++) {
             interpretation(i);
         }
     }
 
+    /**
+     * Interpret the current command of the list and modify the metrics corresponding
+     *
+     * @param i index of the current command in the list
+     */
     public void interpretation(int i) {
         try {
             if (i >= ignoredUntilIndex) {

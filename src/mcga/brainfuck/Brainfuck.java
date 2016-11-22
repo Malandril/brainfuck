@@ -19,6 +19,7 @@ import static mcga.brainfuck.Arguments.*;
  *
  * @author Team Make Coding Great Again
  */
+
 public class Brainfuck {
 
     private static final String FILE_SUFFIX = "bmp";
@@ -38,7 +39,8 @@ public class Brainfuck {
     }
 
     /**
-     * Main method, which executes the readArguments method and displaiys the values of the memory's cells.
+     * Main method, which executes the readArguments method and after the execution, displays the values of the
+     * memory's cells and the metrics.
      *
      * @param args Different parameters accepted
      */
@@ -55,7 +57,7 @@ public class Brainfuck {
     /**
      * Reads the provided arguments, determines the actions they correspond to and executes them.
      *
-     * @param args
+     * @param args list of the arguments passed in parameter
      */
 
     public static void readArguments(String[] args) {

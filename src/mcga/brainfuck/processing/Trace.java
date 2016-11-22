@@ -6,23 +6,39 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 /**
- * Created by user on 02/11/2016.
+ * Class defining the actions to do when the user wants to trace the execution of his program
+ * thanks to the metrics.
+ *
+ * @author Team Make Coding Great Again
  */
 public class Trace extends Interpreter {
-
-    public PrintStream logFileStream;
-
-
+    /**
+     * Constructor of the class Trace using the constructor of the Interpreter class
+     *
+     * @param fileName
+     * @throws FileNotFoundException
+     */
     public Trace(String fileName) throws FileNotFoundException {
         super(fileName);
-        logFileStream = logFileStream;
     }
 
+    /**
+     * Overrides the method of the Interpreter class to parse the file
+     *
+     * @see Interpreter#parseFile()
+     */
     @Override
     public void parseFile() {
         super.parseFile();
     }
 
+    /**
+     * Overrides the method of the Interpreter class to interpret the commands and write the metrics
+     * in the log at the same time
+     *
+     * @param i index of the command to interpret
+     * @see Interpreter#interpretation(int)
+     */
     @Override
     public void  interpretation(int i){
         super.interpretation(i);

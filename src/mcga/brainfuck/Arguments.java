@@ -6,6 +6,8 @@ import org.apache.commons.cli.Options;
 
 /**
  * This enum links the arguments passed in parameter in the command line to the actions they correspond to.
+ *
+ *  @author Team Make Coding Great Again
  */
 public enum Arguments {
     P("p", true),

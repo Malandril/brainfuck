@@ -7,6 +7,8 @@ import java.util.StringJoiner;
 
 /**
  * Creates the memory and contains all the methods used to deal with it.
+ *
+ *  @author Team Make Coding Great Again
  */
 public class Memory {
     public static final int MIN_CELL_VALUE = 0;

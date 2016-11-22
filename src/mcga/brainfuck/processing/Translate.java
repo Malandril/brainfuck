@@ -6,7 +6,6 @@ import mcga.brainfuck.exceptions.InvalidInstructionException;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,18 +16,26 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
 
 /**
  * Class defining the actions to do when the user wants to translate his Brainf*ck code in a bitmap image.
- * Because this class reads a file, it extends Parser.
+ *
+ * @author Team Make Coding Great Again
  */
 public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
     private Queue<Color> colorFifo = new LinkedList<>();
 
+    /**
+     * Constructor with the name of file
+     *
+     * @param fileName String containing the name of the file
+     * @see Parser#Parser()
+     * @throws FileNotFoundException
+     */
     public Translate(String fileName) throws FileNotFoundException {
         super(fileName);
     }
 
     /**
-     * Constructor of the class.
+     * Constructor with a FileInputStream
      *
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
@@ -42,14 +49,13 @@ public class Translate extends Parser {
      *
      * @param str String corresponding to an instruction
      * @throws InvalidInstructionException
-     * @see Parser#execute(String)
      */
     public void execute(String str) throws InvalidInstructionException {
         colorFifo.add(Color.decode(InstructionCreator.getBitmapColorIndex(str)));
     }
 
     /**
-     * Creates the bitmap image and draws each instruction.
+     * Overrides the method of the Parser class to create the bitmap image and draw each instruction.
      *
      * @see Parser#parseFile()
      */
@@ -60,7 +66,8 @@ public class Translate extends Parser {
     }
 
     /**
-     * Writes the color queue into a buffered image and writes the buffered image into a bmp file
+     * Uses the color queue to color the blocks of pixels of a buffered image and writes the buffered image
+     * into a bmp file
      */
     public void writeBitmap() {
         int cote = (int) Math.ceil(Math.sqrt(colorFifo.size())) * SQUARE_SIDE;

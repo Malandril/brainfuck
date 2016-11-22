@@ -8,6 +8,8 @@ import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
  * Class defining the action corresponding to the shift of the memory pointer to the left.
  * This class, as well as the Right class, extends Movement, as they both define a shift of the
  * memory pointer in a Brainf*ck program.
+ *
+ * @author Team Make Coding Great Again
  */
 public class Left extends Movement {
 
