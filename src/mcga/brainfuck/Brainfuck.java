@@ -19,6 +19,7 @@ import static mcga.brainfuck.Arguments.*;
  *
  * @author Team Make Coding Great Again
  */
+
 public class Brainfuck {
 
     private static final String FILE_SUFFIX = "bmp";
