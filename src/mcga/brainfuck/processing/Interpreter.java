@@ -1,5 +1,6 @@
 package mcga.brainfuck.processing;
 
+import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidCodeException;
@@ -67,7 +68,13 @@ public class Interpreter extends Parser {
         if (! Jump.isJumpStackEmpty()) {
             throw new InvalidCodeException();
         }
+        double startTime = System.nanoTime();
         interpretList(0, instructions.size());
+        double endTime = System.nanoTime();
+        Metrics.setExecTime((endTime - startTime) * Math.pow(10, - 6));
+        Metrics.printMetrics();
+        System.out.println(Brainfuck.getMemory());
+
     }
 
     /**

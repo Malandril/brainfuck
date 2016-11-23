@@ -11,7 +11,7 @@ import mcga.brainfuck.processing.Interpreter;
  */
 public abstract class Loop implements Instruction {
     static Interpreter interpreter = (Brainfuck.getInterpreter());
-    int boundLoopIndex;
+    protected Loop boundLoop;
     int index;
 
     /**

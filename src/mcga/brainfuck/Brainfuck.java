@@ -42,13 +42,7 @@ public class Brainfuck {
      * @param args Different parameters accepted
      */
     public static void main(String[] args) {
-        double startTime = System.nanoTime();
         readArguments(args);
-        System.out.println();
-        double endTime = System.nanoTime();
-        System.out.println(memory);
-        Metrics.setExecTime((endTime - startTime) * Math.pow(10, - 6));
-        System.out.println(Metrics.printMetrics());
     }
 
     /**
@@ -103,11 +97,7 @@ public class Brainfuck {
                 parsers.add(new Interpreter());
             }
             for (mcga.brainfuck.processing.Parser parser : parsers) {
-                if (line.hasOption(P.expression) && pValue.endsWith(FILE_SUFFIX)) {
-                    parser.readBitmap();
-                } else {
-                    parser.parseFile();
-                }
+                parser.parseFile();
             }
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());

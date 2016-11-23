@@ -11,6 +11,7 @@ import mcga.brainfuck.exceptions.InvalidValueException;
  */
 public class Back extends Loop {
 
+
     /**
      * Default constructor of the Back class
      * Sets the index of the Back and the Jump bounded to it
@@ -20,9 +21,9 @@ public class Back extends Loop {
             throw new InvalidCodeException();
         }
         index = interpreter.getIndex();
-        Jump boundLoop = Jump.popJumpStack();
-        boundLoopIndex = boundLoop.index;
-        boundLoop.boundLoopIndex = index;
+        boundLoop = Jump.popJumpStack();
+        boundLoop.boundLoop=this;
+        boundLoop.boundLoop.index = index;
     }
 
     /**
@@ -40,7 +41,7 @@ public class Back extends Loop {
      */
     private void back() throws InvalidValueException {
         while (Brainfuck.getMemory().getCurrentCellValue() != 0) {
-            interpreter.interpretList(boundLoopIndex, index);
+            interpreter.interpretList(boundLoop.index, index);
         }
     }
 }

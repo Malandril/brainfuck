@@ -26,13 +26,13 @@ public class Metrics {
      * Sets the toString to print at the end of the execution of the program
      * @return String to print at the end
      */
-    public static String printMetrics() {
-        return "PROG_SIZE = " + getProgSize() + '\n' +
+    public static void printMetrics() {
+        System.out.println( "\nPROG_SIZE = " + getProgSize() + '\n' +
                 "EXEC_TIME = " + getExecTime() + " ms" + '\n' +
                 "EXEC_MOVE = " + getExecMove() + '\n' +
                 "DATA_MOVE = " + getDataMove() + '\n' +
                 "DATA_READ = " + getDataRead() + '\n' +
-                "DATA_WRITE = " + getDataWrite() + '\n';
+                "DATA_WRITE = " + getDataWrite() + '\n');
     }
 
     /**

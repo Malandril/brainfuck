@@ -19,6 +19,7 @@ import java.util.TreeMap;
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
+ *
  * @author Team Make Coding Great Again
  */
 public abstract class Parser {
@@ -26,7 +27,17 @@ public abstract class Parser {
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    Map <String, String> macroMap = new TreeMap <>((o1, o2) -> o2.length() - o1.length());
+
+
+    private Map<String, String> macroMap = new TreeMap<>((o1, o2) -> {
+        int n;
+        if ((n = o2.length() - o1.length()) == 0) {
+            return o2.equals(o1) ? 0 : 1;
+        }
+        return n;
+    });
+
+
     private InputStream stream;
     private String fileName;
 
@@ -38,6 +49,7 @@ public abstract class Parser {
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
+     *
      * @param stream Stream from file
      */
     public Parser(InputStream stream) {
@@ -54,6 +66,7 @@ public abstract class Parser {
 
     /**
      * Searches for the short syntax representation corresponding to a long syntax representation.
+     *
      * @param longStr String corresponding to the long syntax of an instruction.
      * @return String corresponding to the short representation of the instruction.
      * @throws InvalidInstructionException
@@ -65,16 +78,18 @@ public abstract class Parser {
     /**
      * Tests the first character to determine if the String is made of several short syntax instructions
      * or a single long syntax instruction.
+     *
      * @param str String of command
      * @return true if it is a long syntax, false otherwise
      */
-    public static boolean isLongSyntax(String str) {
+    public static boolean isLetter(String str) {
         char firstChar = str.charAt(0);
         return Character.isLetter(firstChar);
     }
 
     /**
      * Tests if the String is a macro declaration beginning with a '$'
+     *
      * @param str String to test
      * @return true if it is a macro declaration, false otherwise
      */
@@ -84,6 +99,7 @@ public abstract class Parser {
 
     /**
      * Tests if the String is the start of a comment
+     *
      * @param str String to test
      * @return true if it is a '#', false otherwise
      * @throws InvalidInstructionException
@@ -95,57 +111,29 @@ public abstract class Parser {
     /**
      * Reads the file containing the Brainf*ck code. This method is called in each subclass, with some
      * additions depending on the subclass.
+     *
      * @see Check#parseFile()
      * @see Interpreter#parseFile()
      */
     public void parseFile() {
-        Metrics.setProgSize(0);
-        Scanner scanner = new Scanner(this.stream);
-        String str;
-        String macro[];
-        scanner.useDelimiter("\\s*");
-        try {
-            while (scanner.hasNext()) {
-                str = scanner.next();
-                if (isLongSyntax(str)) {
-                    str += scanner.nextLine();
-                    str = getLongSyntax(str);
-                    if (InstructionCreator.hasInstruction(str) == null) {
-                        str = str.replaceAll("\\s*", "");
-                        for (int i = 0; i < str.length(); i++) {
-                            String in = str.substring(i, i + 1);
-                            Metrics.incrProgSize();
-                            execute(in);
-                        }
-                    } else {
-                        Metrics.incrProgSize();
-                        execute(str);
-                    }
-                } else if (isComments(str)) {
-                    scanner.nextLine();
-                } else if (isMacroDeclaration(str)) {
-                    macro = scanner.nextLine().split("=");
-                    macroMap.put(macro[0], getLongSyntax(macro[1]));
-                } else {
-                    Metrics.incrProgSize();
-                    execute(str);
-                }
-            }
-        } catch (InvalidInstructionException e) {
-            System.err.println(e.getMessage());
-            System.exit(InvalidInstructionException.EXIT_CODE);
+        if (fileName.endsWith(".bmp")) {
+            readBitmap();
+        } else {
+            readFile();
         }
+
     }
 
     /**
      * Replaces the macros by their command values
+     *
      * @param str String to modify
      * @return String after the modification of the macros
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException thrown if tries to parse an invalid Instruction
      */
-    public String getLongSyntax(String str) throws InvalidInstructionException {
+    public String getCorrectSyntax(String str) throws InvalidInstructionException {
         String s = str.replaceAll("\\s*#.*", "");
-        for (Map.Entry <String, String> entry : macroMap.entrySet()) {
+        for (Map.Entry<String, String> entry : macroMap.entrySet()) {
             s = s.replaceAll(entry.getKey(), entry.getValue());
         }
         return s;
@@ -154,6 +142,7 @@ public abstract class Parser {
     /**
      * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
+     *
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
@@ -169,19 +158,19 @@ public abstract class Parser {
 
             String prevColor;
             String hexColor = "";
-            for (int i = 0 ; i < height ; i += SQUARE_SIDE) {
-                for (int j = 0 ; j < width ; j += SQUARE_SIDE) {
+            for (int i = 0; i < height; i += SQUARE_SIDE) {
+                for (int j = 0; j < width; j += SQUARE_SIDE) {
                     prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
-                    for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
-                        for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
+                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
                             hexColor = colorToHex(imgColor);
-                            if (! prevColor.equals(hexColor)) {
+                            if (!prevColor.equals(hexColor)) {
                                 throw new InvalidBitmapException();
                             }
                         }
                     }
-                    if (! hexColor.equals(EMPTY_INSTRUCTION)) {
+                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
                         Metrics.incrProgSize();
                     }
@@ -199,8 +188,48 @@ public abstract class Parser {
         }
     }
 
+    public void readFile() {
+        Metrics.setProgSize(0);
+        Scanner scanner = new Scanner(this.stream);
+        String str;
+        String macro[];
+        scanner.useDelimiter("\\s*");
+        try {
+            while (scanner.hasNext()) {
+                str = scanner.next();
+                if (isLetter(str)) {
+                    str += scanner.nextLine();
+                    str = getCorrectSyntax(str);
+                    if (InstructionCreator.hasInstruction(str) == null) {
+                        str = str.replaceAll("\\s*", "");
+                        for (int i = 0; i < str.length(); i++) {
+                            String in = str.substring(i, i + 1);
+                            Metrics.incrProgSize();
+                            execute(in);
+                        }
+                    } else {
+                        Metrics.incrProgSize();
+                        execute(str);
+                    }
+                } else if (isComments(str)) {
+                    scanner.nextLine();
+                } else if (isMacroDeclaration(str)) {
+                    macro = scanner.nextLine().split("=");
+                    macroMap.put(macro[0], getCorrectSyntax(macro[1]));
+                } else {
+                    Metrics.incrProgSize();
+                    execute(str);
+                }
+            }
+        } catch (InvalidInstructionException e) {
+            System.err.println(e.getMessage());
+            System.exit(InvalidInstructionException.EXIT_CODE);
+        }
+    }
+
     /**
      * Converts a Color object to its hexadecimal value.
+     *
      * @param color Color to convert.
      * @return String corresponding hexadecimal value
      */
@@ -215,6 +244,7 @@ public abstract class Parser {
 
     /**
      * This method is overriden in all subclasses.
+     *
      * @param str string value of the argument to interpret
      * @throws InvalidInstructionException
      * @see Check#execute(String)
