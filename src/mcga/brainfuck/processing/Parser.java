@@ -111,7 +111,8 @@ public abstract class Parser {
                     str += scanner.nextLine();
                     str = getLongSyntax(str);
                     if (InstructionCreator.hasInstruction(str) == null) {
-                        for (int i = 0 ; i < str.length() ; i++) {
+                        str = str.replaceAll("\\s*", "");
+                        for (int i = 0; i < str.length(); i++) {
                             String in = str.substring(i, i + 1);
                             Metrics.incrProgSize();
                             execute(in);
@@ -131,7 +132,8 @@ public abstract class Parser {
                 }
             }
         } catch (InvalidInstructionException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            System.exit(InvalidInstructionException.EXIT_CODE);
         }
     }
 
@@ -146,7 +148,6 @@ public abstract class Parser {
         for (Map.Entry <String, String> entry : macroMap.entrySet()) {
             s = s.replaceAll(entry.getKey(), entry.getValue());
         }
-        s = s.replaceAll("\\s*", "");
         return s;
     }
 

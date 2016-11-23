@@ -15,4 +15,8 @@ public class InvalidInstructionException extends Exception {
     public InvalidInstructionException(String message) {
         super("Instruction Invalide: " + message);
     }
+
+    public InvalidInstructionException() {
+        super("Instruction Invalide");
+    }
 }
