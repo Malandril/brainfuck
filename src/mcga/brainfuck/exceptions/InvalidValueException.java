@@ -8,7 +8,8 @@ import mcga.brainfuck.Memory;
  */
 public class InvalidValueException extends Exception {
 
-    public static final int EXIT_CODE=1;
+    public static final int EXIT_CODE = 1;
+
     /**
      * Calls the superclass constructor with a default message.
      * @see Exception#Exception()

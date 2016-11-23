@@ -16,12 +16,11 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
 
 /**
  * Class defining the actions to do when the user wants to translate his Brainf*ck code in a bitmap image.
- *
  * @author Team Make Coding Great Again
  */
 public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
-    private Queue<Color> colorFifo = new LinkedList<>();
+    private Queue <Color> colorFifo = new LinkedList <>();
 
 
     public Translate() {
@@ -30,10 +29,9 @@ public class Translate extends Parser {
 
     /**
      * Constructor with the name of file
-     *
      * @param fileName String containing the name of the file
-     * @see Parser#Parser()
      * @throws FileNotFoundException
+     * @see Parser#Parser()
      */
 
     public Translate(String fileName) throws FileNotFoundException {
@@ -42,7 +40,6 @@ public class Translate extends Parser {
 
     /**
      * Constructor with a FileInputStream
-     *
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
@@ -52,7 +49,6 @@ public class Translate extends Parser {
 
     /**
      * For each instruction, adds to colorFifo the corresponding color.
-     *
      * @param str String corresponding to an instruction
      * @throws InvalidInstructionException
      * @see Parser#execute(String)
@@ -63,7 +59,6 @@ public class Translate extends Parser {
 
     /**
      * Overrides the method of the Parser class to create the bitmap image and draw each instruction.
-     *
      * @see Parser#parseFile()
      */
     @Override
@@ -79,11 +74,11 @@ public class Translate extends Parser {
     public void writeBitmap() {
         int cote = (int) Math.ceil(Math.sqrt(colorFifo.size())) * SQUARE_SIDE;
         BufferedImage image = new BufferedImage(cote, cote, TYPE_INT_BGR);
-        for (int i = 0; i < cote; i += SQUARE_SIDE) {
-            for (int j = 0; j < cote && !colorFifo.isEmpty(); j += SQUARE_SIDE) {
+        for (int i = 0 ; i < cote ; i += SQUARE_SIDE) {
+            for (int j = 0 ; j < cote && ! colorFifo.isEmpty() ; j += SQUARE_SIDE) {
                 int colorInt = colorFifo.poll().getRGB();
-                for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
-                    for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
+                    for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
                         image.setRGB(j + jSquare, i + iSquare, colorInt);
                     }
                 }

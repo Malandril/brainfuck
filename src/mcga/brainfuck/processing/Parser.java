@@ -19,7 +19,6 @@ import java.util.TreeMap;
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
- *
  * @author Team Make Coding Great Again
  */
 public abstract class Parser {
@@ -27,7 +26,7 @@ public abstract class Parser {
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    Map<String, String> macroMap = new TreeMap<>((o1, o2) -> o2.length() - o1.length());
+    Map <String, String> macroMap = new TreeMap <>((o1, o2) -> o2.length() - o1.length());
     private InputStream stream;
     private String fileName;
 
@@ -39,7 +38,6 @@ public abstract class Parser {
 
     /**
      * In case a file is specified in the launching command, this constructor is called.
-     *
      * @param stream Stream from file
      */
     public Parser(InputStream stream) {
@@ -56,7 +54,6 @@ public abstract class Parser {
 
     /**
      * Searches for the short syntax representation corresponding to a long syntax representation.
-     *
      * @param longStr String corresponding to the long syntax of an instruction.
      * @return String corresponding to the short representation of the instruction.
      * @throws InvalidInstructionException
@@ -68,7 +65,6 @@ public abstract class Parser {
     /**
      * Tests the first character to determine if the String is made of several short syntax instructions
      * or a single long syntax instruction.
-     *
      * @param str String of command
      * @return true if it is a long syntax, false otherwise
      */
@@ -79,7 +75,6 @@ public abstract class Parser {
 
     /**
      * Tests if the String is a macro declaration beginning with a '$'
-     *
      * @param str String to test
      * @return true if it is a macro declaration, false otherwise
      */
@@ -89,7 +84,6 @@ public abstract class Parser {
 
     /**
      * Tests if the String is the start of a comment
-     *
      * @param str String to test
      * @return true if it is a '#', false otherwise
      * @throws InvalidInstructionException
@@ -101,7 +95,6 @@ public abstract class Parser {
     /**
      * Reads the file containing the Brainf*ck code. This method is called in each subclass, with some
      * additions depending on the subclass.
-     *
      * @see Check#parseFile()
      * @see Interpreter#parseFile()
      */
@@ -118,7 +111,7 @@ public abstract class Parser {
                     str += scanner.nextLine();
                     str = getLongSyntax(str);
                     if (InstructionCreator.hasInstruction(str) == null) {
-                        for (int i = 0; i < str.length(); i++) {
+                        for (int i = 0 ; i < str.length() ; i++) {
                             String in = str.substring(i, i + 1);
                             Metrics.incrProgSize();
                             execute(in);
@@ -144,14 +137,13 @@ public abstract class Parser {
 
     /**
      * Replaces the macros by their command values
-     *
      * @param str String to modify
      * @return String after the modification of the macros
      * @throws InvalidInstructionException
      */
     public String getLongSyntax(String str) throws InvalidInstructionException {
         String s = str.replaceAll("\\s*#.*", "");
-        for (Map.Entry<String, String> entry : macroMap.entrySet()) {
+        for (Map.Entry <String, String> entry : macroMap.entrySet()) {
             s = s.replaceAll(entry.getKey(), entry.getValue());
         }
         s = s.replaceAll("\\s*", "");
@@ -161,7 +153,6 @@ public abstract class Parser {
     /**
      * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
-     *
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
@@ -177,19 +168,19 @@ public abstract class Parser {
 
             String prevColor;
             String hexColor = "";
-            for (int i = 0; i < height; i += SQUARE_SIDE) {
-                for (int j = 0; j < width; j += SQUARE_SIDE) {
+            for (int i = 0 ; i < height ; i += SQUARE_SIDE) {
+                for (int j = 0 ; j < width ; j += SQUARE_SIDE) {
                     prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
-                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
-                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                    for (int iSquare = 0 ; iSquare < SQUARE_SIDE ; iSquare++) {
+                        for (int jSquare = 0 ; jSquare < SQUARE_SIDE ; jSquare++) {
                             Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
                             hexColor = colorToHex(imgColor);
-                            if (!prevColor.equals(hexColor)) {
+                            if (! prevColor.equals(hexColor)) {
                                 throw new InvalidBitmapException();
                             }
                         }
                     }
-                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                    if (! hexColor.equals(EMPTY_INSTRUCTION)) {
                         execute(hexColor);
                         Metrics.incrProgSize();
                     }
@@ -209,11 +200,10 @@ public abstract class Parser {
 
     /**
      * Converts a Color object to its hexadecimal value.
-     *
      * @param color Color to convert.
      * @return String corresponding hexadecimal value
      */
-    public String colorToHex(Color color) {
+    private String colorToHex(Color color) {
         String hexColor = "";
         hexColor += String.format("%02X", color.getRed());
         hexColor += String.format("%02X", color.getGreen());
@@ -224,7 +214,6 @@ public abstract class Parser {
 
     /**
      * This method is overriden in all subclasses.
-     *
      * @param str string value of the argument to interpret
      * @throws InvalidInstructionException
      * @see Check#execute(String)

@@ -1,9 +1,8 @@
 package mcga.brainfuck;
 
 /**
- *  Creates and controls the metrics related to the execution of the program
- *
- *  @author Team Make Coding Great Again
+ * Creates and controls the metrics related to the execution of the program
+ * @author Team Make Coding Great Again
  */
 public class Metrics {
     private static long PROG_SIZE = 0;

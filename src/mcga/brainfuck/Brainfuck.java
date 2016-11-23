@@ -16,14 +16,13 @@ import static mcga.brainfuck.Arguments.*;
 /**
  * Main class of the project.
  * Contains the main method.
- *
  * @author Team Make Coding Great Again
  */
 public class Brainfuck {
 
     private static final String FILE_SUFFIX = "bmp";
     private static Memory memory = new Memory();
-    private static List<mcga.brainfuck.processing.Parser> parsers = new ArrayList<>();
+    private static List <mcga.brainfuck.processing.Parser> parsers = new ArrayList <>();
 
     public static Memory getMemory() {
         return memory;
@@ -40,7 +39,6 @@ public class Brainfuck {
     /**
      * Main method, which executes the readArguments method and after the execution, displays the values of the
      * memory's cells and the metrics.
-     *
      * @param args Different parameters accepted
      */
     public static void main(String[] args) {
@@ -49,13 +47,12 @@ public class Brainfuck {
         System.out.println();
         double endTime = System.nanoTime();
         System.out.println(memory);
-        Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
+        Metrics.setExecTime((endTime - startTime) * Math.pow(10, - 6));
         System.out.println(Metrics.printMetrics());
     }
 
     /**
      * Reads the provided arguments, determines the actions they correspond to and executes them.
-     *
      * @param args list of the arguments passed in parameter
      */
 

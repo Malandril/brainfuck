@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 
 /**
  * Class defining the actions to do when the user wants to check if the Brainf*ck code is correctly written.
- *
  * @author Team Make Coding Great Again
  */
 public class Check extends Parser {
@@ -21,7 +20,6 @@ public class Check extends Parser {
 
     /**
      * Constructor with the name of the file
-     *
      * @param fileName file name of the file to check
      * @throws FileNotFoundException
      */
@@ -31,7 +29,6 @@ public class Check extends Parser {
 
     /**
      * Constructor with a FileInputStream
-     *
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
@@ -42,7 +39,6 @@ public class Check extends Parser {
     /**
      * Overrides the main class method so that after its execution and the number of brackets counted,
      * it determines depending on count's value if the code is correctly written.
-     *
      * @see Parser#parseFile()
      */
     @Override
@@ -55,7 +51,6 @@ public class Check extends Parser {
     /**
      * Overrides the main class method so that after its execution and the number of pixels corresponding to a
      * jump or back action counted, it determines depending on count's value if the code is correctly written.
-     *
      * @see Parser#readBitmap()
      */
     @Override
@@ -67,7 +62,6 @@ public class Check extends Parser {
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it only counts the number of opening
      * and closing brackets.
-     *
      * @param str String corresponding to an instruction
      * @throws InvalidInstructionException
      * @see Parser#execute(String)
@@ -92,7 +86,7 @@ public class Check extends Parser {
      * Checks the value of the count to determine if the code is well written or not.
      * If the count is different from zero, the program exits with the error code 4.
      */
-    public void checkCount() {
+    private void checkCount() {
         if (this.count != 0) {
             throw new InvalidCodeException();
         }

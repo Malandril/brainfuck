@@ -17,20 +17,18 @@ import java.util.List;
 
 /**
  * This class extends Parser. It rewrites the methods from the superclass to interpret the parsed actions.
- *
  * @author Team Make Coding Great Again
  */
 
 public class Interpreter extends Parser {
 
     public int ignoredUntilIndex = 0;
-    private List<Instruction> instructions = new ArrayList<>();
+    private List <Instruction> instructions = new ArrayList <>();
     private int index = 0;
 
 
     /**
      * Default constructor of the class.
-     *
      * @see Parser#Parser()
      */
     public Interpreter() {
@@ -39,7 +37,6 @@ public class Interpreter extends Parser {
 
     /**
      * Constructor with a file name
-     *
      * @param fileName String file to interpret
      * @throws FileNotFoundException
      */
@@ -49,7 +46,6 @@ public class Interpreter extends Parser {
 
     /**
      * Constructor defining the stream in parameter as the input stream.
-     *
      * @param stream inputStream
      * @see Parser(InputStream)
      */
@@ -63,13 +59,12 @@ public class Interpreter extends Parser {
 
     /**
      * Overrides the method of the Parser class to interpret the list of commands
-     *
      * @see Parser#parseFile()
      */
     @Override
     public void parseFile() {
         super.parseFile();
-        if (!Jump.isJumpStackEmpty()) {
+        if (! Jump.isJumpStackEmpty()) {
             throw new InvalidCodeException();
         }
         interpretList(0, instructions.size());
@@ -77,19 +72,17 @@ public class Interpreter extends Parser {
 
     /**
      * Interpret each command between the two index start and end
-     *
      * @param start int representing the beginning of the list to interpret
-     * @param end int representing the end of the list to interpret
+     * @param end   int representing the end of the list to interpret
      */
     public void interpretList(int start, int end) {
-        for (int i = start; i < end; i++) {
+        for (int i = start ; i < end ; i++) {
             interpretation(i);
         }
     }
 
     /**
      * Interpret the current command of the list and modify the metrics corresponding
-     *
      * @param i index of the current command in the list
      */
     public void interpretation(int i) {
@@ -116,7 +109,6 @@ public class Interpreter extends Parser {
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction
      * corresponding to the String in parameter and interprets it.
-     *
      * @param str String corresponding to the Instruction
      * @throws InvalidInstructionException
      * @see Parser#execute(String)

@@ -8,8 +8,7 @@ import java.util.List;
 
 /**
  * This enum links the keywords in the Brainf*ck code to the instruction they correspond to.
- *
- *  @author Team Make Coding Great Again
+ * @author Team Make Coding Great Again
  */
 public enum InstructionCreator {
     INCR("INCR", "+", "FFFFFF"),
@@ -24,7 +23,7 @@ public enum InstructionCreator {
 
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
-    List<String> identifiers;
+    List <String> identifiers;
 
     /**
      * Constructor of the enum

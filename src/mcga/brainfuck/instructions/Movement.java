@@ -6,13 +6,11 @@ import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 
 /**
  * Superclass of the Left and Right classes.
- *
  * @author Team Make Coding Great Again
  */
 public abstract class Movement implements Instruction {
     /**
      * Overrides the method defined in the Instruction interface to increment the metric DATA_MOVE
-     *
      * @throws InvalidValueException
      * @throws IndexOutOfBoundsException
      * @throws MyIndexOutOfBoundsException
