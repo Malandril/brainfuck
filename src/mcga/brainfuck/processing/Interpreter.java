@@ -26,6 +26,8 @@ public class Interpreter extends Parser {
     public int ignoredUntilIndex = 0;
     private List<Instruction> instructions = new ArrayList<>();
     private int index = 0;
+
+
     /**
      * Default constructor of the class.
      *

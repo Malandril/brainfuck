@@ -12,6 +12,11 @@ import java.io.FileNotFoundException;
  */
 public class Rewrite extends Parser {
 
+
+    public Rewrite() {
+        super();
+    }
+
     /**
      * Constructor with the name of the file
      *

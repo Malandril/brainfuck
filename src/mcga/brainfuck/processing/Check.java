@@ -15,6 +15,10 @@ import java.io.FileNotFoundException;
 public class Check extends Parser {
     private long count = 0;
 
+    public Check() {
+        super();
+    }
+
     /**
      * Constructor with the name of the file
      *

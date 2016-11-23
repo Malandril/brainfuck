@@ -23,6 +23,11 @@ public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
     private Queue<Color> colorFifo = new LinkedList<>();
 
+
+    public Translate() {
+        super();
+    }
+
     /**
      * Constructor with the name of file
      *
@@ -30,9 +35,6 @@ public class Translate extends Parser {
      * @see Parser#Parser()
      * @throws FileNotFoundException
      */
-
-    public Translate() {
-    }
 
     public Translate(String fileName) throws FileNotFoundException {
         super(fileName);

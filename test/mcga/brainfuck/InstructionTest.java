@@ -107,7 +107,8 @@ public class InstructionTest {
 
     @Ignore
     @Test
-    public void testJump() throws Exception{
+    public void testLoop() throws Exception {
          Jump jump=new Jump();
+
     }
 }

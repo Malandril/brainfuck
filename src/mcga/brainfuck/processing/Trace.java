@@ -12,6 +12,9 @@ import java.io.FileNotFoundException;
  */
 public class Trace extends Interpreter {
 
+    public Trace() {
+        super();
+    }
 
     /**
      * Constructor of the class Trace using the constructor of the Interpreter class
@@ -41,7 +44,7 @@ public class Trace extends Interpreter {
      * @see Interpreter#interpretation(int)
      */
     @Override
-    public void  interpretation(int i){
+    public void interpretation(int i) {
         super.interpretation(i);
         Metrics.logMetrics();
     }

@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
@@ -23,9 +22,7 @@ public class RewriteTest {
 
     @Before
     public void setUp() throws Exception {
-        File file = new File("test.bf");
-        file.createNewFile();
-        rewrite = new Rewrite("test.bf");
+        rewrite = new Rewrite();
     }
 
     @Test
