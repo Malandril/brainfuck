@@ -190,7 +190,6 @@ public abstract class Parser {
         Scanner scanner = new Scanner(this.stream);
         String str;
         String macroLine[];
-        String params[] = {};
         String macroName;
         String macroValue;
 
@@ -219,6 +218,7 @@ public abstract class Parser {
                     Pattern pat = Pattern.compile(MACRO_REGX);
                     Matcher matcher = pat.matcher(macroLine[0]);
                     macroValue = getCorrectSyntax(macroLine[1]);
+                    String params[] = {};
                     if (matcher.find()) {
                         params = matcher.group(2).split(PARAMS_SEPARATOR);
                         macroName = matcher.group(1);
