@@ -1,6 +1,7 @@
 package mcga.brainfuck.processing;
 
 import mcga.brainfuck.InstructionCreator;
+import mcga.brainfuck.Macro;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
@@ -12,9 +13,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
@@ -26,7 +29,7 @@ public abstract class Parser {
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    Map <String, String> macroMap = new TreeMap <>((o1, o2) -> o2.length() - o1.length());
+    private Set<Macro> macroMap = new TreeSet<>();
     private InputStream stream;
     private String fileName;
 
@@ -34,6 +37,7 @@ public abstract class Parser {
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
         this.fileName = fileName;
+
     }
 
     /**
@@ -102,7 +106,7 @@ public abstract class Parser {
         Metrics.setProgSize(0);
         Scanner scanner = new Scanner(this.stream);
         String str;
-        String macro[];
+        String macroLine[];
         scanner.useDelimiter("\\s*");
         try {
             while (scanner.hasNext()) {
@@ -124,8 +128,15 @@ public abstract class Parser {
                 } else if (isComments(str)) {
                     scanner.nextLine();
                 } else if (isMacroDeclaration(str)) {
-                    macro = scanner.nextLine().split("=");
-                    macroMap.put(macro[0], getLongSyntax(macro[1]));
+                    macroLine = scanner.nextLine().split("=");
+                    Pattern pat = Pattern.compile("(.*)\\((.*)\\)");
+                    Matcher matcher = pat.matcher(macroLine[0]);
+                    if (matcher.find()) {
+                        String params[] = matcher.group(2).split(",");
+                        macroMap.add(new Macro(matcher.group(1), getLongSyntax(macroLine[1]), params));
+                    } else {
+                        macroMap.add(new Macro(macroLine[0], macroLine[1]));
+                    }
                 } else {
                     Metrics.incrProgSize();
                     execute(str);
@@ -145,8 +156,8 @@ public abstract class Parser {
      */
     public String getLongSyntax(String str) throws InvalidInstructionException {
         String s = str.replaceAll("\\s*#.*", "");
-        for (Map.Entry <String, String> entry : macroMap.entrySet()) {
-            s = s.replaceAll(entry.getKey(), entry.getValue());
+        for (Macro macro : macroMap) {
+            s = macro.callMacro(s);
         }
         return s;
     }
