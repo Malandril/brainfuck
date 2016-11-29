@@ -7,6 +7,7 @@ import mcga.brainfuck.exceptions.InvalidValueException;
 /**
  * Class defining the action corresponding to the end of a loop.
  * This class, as well as the Jump class, extends Loop, as they both define a loop in a Brainf*ck program.
+ *
  * @author Team Make Coding Great Again
  */
 public class Back extends Loop {
@@ -22,12 +23,13 @@ public class Back extends Loop {
         }
         index = interpreter.getIndex();
         boundLoop = Jump.popJumpStack();
-        boundLoop.boundLoop=this;
+        boundLoop.boundLoop = this;
         boundLoop.boundLoop.index = index;
     }
 
     /**
      * Overrides the method defined in the Instruction interface to execute the back action.
+     *
      * @throws InvalidValueException
      */
     @Override
