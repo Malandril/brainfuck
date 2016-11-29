@@ -48,16 +48,6 @@ public class Check extends Parser {
 
     }
 
-    /**
-     * Overrides the main class method so that after its execution and the number of pixels corresponding to a
-     * jump or back action counted, it determines depending on count's value if the code is correctly written.
-     * @see Parser#readBitmap()
-     */
-    @Override
-    public void readBitmap() {
-        super.readBitmap();
-        checkCount();
-    }
 
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it only counts the number of opening

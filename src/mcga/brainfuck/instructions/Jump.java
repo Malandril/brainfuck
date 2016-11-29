@@ -52,7 +52,7 @@ public class Jump extends Loop {
 
     private void jump() {
         if (Brainfuck.getMemory().getCurrentCellValue() == 0) {
-            interpreter.ignoredUntilIndex = boundLoopIndex;
+            interpreter.ignoredUntilIndex = boundLoop.index;
         }
     }
 }
