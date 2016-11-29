@@ -10,4 +10,9 @@ public class InvalidCodeException extends RuntimeException {
         System.err.println("Code Invalide");
         System.exit(EXIT_CODE);
     }
+
+    public InvalidCodeException(String str) {
+        System.err.println("Code Invalide: " + str);
+        System.exit(EXIT_CODE);
+    }
 }

@@ -2,9 +2,9 @@ package mcga.brainfuck.processing;
 
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Macro;
-import mcga.brainfuck.Macro;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
+import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 
 import javax.imageio.ImageIO;
@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
  */
 public abstract class Parser {
     public static final String MACRO = "$";
+    public static final String PARAMS_SEPARATOR = ",";
+    public static final String MACRO_REGX = "(.*)\\((.*)\\)";
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
@@ -137,6 +139,7 @@ public abstract class Parser {
     /**
      * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
+     *
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
@@ -186,7 +189,11 @@ public abstract class Parser {
         Metrics.setProgSize(0);
         Scanner scanner = new Scanner(this.stream);
         String str;
-        String macro[];
+        String macroLine[];
+        String params[] = {};
+        String macroName;
+        String macroValue;
+
         scanner.useDelimiter("\\s*");
         try {
             while (scanner.hasNext()) {
@@ -209,13 +216,20 @@ public abstract class Parser {
                     scanner.nextLine();
                 } else if (isMacroDeclaration(str)) {
                     macroLine = scanner.nextLine().split("=");
-                    Pattern pat = Pattern.compile("(.*)\\((.*)\\)");
+                    Pattern pat = Pattern.compile(MACRO_REGX);
                     Matcher matcher = pat.matcher(macroLine[0]);
+                    macroValue = getCorrectSyntax(macroLine[1]);
                     if (matcher.find()) {
-                        String params[] = matcher.group(2).split(",");
-                        macroMap.add(new Macro(matcher.group(1), getLongSyntax(macroLine[1]), params));
+                        params = matcher.group(2).split(PARAMS_SEPARATOR);
+                        macroName = matcher.group(1);
                     } else {
-                        macroMap.add(new Macro(macroLine[0], macroLine[1]));
+                        macroName = macroLine[0];
+                    }
+                    Macro macro = new Macro(macroName, macroValue, params);
+                    if (!macroMap.contains(macro)) {
+                        macroMap.add(macro);
+                    } else {
+                        throw new InvalidCodeException("macro déja définie " + macroName);
                     }
                 } else {
                     Metrics.incrProgSize();
