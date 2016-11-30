@@ -82,4 +82,8 @@ public class Check extends Parser {
         }
 
     }
+
+    public long getCount() {
+        return count;
+    }
 }

@@ -113,6 +113,10 @@ public class Interpreter extends Parser {
         return instructions.get(i);
     }
 
+    public void setInstructions(List <Instruction> instructions) {
+        this.instructions = instructions;
+    }
+
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction
      * corresponding to the String in parameter and interprets it.
