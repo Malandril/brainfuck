@@ -83,8 +83,8 @@ public class Metrics {
         return DATA_READ;
     }
 
-    public static void setDataRead(long dataRead) {
-        DATA_READ = dataRead;
+    public static void incrDataRead() {
+        DATA_READ++;
     }
 
     public static long getExecMove() {

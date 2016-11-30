@@ -24,9 +24,8 @@ import java.util.List;
 
 public class Interpreter extends Parser {
 
-    public int ignoredUntilIndex = 0;
-    private List<Instruction> instructions = new ArrayList<>();
-    private int index = 0;
+    public List<Instruction> mainInstructions = new ArrayList<>();
+    public List<Instruction> instructions = mainInstructions;
 
 
     /**
@@ -58,9 +57,6 @@ public class Interpreter extends Parser {
         super(stream);
     }
 
-    public int getIndex() {
-        return index;
-    }
 
     /**
      * Overrides the method of the Parser class to interpret the list of commands
@@ -74,7 +70,7 @@ public class Interpreter extends Parser {
             throw new InvalidCodeException();
         }
         double startTime = System.nanoTime();
-        interpretList(0, instructions.size());
+        interpretList(mainInstructions);
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
         Metrics.printMetrics();
@@ -85,35 +81,29 @@ public class Interpreter extends Parser {
     /**
      * Interpret each command between the two index start and end
      *
-     * @param start int representing the beginning of the list to interpret
-     * @param end   int representing the end of the list to interpret
+     *
      */
-    public void interpretList(int start, int end) {
-        for (int i = start; i < end; i++) {
-            interpretation(i);
+    public void interpretList(List<Instruction> instructions) {
+        for (Instruction instruction : instructions) {
+            interpretation(instruction);
         }
     }
 
     /**
      * Interpret the current command of the list and modify the metrics corresponding
      *
-     * @param i index of the current command in the list
      */
-    public void interpretation(int i) {
+    public void interpretation(Instruction instruction) {
         try {
-            if (i >= ignoredUntilIndex) {
-                ignoredUntilIndex = 0;
-                instructions.get(i).interpret();
-                Metrics.setExecPos(i + 1);
-                Metrics.setExecMove(Metrics.getExecMove() + 1);
-            }
-        } catch (MyIndexOutOfBoundsException e) {
-            System.err.println(e.getMessage());
-            System.exit(MyIndexOutOfBoundsException.EXIT_CODE);
+            instruction.interpret();
+//                Metrics.setExecPos(i + 1);
+            Metrics.setExecMove(Metrics.getExecMove() + 1);
         } catch (InvalidValueException e) {
-            System.err.println(e.getMessage());
-            System.exit(InvalidValueException.EXIT_CODE);
+            e.printStackTrace();
+        } catch (MyIndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
+
     }
 
     public Instruction getInstruction(int i) {
@@ -130,9 +120,6 @@ public class Interpreter extends Parser {
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
-        index = instructions.size();
         instructions.add(InstructionCreator.createInstruction(str));
     }
-
-
 }
