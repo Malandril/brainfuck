@@ -20,7 +20,7 @@ public class Output extends DataIO {
      * Overrides the method defined in the Instruction interface to execute the output action.
      */
     public void interpret() {
-        Metrics.setDataRead(Metrics.getDataRead() + 1);
+        Metrics.incrDataRead();
         System.out.print((char) Brainfuck.getMemory().getCurrentCellValue());
     }
 

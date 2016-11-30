@@ -60,7 +60,7 @@ public class Memory {
         if (isValidNumber(val + i)) {
             memoire[currentIndex] = val + i;
         } else {
-            throw new InvalidValueException(val + i + " at index: " + currentIndex);
+//            throw new InvalidValueException(val + i + " at index: " + currentIndex);
         }
 
     }

@@ -23,7 +23,7 @@ public enum InstructionCreator {
 
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
-    List <String> identifiers;
+    private List <String> identifiers;
 
     /**
      * Constructor of the enum

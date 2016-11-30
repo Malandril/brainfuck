@@ -1,6 +1,7 @@
 package mcga.brainfuck.processing;
 
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.instructions.Instruction;
 
 import java.io.FileNotFoundException;
 
@@ -36,12 +37,12 @@ public class Trace extends Interpreter {
     /**
      * Overrides the method of the Interpreter class to interpret the commands and write the metrics
      * in the log at the same time
-     * @param i index of the command to interpret
-     * @see Interpreter#interpretation(int)
+     * @param instruction index of the command to interpret
+     * @see Interpreter#
      */
     @Override
-    public void interpretation(int i) {
-        super.interpretation(i);
+    public void interpretation(Instruction instruction) {
+        super.interpretation(instruction);
         Metrics.logMetrics();
     }
 }
