@@ -29,11 +29,11 @@ import java.util.regex.Pattern;
 public abstract class Parser {
     public static final String MACRO = "$";
     public static final String PARAMS_SEPARATOR = ",";
-    public static final String MACRO_REGX = "(.*)\\((.*)\\)";
+    public static final String MACRO_REGX = "\\((\\d*)\\)";
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    private Set<Macro> macroMap = new TreeSet<>();
+    private Set<Macro> macroSet = new TreeSet<>();
     private InputStream stream;
     private String fileName;
 
@@ -130,7 +130,7 @@ public abstract class Parser {
      */
     public String getCorrectSyntax(String str) throws InvalidInstructionException {
         String s = str.replaceAll("\\s*#.*", "");
-        for (Macro macro : macroMap) {
+        for (Macro macro : macroSet) {
             s = macro.callMacro(s);
         }
         return s;
@@ -225,9 +225,9 @@ public abstract class Parser {
                     } else {
                         macroName = macroLine[0];
                     }
-                    Macro macro = new Macro(macroName, macroValue, params);
-                    if (!macroMap.contains(macro)) {
-                        macroMap.add(macro);
+                    Macro macro = new Macro(macroName, macroValue);
+                    if (!macroSet.contains(macro)) {
+                        macroSet.add(macro);
                     } else {
                         throw new InvalidCodeException("macro déja définie " + macroName);
                     }
