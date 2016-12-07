@@ -22,7 +22,7 @@ import static mcga.brainfuck.Arguments.*;
 public class Brainfuck {
 
     private static Memory memory = new Memory();
-    private static List <mcga.brainfuck.processing.Parser> parsers = new ArrayList <>();
+    private static List <Parser> parsers = new ArrayList <>();
 
     public static Memory getMemory() {
         return memory;
