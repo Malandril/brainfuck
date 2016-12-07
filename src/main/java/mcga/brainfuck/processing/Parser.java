@@ -1,9 +1,9 @@
 package mcga.brainfuck.processing;
 
-import mcga.brainfuck.Procedure;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Macro;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.Procedure;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
@@ -15,10 +15,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Comparator;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
