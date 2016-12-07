@@ -1,5 +1,6 @@
 package mcga.brainfuck.processing;
 
+import mcga.brainfuck.Procedure;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Macro;
 import mcga.brainfuck.Metrics;
@@ -14,9 +15,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +28,14 @@ import java.util.regex.Pattern;
  */
 public abstract class Parser {
     public static final String MACRO = "$";
+    public static final String FUNCTION = "@";
     public static final String PARAMS_SEPARATOR = ",";
     public static final String MACRO_REGX = "\\((\\d*)\\)";
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
     private Set<Macro> macroSet = new TreeSet<>();
+    private List<Procedure> procedures = new ArrayList<>();
     private InputStream stream;
     private String fileName;
 
@@ -103,6 +105,10 @@ public abstract class Parser {
      */
     public static boolean isComments(String str) throws InvalidInstructionException {
         return str.equals(COM);
+    }
+
+    public static boolean isFunctionDeclaration(String str){
+        return str.equals(FUNCTION);
     }
 
     /**
@@ -192,6 +198,9 @@ public abstract class Parser {
         String macroLine[];
         String macroName;
         String macroValue;
+        String procedureTab[];
+        String procedureName;
+        String procedureCode;
 
         scanner.useDelimiter("\\s*");
         try {
@@ -229,7 +238,25 @@ public abstract class Parser {
                     if (!macroSet.contains(macro)) {
                         macroSet.add(macro);
                     } else {
-                        throw new InvalidCodeException("macro déja définie " + macroName);
+                        throw new InvalidCodeException("Macro déjà définie " + macroName);
+                    }
+                }else if(isFunctionDeclaration(str)){
+                    procedureTab = scanner.nextLine().split("=");
+                    Pattern pat = Pattern.compile(MACRO_REGX);
+                    Matcher matcher = pat.matcher(procedureTab[0]);
+                    procedureCode = getCorrectSyntax(procedureTab[1]);
+                    String params[] = {};
+                    if (matcher.find()) {
+                        params = matcher.group(2).split(PARAMS_SEPARATOR);
+                        procedureName = matcher.group(1);
+                    } else {
+                        procedureName = procedureTab[0];
+                    }
+                    Procedure procedure = new Procedure(procedureName, procedureCode);
+                    if (!procedures.contains(procedure)) {
+                        procedures.add(procedure);
+                    } else {
+                        throw new InvalidCodeException("Fonction déjà définie " + procedureName);
                     }
                 } else {
                     Metrics.incrProgSize();

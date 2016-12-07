@@ -80,8 +80,6 @@ public class Interpreter extends Parser {
 
     /**
      * Interpret each command between the two index start and end
-     *
-     *
      */
     public void interpretList(List<Instruction> instructions) {
         for (Instruction instruction : instructions) {
@@ -91,7 +89,6 @@ public class Interpreter extends Parser {
 
     /**
      * Interpret the current command of the list and modify the metrics corresponding
-     *
      */
     public void interpretation(Instruction instruction) {
         try {
@@ -110,7 +107,7 @@ public class Interpreter extends Parser {
         return instructions.get(i);
     }
 
-    public void setInstructions(List <Instruction> instructions) {
+    public void setInstructions(List<Instruction> instructions) {
         this.instructions = instructions;
     }
 
