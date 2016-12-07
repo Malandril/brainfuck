@@ -3,6 +3,7 @@ package mcga.brainfuck;
 
 import mcga.brainfuck.instructions.Input;
 import mcga.brainfuck.processing.*;
+import mcga.brainfuck.processing.Parser;
 import org.apache.commons.cli.*;
 
 import java.io.FileInputStream;
@@ -20,7 +21,6 @@ import static mcga.brainfuck.Arguments.*;
  */
 public class Brainfuck {
 
-    private static final String FILE_SUFFIX = "bmp";
     private static Memory memory = new Memory();
     private static List <mcga.brainfuck.processing.Parser> parsers = new ArrayList <>();
 
@@ -50,7 +50,7 @@ public class Brainfuck {
      * @param args list of the arguments passed in parameter
      */
 
-    public static void readArguments(String[] args) {
+    private static void readArguments(String[] args) {
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();
@@ -96,9 +96,7 @@ public class Brainfuck {
             if (parsers.isEmpty()) {
                 parsers.add(new Interpreter());
             }
-            for (mcga.brainfuck.processing.Parser parser : parsers) {
-                parser.parseFile();
-            }
+            parsers.forEach(Parser::parseFile);
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());
         } catch (FileNotFoundException e) {
