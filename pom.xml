@@ -72,6 +72,7 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <finalName>brainfuck</finalName>
+                    <outputDirectory>build</outputDirectory>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
