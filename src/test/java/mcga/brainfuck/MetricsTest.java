@@ -5,6 +5,7 @@ import mcga.brainfuck.instructions.*;
 import mcga.brainfuck.processing.Interpreter;
 import mcga.brainfuck.processing.Parser;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -19,7 +20,7 @@ import static org.junit.Assert.*;
  * Created by user on 30/11/2016.
  */
 public class MetricsTest {
-    private final String fileName = "./test/testFile.txt";
+    private final String fileName = "./testFile.txt";
     Memory memory;
     Interpreter interpreter;
     List<Instruction> instructions;
@@ -29,6 +30,8 @@ public class MetricsTest {
         memory = new Memory();
         PrintStream ps = new PrintStream(fileName);
         ps.println("+>+.");
+        ps.close();
+        interpreter=new Interpreter(fileName);
     }
 
     @Test
@@ -52,10 +55,6 @@ public class MetricsTest {
 */
     }
 
-    @Test
-    public void printMetrics() throws Exception {
-
-    }
 
 
     public void setListInstructions(){
