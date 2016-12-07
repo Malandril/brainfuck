@@ -121,7 +121,7 @@ public abstract class Parser {
      * @see Interpreter#parseFile()
      */
     public void parseFile() {
-        if (fileName.endsWith(".bmp")) {
+        if (fileName != null && fileName.endsWith(".bmp")) {
             readBitmap();
         } else {
             readFile();
