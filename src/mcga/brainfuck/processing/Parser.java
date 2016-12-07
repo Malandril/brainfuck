@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,11 +30,13 @@ import java.util.regex.Pattern;
 public abstract class Parser {
     public static final String MACRO = "$";
     public static final String PARAMS_SEPARATOR = ",";
-    public static final String MACRO_REGX = "\\((\\d*)\\)";
+    public static final String MACRO_INT_PARAM = "\\(((\\d+,?)*)\\)";
+    public static final String MACRO_REGX = "(.*)\\((.*)\\)";
+    public static final String MACRO_SEP = "=";
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    private Set<Macro> macroSet = new TreeSet<>();
+    private Set<Macro> macroSet = new TreeSet<>(Comparator.reverseOrder());
     private InputStream stream;
     private String fileName;
 
@@ -214,7 +217,7 @@ public abstract class Parser {
                 } else if (isComments(str)) {
                     scanner.nextLine();
                 } else if (isMacroDeclaration(str)) {
-                    macroLine = scanner.nextLine().split("=");
+                    macroLine = scanner.nextLine().split(MACRO_SEP);
                     Pattern pat = Pattern.compile(MACRO_REGX);
                     Matcher matcher = pat.matcher(macroLine[0]);
                     macroValue = getCorrectSyntax(macroLine[1]);
@@ -225,7 +228,7 @@ public abstract class Parser {
                     } else {
                         macroName = macroLine[0];
                     }
-                    Macro macro = new Macro(macroName, macroValue);
+                    Macro macro = new Macro(macroName, macroValue, params);
                     if (!macroSet.contains(macro)) {
                         macroSet.add(macro);
                     } else {
