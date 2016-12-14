@@ -2,7 +2,10 @@ package mcga.brainfuck;
 
 import mcga.brainfuck.processing.Parser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,9 +16,9 @@ public class Macro implements Comparable<Macro> {
     String name;
     String regName;
     String value;
-    int repetition;
+    private String[] params;
     private Set<Macro> subMacros = new TreeSet<>(Comparator.reverseOrder());
-    private List<String> values;
+    private ArrayList<String[]> values = new ArrayList<>();
 
     public Macro(String name, String value) {
         this(name, value, 1);
@@ -24,20 +27,17 @@ public class Macro implements Comparable<Macro> {
     public Macro(String name, String value, int repetition) {
         this.name = name;
         this.regName = Pattern.quote(name);
-        this.repetition = repetition;
     }
 
     public Macro(String name, String value, String[] params) {
         this.name = name;
         this.regName = Pattern.quote(name);
-        this.repetition = 1;
-        StringJoiner stringJoiner = new StringJoiner("\\W|");
-        for (String param : params) {
-            stringJoiner.add(param);
-        }
-        values = new ArrayList<>(Arrays.asList(value.split(stringJoiner.toString())));
-        if (values.get(0).equals("")) {
-            values.remove(0);
+        this.value = value;
+        this.params = params;
+        Pattern pat = Pattern.compile("(\\w*)\\((.+?)\\)");
+        Matcher matcher = pat.matcher(value);
+        while (matcher.find()) {
+            values.add(new String[]{matcher.group(1), matcher.group(2)});
         }
     }
 
@@ -47,14 +47,19 @@ public class Macro implements Comparable<Macro> {
         StringBuilder tmp = new StringBuilder();
         if (match.find()) {
             String[] split = match.group(1).split(",");
-            for (int i = 0; i < split.length; i++) {
-                for (int j = 0; j < Integer.valueOf(split[i]); j++) {
-                    tmp.append(values.get(i));
+            for (int i = 0; i < values.size(); i++) {
+                for (int j = 0; j < split.length; j++) {
+                    if (params[j].equals(values.get(i)[0])) {
+                        for (int k = 0; k < Integer.valueOf(split[j]); k++) {
+                            tmp.append(values.get(i)[1]);
+                        }
+                    }
                 }
             }
             str = match.replaceAll(name);
+        } else {
+            tmp.append(value);
         }
-        tmp.append(value);
         return str.replaceAll(regName, tmp.toString());
     }
 
@@ -77,7 +82,6 @@ public class Macro implements Comparable<Macro> {
                 "name='" + name + '\'' +
                 ", regName='" + regName + '\'' +
                 ", value='" + value + '\'' +
-                ", repetition=" + repetition +
                 ", subMacros=" + subMacros +
                 '}';
     }

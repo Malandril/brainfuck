@@ -31,7 +31,7 @@ public abstract class Parser {
     public static final String MACRO = "$";
     public static final String FUNCTION = "@";
     public static final String PARAMS_SEPARATOR = ",";
-    public static final String MACRO_INT_PARAM = "\\(((\\d+,?)*)\\)";
+    public static final String MACRO_INT_PARAM = "\\(((\\w+,?)*)\\)";
     public static final String MACRO_REGX = "(.*)\\((.*)\\)";
     public static final String MACRO_SEP = "=";
     static final int SQUARE_SIDE = 3;
