@@ -15,8 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +38,7 @@ public abstract class Parser {
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
     private List<Procedure> procedures = new ArrayList<>();
-    private Set<Macro> macroSet = new TreeSet<>(Comparator.reverseOrder());
+    private List<Macro> macroSet = new ArrayList<>();
     private InputStream stream;
     private String fileName;
 

@@ -24,16 +24,14 @@ public class Macro implements Comparable<Macro> {
     public Macro(String name, String value, int repetition) {
         this.name = name;
         this.regName = Pattern.quote(name);
-        this.value = value;
         this.repetition = repetition;
     }
 
     public Macro(String name, String value, String[] params) {
         this.name = name;
         this.regName = Pattern.quote(name);
-        this.value = "";
         this.repetition = 1;
-        StringJoiner stringJoiner = new StringJoiner("|");
+        StringJoiner stringJoiner = new StringJoiner("\\W|");
         for (String param : params) {
             stringJoiner.add(param);
         }
