@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -20,7 +22,7 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
  */
 public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
-    private Queue <Color> colorFifo = new LinkedList <>();
+    private Deque<Color> colorFifo = new ArrayDeque<>();
 
 
     public Translate() {

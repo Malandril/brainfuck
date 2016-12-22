@@ -1,7 +1,6 @@
 package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.Brainfuck;
-import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidValueException;
 
@@ -22,13 +21,7 @@ public class Back extends Loop {
             throw new InvalidCodeException();
         }
         boundLoop = Jump.popJumpStack();
-        if(Jump.isJumpStackEmpty()){
-            Brainfuck.getInterpreter().instructions=Brainfuck.getInterpreter().mainInstructions;
-        }
-        else {
-            Jump prevJump = Jump.peekJumpStack();
-            Brainfuck.getInterpreter().instructions = prevJump.jumpInstructions;
-        }
+        Brainfuck.getInterpreter().popInstructions();
         boundLoop.boundLoop = this;
     }
 
@@ -47,7 +40,7 @@ public class Back extends Loop {
      * Defines the actions of a back instruction.
      */
     private void back() throws InvalidValueException {
-        if (Brainfuck.getMemory().getCurrentCellValue()!=0){
+        if (Brainfuck.getMemory().getCurrentCellValue() != 0) {
             Brainfuck.getInterpreter().interpretList(((Jump) boundLoop).jumpInstructions);
         }
     }

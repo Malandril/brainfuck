@@ -25,7 +25,7 @@ public class Jump extends Loop {
      */
     public Jump() {
         jumpIndexStack.add(this);
-        Brainfuck.getInterpreter().instructions = jumpInstructions;
+        Brainfuck.getInterpreter().pushInstructions(jumpInstructions);
     }
 
     /**

@@ -7,14 +7,16 @@ import java.util.StringJoiner;
 
 /**
  * Creates the memory and contains all the methods used to deal with it.
+ *
  * @author Team Make Coding Great Again
  */
 public class Memory {
     public static final int MIN_CELL_VALUE = 0;
     public static final int MAX_CELL_VALUE = 255;
-    private static final int MAX_SIZE = 30000;
+    public static final int MAX_SIZE = 30000;
     private int currentIndex = 0;
     private int[] memoire;
+    private int prevIndex;
 
     /**
      * Constructor of the class Memory.
@@ -25,6 +27,7 @@ public class Memory {
 
     /**
      * Gets the index of the current cell.
+     *
      * @return currentIndex index of the current cell.
      */
     public int getCurrentIndex() {
@@ -33,6 +36,7 @@ public class Memory {
 
     /**
      * Checks if the parameter i is between 0 and 255.
+     *
      * @param i value in a memory cell.
      * @return true if i is between the values, false otherwise.
      */
@@ -43,6 +47,7 @@ public class Memory {
 
     /**
      * Checks if the cell exists int the memory.
+     *
      * @param i index of the current cell.
      * @return true if it exists, false otherwise.
      */
@@ -52,6 +57,7 @@ public class Memory {
 
     /**
      * Adds i to the value of the current cell.
+     *
      * @param i value to add in the current cell.
      * @throws InvalidValueException
      */
@@ -67,26 +73,36 @@ public class Memory {
 
     /**
      * Changes the index of the current cell.
+     *
      * @param i value to add to the current index.
      * @throws IndexOutOfBoundsException
      */
     public void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException {
         int val = currentIndex;
-        if (! isValidIndex(i)) {
+        if (!isValidIndex(i)) {
             throw new MyIndexOutOfBoundsException(val + i + " index must be between " + 0 + " and " + MAX_SIZE);
         } else {
             currentIndex += i;
         }
     }
 
+    public void goToIndex(int i) throws MyIndexOutOfBoundsException {
+        if (i >= 0 && i < 30000)
+            currentIndex = i;
+        else {
+            throw new MyIndexOutOfBoundsException(i + " index must be between " + 0 + " and " + MAX_SIZE);
+        }
+    }
+
     /**
      * Returns a printable representation of the memory.
+     *
      * @return String version of the memory.
      */
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(" , ");
-        for (int i = 0 ; i < memoire.length ; i++) {
+        for (int i = 0; i < memoire.length; i++) {
             if (memoire[i] != 0) {
                 joiner.add("C" + i + ": " + memoire[i]);
             }
@@ -96,6 +112,7 @@ public class Memory {
 
     /**
      * Gets the current cell value.
+     *
      * @return value of the current cell.
      */
     public int getCurrentCellValue() {
@@ -107,5 +124,30 @@ public class Memory {
      */
     public void clearCurrentCell() {
         memoire[currentIndex] = 0;
+    }
+
+    public void malloc(Procedure procedure) {
+        procedure.prevIndex=getCurrentIndex();
+        int i = MAX_SIZE - 1;
+        while (i>=0&&memoire[i] == 0) {
+            i--;
+        }
+        i++;
+        if (MAX_SIZE - (i) < procedure.size) {
+            System.err.println("Pas assez de memoire pour appeler la fonction");
+            System.exit(18);
+        } else {
+            currentIndex = i;
+            procedure.startIndex=i;
+            procedure.endIndex=procedure.startIndex+procedure.size-1;
+        }
+    }
+
+    public void free(Procedure procedure) {
+        int i = procedure.endIndex;
+        while (i>=procedure.startIndex) {
+            memoire[i--]=0;
+        }
+        currentIndex=procedure.prevIndex;
     }
 }

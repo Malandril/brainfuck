@@ -13,7 +13,9 @@ import mcga.brainfuck.instructions.Jump;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -24,9 +26,7 @@ import java.util.List;
 
 public class Interpreter extends Parser {
 
-    public List<Instruction> mainInstructions = new ArrayList<>();
-    public List<Instruction> instructions = mainInstructions;
-
+    private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
 
     /**
      * Default constructor of the class.
@@ -45,6 +45,7 @@ public class Interpreter extends Parser {
      */
     public Interpreter(String fileName) throws FileNotFoundException {
         super(fileName);
+        instructionsStack.push(new ArrayList<>());
     }
 
     /**
@@ -70,7 +71,7 @@ public class Interpreter extends Parser {
             throw new InvalidCodeException();
         }
         double startTime = System.nanoTime();
-        interpretList(mainInstructions);
+        interpretList(instructionsStack.peek());
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
         Metrics.printMetrics();
@@ -96,20 +97,15 @@ public class Interpreter extends Parser {
 //                Metrics.setExecPos(i + 1);
             Metrics.setExecMove(Metrics.getExecMove() + 1);
         } catch (InvalidValueException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            System.exit(InvalidValueException.EXIT_CODE);
         } catch (MyIndexOutOfBoundsException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            System.exit(MyIndexOutOfBoundsException.EXIT_CODE);
         }
 
     }
 
-    public Instruction getInstruction(int i) {
-        return instructions.get(i);
-    }
-
-    public void setInstructions(List<Instruction> instructions) {
-        this.instructions = instructions;
-    }
 
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction
@@ -121,6 +117,14 @@ public class Interpreter extends Parser {
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
-        instructions.add(InstructionCreator.createInstruction(str));
+        instructionsStack.peek().add(InstructionCreator.createInstruction(str));
+    }
+
+    public void pushInstructions(List<Instruction> item) {
+        instructionsStack.push(item);
+    }
+
+    public List<Instruction> popInstructions() {
+        return instructionsStack.pop();
     }
 }

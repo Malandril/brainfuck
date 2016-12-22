@@ -1,7 +1,5 @@
 package mcga.brainfuck;
 
-import mcga.brainfuck.processing.Parser;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
@@ -13,6 +11,10 @@ import java.util.regex.Pattern;
  * Created by user on 30/11/2016.
  */
 public class Macro implements Comparable<Macro> {
+    public static final String MACRO = "$";
+    private static final String MACRO_INT_PARAM = "\\(((\\d+,?)*)\\)";
+    public static final String MACRO_REGX = "(.*)\\((.*)\\)";
+    public static final String MACRO_SEP = "=";
     String name;
     String regName;
     String value;
@@ -42,16 +44,16 @@ public class Macro implements Comparable<Macro> {
     }
 
     public String callMacro(String str) {
-        Pattern pat = Pattern.compile(regName + Parser.MACRO_INT_PARAM);
+        Pattern pat = Pattern.compile(regName + MACRO_INT_PARAM);
         Matcher match = pat.matcher(str);
         StringBuilder tmp = new StringBuilder();
         if (match.find()) {
             String[] split = match.group(1).split(",");
-            for (int i = 0; i < values.size(); i++) {
+            for (String[] string : values) {
                 for (int j = 0; j < split.length; j++) {
-                    if (params[j].equals(values.get(i)[0])) {
+                    if (params[j].equals(string[0])) {
                         for (int k = 0; k < Integer.valueOf(split[j]); k++) {
-                            tmp.append(values.get(i)[1]);
+                            tmp.append(string[1]);
                         }
                     }
                 }

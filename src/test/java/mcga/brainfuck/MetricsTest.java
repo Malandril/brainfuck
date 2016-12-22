@@ -62,7 +62,6 @@ public class MetricsTest {
         instructions.add(new Increment());
         instructions.add(new Right());
         instructions.add(new Output());
-        interpreter.setInstructions(instructions);
     }
 
     class MyParser extends Parser{
