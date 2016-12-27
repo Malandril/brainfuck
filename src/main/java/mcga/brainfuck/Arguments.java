@@ -15,7 +15,8 @@ public enum Arguments {
     REWRITE("rewrite", false),
     CHECK("check", false),
     TRANSLATE("translate", false),
-    TRACE("trace", false);
+    TRACE("trace", false),
+    TOC("toc",false);
 
 
     String expression;

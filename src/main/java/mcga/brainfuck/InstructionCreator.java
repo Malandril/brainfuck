@@ -11,18 +11,19 @@ import java.util.List;
  * @author Team Make Coding Great Again
  */
 public enum InstructionCreator {
-    INCR("INCR", "+", "FFFFFF"),
-    DECR("DECR", "-", "4B0082"),
-    LEFT("LEFT", "<", "9400D3"),
-    RIGHT("RIGHT", ">", "0000FF"),
-    IN("IN", ",", "FFFF00"),
-    OUT("OUT", ".", "00FF00"),
-    JUMP("JUMP", "[", "FF7F00"),
-    BACK("BACK", "]", "FF0000");
+    INCR("INCR", "+", "FFFFFF","tab[ptr]++;"),
+    DECR("DECR", "-", "4B0082","tab[ptr]--;"),
+    LEFT("LEFT", "<", "9400D3","ptr--;\n MaxMinPtr(ptr);"),
+    RIGHT("RIGHT", ">", "0000FF","ptr++;\n MaxMinPtr(ptr);"),
+    IN("IN", ",", "FFFF00",""),
+    OUT("OUT", ".", "00FF00","printf(\"%c\",tab[ptr]);"),
+    JUMP("JUMP", "[", "FF7F00","while(tab[ptr]){"),
+    BACK("BACK", "]", "FF0000","}");
 
 
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
+    public static final int C_SYNTAX_INDEX = 3;
     private List <String> identifiers;
 
     /**
@@ -41,6 +42,10 @@ public enum InstructionCreator {
      */
     public static String getShortSyntax(String longStr) throws InvalidInstructionException {
         return hasInstruction(longStr).identifiers.get(SHORT_SYNTAX_INDEX);
+    }
+
+    public static String getCSyntax(String longStr) throws InvalidInstructionException {
+        return hasInstruction(longStr).identifiers.get(C_SYNTAX_INDEX);
     }
 
     /**
@@ -66,7 +71,12 @@ public enum InstructionCreator {
     public static InstructionCreator hasInstruction(String str) {
         for (InstructionCreator instructionCreator : InstructionCreator.values()) {
             if (instructionCreator.identifiers.contains(str)) {
-                return instructionCreator;
+                if(isCSyntax(instructionCreator,str)){
+                    return null;
+                }
+                else {
+                    return instructionCreator;
+                }
             }
         }
         return null;
@@ -121,5 +131,8 @@ public enum InstructionCreator {
         return this.identifiers.get(i);
     }
 
+    public static boolean isCSyntax(InstructionCreator instructionCreator,String str){
+        return instructionCreator.identifiers.indexOf(str)==3;
+    }
 
 }
