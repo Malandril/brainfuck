@@ -35,6 +35,7 @@ public class Interpreter extends Parser {
      */
     public Interpreter() {
         super();
+        instructionsStack.push(new ArrayList<>());
     }
 
     /**
@@ -98,7 +99,7 @@ public class Interpreter extends Parser {
             Metrics.setExecMove(Metrics.getExecMove() + 1);
         } catch (InvalidValueException e) {
             System.err.println(e.getMessage());
-            System.exit(InvalidValueException.EXIT_CODE);
+//            System.exit(InvalidValueException.EXIT_CODE);
         } catch (MyIndexOutOfBoundsException e) {
             System.err.println(e.getMessage());
             System.exit(MyIndexOutOfBoundsException.EXIT_CODE);

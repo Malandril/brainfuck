@@ -1,45 +1,38 @@
 package mcga.brainfuck;
 
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Instruction;
-import mcga.brainfuck.instructions.Right;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static mcga.brainfuck.Brainfuck.*;
+import static mcga.brainfuck.Brainfuck.getMemory;
+import static mcga.brainfuck.Brainfuck.peekInterpreter;
 
 /**
  * Created by user on 07/12/2016.
  */
 public class Procedure implements Instruction {
-    public String name;
-    public int prevIndex;
-    public int startIndex;
-    public int endIndex;
-    private List<Instruction> instructionsProcedure=new ArrayList<>();
-    public int size = 0;
+    public Procedure prevProcedure;
+    int prevIndex;
+    int startIndex;
+    int endIndex;
+    int size = 0;
+    int[] paramDeclaration;
+    private String name;
+    private List<Instruction> instructions = new ArrayList<>();
 
-    public Procedure(String name, String code){
+    public Procedure(String name, List<Instruction> instructions,int size, int[] paramDeclaration,String params) {
+        this.instructions = instructions;
         this.name = name;
-        getInterpreter().pushInstructions(instructionsProcedure);
-        getInterpreter().readText(code);
-        getInterpreter().popInstructions();
-        calculateMemoryNeeded();
+        this.paramDeclaration = paramDeclaration;
+        this.size=size;
     }
 
-    public void interpret(){
+    public void interpret() {
         getMemory().malloc(this);
-        getInterpreter().interpretList(instructionsProcedure);
+        peekInterpreter().interpretList(instructions);
         getMemory().free(this);
+        System.out.println(getMemory().maxVal);
     }
 
-    public void calculateMemoryNeeded(){
-        for (Instruction instruction : instructionsProcedure) {
-            if(instruction instanceof Right){
-                size++;
-            }
-        }
-    }
 }

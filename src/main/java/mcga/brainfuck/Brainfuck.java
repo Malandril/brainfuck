@@ -9,7 +9,9 @@ import org.apache.commons.cli.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import static mcga.brainfuck.Arguments.*;
@@ -17,12 +19,14 @@ import static mcga.brainfuck.Arguments.*;
 /**
  * Main class of the project.
  * Contains the main method.
+ *
  * @author Team Make Coding Great Again
  */
 public class Brainfuck {
 
+    public static Deque<Interpreter> interpreterDeque = new ArrayDeque<>();
     private static Memory memory = new Memory();
-    private static List <Parser> parsers = new ArrayList <>();
+    private static List<Parser> parsers = new ArrayList<>();
 
     public static Memory getMemory() {
         return memory;
@@ -32,13 +36,22 @@ public class Brainfuck {
         Brainfuck.memory = memory;
     }
 
-    public static Interpreter getInterpreter() {
-        return (Interpreter) parsers.get(0);
+    public static Interpreter popInterpreter() {
+        return interpreterDeque.pop();
+    }
+
+    public static void pushInterpreter(Interpreter curentInterpreter) {
+        interpreterDeque.push(curentInterpreter);
+    }
+
+    public static Interpreter peekInterpreter() {
+        return interpreterDeque.peek();
     }
 
     /**
      * Main method, which executes the readArguments method and after the execution, displays the values of the
      * memory's cells and the metrics.
+     *
      * @param args Different parameters accepted
      */
     public static void main(String[] args) {
@@ -47,6 +60,7 @@ public class Brainfuck {
 
     /**
      * Reads the provided arguments, determines the actions they correspond to and executes them.
+     *
      * @param args list of the arguments passed in parameter
      */
 
@@ -81,10 +95,14 @@ public class Brainfuck {
                     }
                     String logFile = bfFile + ".log";
                     System.setErr(new PrintStream(logFile));
-                    parsers.add(new Trace(pValue));
+                    Trace trace = new Trace(pValue);
+                    parsers.add(trace);
+                    interpreterDeque.push(trace);
                 }
                 if (parsers.isEmpty()) {
-                    parsers.add(new Interpreter(pValue));
+                    Interpreter interpreter = new Interpreter(pValue);
+                    parsers.add(interpreter);
+                    interpreterDeque.push(interpreter);
                 }
             }
             if (line.hasOption(INPUT.expression)) {
@@ -94,7 +112,9 @@ public class Brainfuck {
                 System.setOut(new PrintStream(line.getOptionValue(OUTPUT.expression)));
             }
             if (parsers.isEmpty()) {
-                parsers.add(new Interpreter());
+                Interpreter interpreter = new Interpreter();
+                parsers.add(interpreter);
+                interpreterDeque.push(interpreter);
             }
             parsers.forEach(Parser::parseFile);
         } catch (ParseException exp) {

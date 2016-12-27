@@ -120,9 +120,9 @@ public enum InstructionCreator {
             }
             return instruction;
         } else {
-            String code = Parser.procedures.get(s);
-            if (code != null) {
-                return new Procedure(s, code);
+            ProcedureStruct struct = Parser.procedures.get(s);
+            if (struct != null) {
+                return new Procedure(s, struct.instructions,struct.size,struct.params,"");
             }
         }
         throw new InvalidInstructionException(s);

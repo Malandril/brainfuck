@@ -1,7 +1,9 @@
 package mcga.brainfuck.processing;
 
+import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Macro;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.ProcedureStruct;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
@@ -29,11 +31,12 @@ import static mcga.brainfuck.InstructionCreator.hasInstruction;
  */
 public abstract class Parser {
     public static final String PROCEDURE = "@";
-    public static final String PARAMS_SEPARATOR = ",";
+    public static final String MACRO_PARAM_SEP = ",";
+    public static final String PROC_PARAM_SEP = ";";
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    public static Map<String,String> procedures = new HashMap<>();
+    public static Map<String, ProcedureStruct> procedures = new HashMap<>();
     private List<Macro> macroSet = new ArrayList<>();
     private InputStream stream;
     private String fileName;
@@ -70,7 +73,12 @@ public abstract class Parser {
      * @throws InvalidInstructionException
      */
     public static String getShortSyntax(String longStr) throws InvalidInstructionException {
-        return hasInstruction(longStr).getIdentifier(SHORT_SYNTAX_INDEX);
+        InstructionCreator creator = hasInstruction(longStr);
+        if (creator != null) {
+            return creator.getIdentifier(SHORT_SYNTAX_INDEX);
+        } else {
+            throw new InvalidInstructionException();
+        }
     }
 
     /**
@@ -216,7 +224,7 @@ public abstract class Parser {
                 if (isLetter(str)) {
                     str += scanner.nextLine();
                     str = getCorrectSyntax(str);
-                    if (hasInstruction(str) == null&&(procedureName=procedures.get(str))==null) {
+                    if (hasInstruction(str) == null && (procedures.get(str)) == null) {
                         str = str.replaceAll("\\s*", "");
                         for (int i = 0; i < str.length(); i++) {
                             String in = str.substring(i, i + 1);
@@ -230,40 +238,9 @@ public abstract class Parser {
                 } else if (isComments(str)) {
                     scanner.nextLine();
                 } else if (isMacroDeclaration(str)) {
-                    macroLine = scanner.nextLine().split(Macro.MACRO_SEP);
-                    Pattern pat = Pattern.compile(Macro.MACRO_REGX);
-                    Matcher matcher = pat.matcher(macroLine[0]);
-                    macroValue = getCorrectSyntax(macroLine[1]);
-                    String params[] = {};
-                    if (matcher.find()) {
-                        params = matcher.group(2).split(PARAMS_SEPARATOR);
-                        macroName = matcher.group(1);
-                    } else {
-                        macroName = macroLine[0];
-                    }
-                    Macro macro = new Macro(macroName, macroValue, params);
-                    if (!macroSet.contains(macro)) {
-                        macroSet.add(macro);
-                    } else {
-                        throw new InvalidCodeException("Macro déjà définie " + macroName);
-                    }
+                    macroDelcaration(scanner);
                 } else if (isProcedureDeclaration(str)) {
-                    procedureTab = scanner.nextLine().split("=");
-                    Pattern pat = Pattern.compile(Macro.MACRO_REGX);
-                    Matcher matcher = pat.matcher(procedureTab[0]);
-                    procedureCode = getCorrectSyntax(procedureTab[1]);
-                    String params[] = {};
-                    if (matcher.find()) {
-                        params = matcher.group(2).split(PARAMS_SEPARATOR);
-                        procedureName = matcher.group(1);
-                    } else {
-                        procedureName = procedureTab[0];
-                    }
-                    if (!procedures.containsKey(procedureName)) {
-                        procedures.put(procedureName,procedureCode);
-                    } else {
-                        throw new InvalidCodeException("Procédure déjà définie " + procedureName);
-                    }
+                    procedureDeclaration(scanner);
                 } else {
                     Metrics.incrProgSize();
                     execute(str);
@@ -272,6 +249,51 @@ public abstract class Parser {
         } catch (InvalidInstructionException e) {
             System.err.println(e.getMessage());
             System.exit(InvalidInstructionException.EXIT_CODE);
+        }
+    }
+
+    private void macroDelcaration(Scanner scanner) throws InvalidInstructionException {
+        String[] macroLine;
+        String macroValue;
+        String macroName;
+        macroLine = scanner.nextLine().split(Macro.MACRO_SEP);
+        Pattern pat = Pattern.compile(Macro.MACRO_REGX);
+        Matcher matcher = pat.matcher(macroLine[0]);
+        macroValue = getCorrectSyntax(macroLine[1]);
+        String params[] = {};
+        if (matcher.find()) {
+            params = matcher.group(2).split(MACRO_PARAM_SEP);
+            macroName = matcher.group(1);
+        } else {
+            macroName = macroLine[0];
+        }
+        Macro macro = new Macro(macroName, macroValue, params);
+        if (!macroSet.contains(macro)) {
+            macroSet.add(macro);
+        } else {
+            throw new InvalidCodeException("Macro déjà définie " + macroName);
+        }
+    }
+
+    private void procedureDeclaration(Scanner scanner) throws InvalidInstructionException {
+        String[] procedureTab;
+        String procedureCode;
+        String procedureName;
+        procedureTab = scanner.nextLine().split("=");
+        Pattern pat = Pattern.compile(Macro.MACRO_REGX);
+        Matcher matcher = pat.matcher(procedureTab[0]);
+        procedureCode = getCorrectSyntax(procedureTab[1]);
+        String params[] = {};
+        if (matcher.find()) {
+            params = matcher.group(2).split(PROC_PARAM_SEP);
+            procedureName = matcher.group(1);
+        } else {
+            procedureName = procedureTab[0];
+        }
+        if (!procedures.containsKey(procedureName)) {
+            procedures.put(procedureName, new ProcedureStruct(procedureCode, params));
+        } else {
+            throw new InvalidCodeException("Procédure déjà définie " + procedureName);
         }
     }
 
