@@ -76,6 +76,7 @@ public class Brainfuck {
                 boolean hasRewrite = line.hasOption(REWRITE.expression);
                 boolean hasCheck = line.hasOption(CHECK.expression);
                 boolean hasTranslate = line.hasOption(TRANSLATE.expression);
+                boolean hasToC = line.hasOption(TOC.expression);
                 if (hasCheck || hasRewrite || hasTranslate) {
                     if (hasRewrite) {
                         parsers.add(new Rewrite(pValue));
@@ -99,6 +100,17 @@ public class Brainfuck {
                     parsers.add(trace);
                     interpreterDeque.push(trace);
                 }
+                else if(hasToC){
+                    int index = pValue.lastIndexOf(".");
+                    String bfFile = pValue;
+                    if (index > 0) {
+                        bfFile = bfFile.substring(0, index);
+                    }
+                    String CFile = bfFile + ".c";
+                    System.setErr(new PrintStream(CFile));
+                    System.err.println(ToC.initialize());
+                    parsers.add(new ToC(pValue));
+                }
                 if (parsers.isEmpty()) {
                     Interpreter interpreter = new Interpreter(pValue);
                     parsers.add(interpreter);
@@ -117,6 +129,7 @@ public class Brainfuck {
                 interpreterDeque.push(interpreter);
             }
             parsers.forEach(Parser::parseFile);
+            if(line.hasOption(TOC.expression))System.err.println(ToC.endOfFile());
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());
         } catch (FileNotFoundException e) {

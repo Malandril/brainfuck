@@ -81,6 +81,10 @@ public abstract class Parser {
         }
     }
 
+    public static String getCSyntax(String longStr) throws InvalidInstructionException {
+        return InstructionCreator.hasInstruction(longStr).getIdentifier(InstructionCreator.C_SYNTAX_INDEX);
+    }
+
     /**
      * Tests the first character to determine if the String is made of several short syntax instructions
      * or a single long syntax instruction.
@@ -316,7 +320,7 @@ public abstract class Parser {
      * This method is overriden in all subclasses.
      *
      * @param str string value of the argument to interpret
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException instructions invalid
      * @see Check#execute(String)
      * @see Interpreter#execute(String)
      * @see Rewrite#execute(String)
