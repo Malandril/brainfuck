@@ -58,7 +58,7 @@ public class Check extends Parser {
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
-        InstructionCreator instr = InstructionCreator.hasInstruction(str);
+        InstructionCreator instr = InstructionCreator.getInstruction(str);
         switch (instr) {
             case JUMP:
                 count++;

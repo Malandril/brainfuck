@@ -21,7 +21,7 @@ public class Back extends Loop {
             throw new InvalidCodeException();
         }
         boundLoop = Jump.popJumpStack();
-        Brainfuck.peekInterpreter().popInstructions();
+        Brainfuck.getInterpreter().popInstructions();
         boundLoop.boundLoop = this;
     }
 
@@ -41,7 +41,7 @@ public class Back extends Loop {
      */
     private void back() throws InvalidValueException {
         if (Brainfuck.getMemory().getCurrentCellValue() != 0) {
-            Brainfuck.peekInterpreter().interpretList(((Jump) boundLoop).jumpInstructions);
+            Brainfuck.getInterpreter().interpretList(((Jump) boundLoop).jumpInstructions);
         }
     }
 }

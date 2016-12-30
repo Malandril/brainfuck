@@ -1,34 +1,25 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.InvalidCodeException;
+import mcga.brainfuck.processing.Parser;
+
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by user on 30/11/2016.
+ * Created by Thomas on 30/11/2016.
+ * salut
  */
 public class Macro implements Comparable<Macro> {
-    public static final String MACRO = "$";
-    private static final String MACRO_INT_PARAM = "\\(((\\d+,?)*)\\)";
-    public static final String MACRO_REGX = "(.*)\\((.*)\\)";
-    public static final String MACRO_SEP = "=";
-    String name;
-    String regName;
-    String value;
+    public String name;
+    public String value;
+    private String regName;
     private String[] params;
-    private Set<Macro> subMacros = new TreeSet<>(Comparator.reverseOrder());
     private ArrayList<String[]> values = new ArrayList<>();
 
     public Macro(String name, String value) {
-        this(name, value, 1);
-    }
-
-    public Macro(String name, String value, int repetition) {
-        this.name = name;
-        this.regName = Pattern.quote(name);
+        this(name, value, new String[0]);
     }
 
     public Macro(String name, String value, String[] params) {
@@ -43,12 +34,13 @@ public class Macro implements Comparable<Macro> {
         }
     }
 
-    public String callMacro(String str) {
-        Pattern pat = Pattern.compile(regName + MACRO_INT_PARAM);
-        Matcher match = pat.matcher(str);
+    public String callMacro(String str, String paramsStr) {
         StringBuilder tmp = new StringBuilder();
-        if (match.find()) {
-            String[] split = match.group(1).split(",");
+        if (paramsStr != null) {
+            String[] split = paramsStr.split(Parser.PROC_PARAM_SEP);
+            if(split.length!=params.length){
+                throw new InvalidCodeException("nombre de parametres incorrect");
+            }
             for (String[] string : values) {
                 for (int j = 0; j < split.length; j++) {
                     if (params[j].equals(string[0])) {
@@ -58,7 +50,6 @@ public class Macro implements Comparable<Macro> {
                     }
                 }
             }
-            str = match.replaceAll(name);
         } else {
             tmp.append(value);
         }
@@ -72,10 +63,7 @@ public class Macro implements Comparable<Macro> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() == this.getClass()) {
-            return this.name.equals(((Macro) obj).name);
-        }
-        return false;
+        return obj.getClass() == this.getClass() && this.name.equals(((Macro) obj).name);
     }
 
     @Override
@@ -84,7 +72,6 @@ public class Macro implements Comparable<Macro> {
                 "name='" + name + '\'' +
                 ", regName='" + regName + '\'' +
                 ", value='" + value + '\'' +
-                ", subMacros=" + subMacros +
                 '}';
     }
 }

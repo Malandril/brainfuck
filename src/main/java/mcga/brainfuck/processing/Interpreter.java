@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import static mcga.brainfuck.InstructionCreator.RIGHT;
+
 /**
  * This class extends Parser. It rewrites the methods from the superclass to interpret the parsed actions.
  *
@@ -25,7 +27,7 @@ import java.util.List;
  */
 
 public class Interpreter extends Parser {
-
+    private int size;
     private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
 
     /**
@@ -99,7 +101,7 @@ public class Interpreter extends Parser {
             Metrics.setExecMove(Metrics.getExecMove() + 1);
         } catch (InvalidValueException e) {
             System.err.println(e.getMessage());
-//            System.exit(InvalidValueException.EXIT_CODE);
+            System.exit(InvalidValueException.EXIT_CODE);
         } catch (MyIndexOutOfBoundsException e) {
             System.err.println(e.getMessage());
             System.exit(MyIndexOutOfBoundsException.EXIT_CODE);
@@ -119,6 +121,9 @@ public class Interpreter extends Parser {
     @Override
     public void execute(String str) throws InvalidInstructionException {
         instructionsStack.peek().add(InstructionCreator.createInstruction(str));
+        if(RIGHT.isIdentifier(str)){
+            size++;
+        }
     }
 
     public void pushInstructions(List<Instruction> item) {
@@ -127,5 +132,12 @@ public class Interpreter extends Parser {
 
     public List<Instruction> popInstructions() {
         return instructionsStack.pop();
+    }
+
+
+    public int readProcedureText(String str) {
+        size = 0;
+        super.readText(str);
+        return size+1;
     }
 }

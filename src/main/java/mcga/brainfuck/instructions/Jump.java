@@ -25,7 +25,7 @@ public class Jump extends Loop {
      */
     public Jump() {
         jumpIndexStack.add(this);
-        Brainfuck.peekInterpreter().pushInstructions(jumpInstructions);
+        Brainfuck.getInterpreter().pushInstructions(jumpInstructions);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Jump extends Loop {
     public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
         Metrics.incrDataRead();
         if (Brainfuck.getMemory().getCurrentCellValue() != 0) {
-            Brainfuck.peekInterpreter().interpretList(jumpInstructions);
+            Brainfuck.getInterpreter().interpretList(jumpInstructions);
         }
     }
 }

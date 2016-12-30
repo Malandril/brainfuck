@@ -9,9 +9,7 @@ import org.apache.commons.cli.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 import static mcga.brainfuck.Arguments.*;
@@ -24,7 +22,7 @@ import static mcga.brainfuck.Arguments.*;
  */
 public class Brainfuck {
 
-    public static Deque<Interpreter> interpreterDeque = new ArrayDeque<>();
+    private static Interpreter interpreter;
     private static Memory memory = new Memory();
     private static List<Parser> parsers = new ArrayList<>();
 
@@ -36,17 +34,6 @@ public class Brainfuck {
         Brainfuck.memory = memory;
     }
 
-    public static Interpreter popInterpreter() {
-        return interpreterDeque.pop();
-    }
-
-    public static void pushInterpreter(Interpreter curentInterpreter) {
-        interpreterDeque.push(curentInterpreter);
-    }
-
-    public static Interpreter peekInterpreter() {
-        return interpreterDeque.peek();
-    }
 
     /**
      * Main method, which executes the readArguments method and after the execution, displays the values of the
@@ -98,23 +85,22 @@ public class Brainfuck {
                     System.setErr(new PrintStream(logFile));
                     Trace trace = new Trace(pValue);
                     parsers.add(trace);
-                    interpreterDeque.push(trace);
-                }
-                else if(hasToC){
+                    interpreter = trace;
+                } else if (hasToC) {
                     int index = pValue.lastIndexOf(".");
                     String bfFile = pValue;
                     if (index > 0) {
                         bfFile = bfFile.substring(0, index);
                     }
                     String CFile = bfFile + ".c";
-                    System.setErr(new PrintStream(CFile));
-                    System.err.println(ToC.initialize());
+                    System.setOut(new PrintStream(CFile));
                     parsers.add(new ToC(pValue));
+                    interpreter=new Interpreter();
                 }
                 if (parsers.isEmpty()) {
                     Interpreter interpreter = new Interpreter(pValue);
                     parsers.add(interpreter);
-                    interpreterDeque.push(interpreter);
+                    Brainfuck.interpreter = interpreter;
                 }
             }
             if (line.hasOption(INPUT.expression)) {
@@ -126,15 +112,18 @@ public class Brainfuck {
             if (parsers.isEmpty()) {
                 Interpreter interpreter = new Interpreter();
                 parsers.add(interpreter);
-                interpreterDeque.push(interpreter);
+                Brainfuck.interpreter = interpreter;
             }
             parsers.forEach(Parser::parseFile);
-            if(line.hasOption(TOC.expression))System.err.println(ToC.endOfFile());
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
             System.exit(3);
         }
+    }
+
+    public static Interpreter getInterpreter() {
+        return interpreter;
     }
 }

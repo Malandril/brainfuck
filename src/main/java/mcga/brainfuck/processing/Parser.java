@@ -15,13 +15,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static mcga.brainfuck.InstructionCreator.SHORT_SYNTAX_INDEX;
-import static mcga.brainfuck.InstructionCreator.hasInstruction;
+import static mcga.brainfuck.InstructionCreator.getInstruction;
 
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
@@ -31,13 +32,15 @@ import static mcga.brainfuck.InstructionCreator.hasInstruction;
  */
 public abstract class Parser {
     public static final String PROCEDURE = "@";
-    public static final String MACRO_PARAM_SEP = ",";
+    public static final String FUNCTION = "§";
     public static final String PROC_PARAM_SEP = ";";
+    public static final String CALL_PATTERN = "([^(]*)(?:\\(((?:.+;?)*?)\\))?";
+    public static final String MACRO = "$";
     static final int SQUARE_SIDE = 3;
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    public static Map<String, ProcedureStruct> procedures = new HashMap<>();
-    private List<Macro> macroSet = new ArrayList<>();
+    protected static Map<String, ProcedureStruct> procedureMap = new HashMap<>();
+    private Map<String, Macro> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
 
@@ -73,16 +76,12 @@ public abstract class Parser {
      * @throws InvalidInstructionException
      */
     public static String getShortSyntax(String longStr) throws InvalidInstructionException {
-        InstructionCreator creator = hasInstruction(longStr);
-        if (creator != null) {
-            return creator.getIdentifier(SHORT_SYNTAX_INDEX);
+        InstructionCreator instruction = getInstruction(longStr);
+        if (instruction != null) {
+            return instruction.getIdentifier(SHORT_SYNTAX_INDEX);
         } else {
             throw new InvalidInstructionException();
         }
-    }
-
-    public static String getCSyntax(String longStr) throws InvalidInstructionException {
-        return InstructionCreator.hasInstruction(longStr).getIdentifier(InstructionCreator.C_SYNTAX_INDEX);
     }
 
     /**
@@ -92,7 +91,7 @@ public abstract class Parser {
      * @param str String of command
      * @return true if it is a long syntax, false otherwise
      */
-    public static boolean isLetter(String str) {
+    private static boolean isLetter(String str) {
         char firstChar = str.charAt(0);
         return Character.isLetter(firstChar);
     }
@@ -103,8 +102,8 @@ public abstract class Parser {
      * @param str String to test
      * @return true if it is a macro declaration, false otherwise
      */
-    public static boolean isMacroDeclaration(String str) {
-        return str.startsWith(Macro.MACRO);
+    private static boolean isMacroDeclaration(String str) {
+        return str.startsWith(MACRO);
     }
 
     /**
@@ -114,12 +113,20 @@ public abstract class Parser {
      * @return true if it is a '#', false otherwise
      * @throws InvalidInstructionException
      */
-    public static boolean isComments(String str) throws InvalidInstructionException {
+    private static boolean isComments(String str) throws InvalidInstructionException {
         return str.equals(COM);
     }
 
-    public static boolean isProcedureDeclaration(String str) {
+    private static boolean isProcedureDeclaration(String str) {
         return str.equals(PROCEDURE);
+    }
+
+    private static boolean isFunctionDeclaration(String str) {
+        return str.equals(FUNCTION);
+    }
+
+    public static ProcedureStruct getProcedure(String key) {
+        return procedureMap.get(key);
     }
 
     /**
@@ -130,27 +137,13 @@ public abstract class Parser {
      * @see Interpreter#parseFile()
      */
     public void parseFile() {
+        Metrics.setProgSize(0);
         if (fileName != null && fileName.endsWith(".bmp")) {
             readBitmap();
         } else {
             readText();
         }
 
-    }
-
-    /**
-     * Replaces the macros by their command values
-     *
-     * @param str String to modify
-     * @return String after the modification of the macros
-     * @throws InvalidInstructionException thrown if tries to parse an invalid Instruction
-     */
-    public String getCorrectSyntax(String str) throws InvalidInstructionException {
-        String s = str.replaceAll("\\s*#.*", "");
-        for (Macro macro : macroSet) {
-            s = macro.callMacro(s);
-        }
-        return s;
     }
 
     /**
@@ -162,14 +155,12 @@ public abstract class Parser {
      */
     private void readBitmap() {
         try {
-            Metrics.setProgSize(0);
             BufferedImage image = ImageIO.read(stream);
             int height = image.getHeight();
             int width = image.getWidth();
             if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
                 throw new InvalidBitmapException();
             }
-
             String prevColor;
             String hexColor = "";
             for (int i = 0; i < height; i += SQUARE_SIDE) {
@@ -207,44 +198,42 @@ public abstract class Parser {
         scanFile(scanner);
     }
 
-    public void readText(String str) {
+    protected void readText(String str) {
         Scanner scanner = new Scanner(str);
         scanFile(scanner);
     }
 
     private void scanFile(Scanner scanner) {
-        Metrics.setProgSize(0);
         String str;
-        String macroLine[];
-        String macroName;
-        String macroValue;
-        String procedureTab[];
-        String procedureName;
-        String procedureCode;
         scanner.useDelimiter("\\s*");
         try {
             while (scanner.hasNext()) {
                 str = scanner.next();
                 if (isLetter(str)) {
                     str += scanner.nextLine();
-                    str = getCorrectSyntax(str);
-                    if (hasInstruction(str) == null && (procedures.get(str)) == null) {
-                        str = str.replaceAll("\\s*", "");
-                        for (int i = 0; i < str.length(); i++) {
-                            String in = str.substring(i, i + 1);
+                    str = str.replaceAll("\\s*#.*", "");
+                    Pattern pattern = Pattern.compile(CALL_PATTERN);
+                    Matcher matcher = pattern.matcher(str);
+                    if (matcher.matches()) {
+                        Macro macro;
+                        if ((macro = macroMap.get(matcher.group(1))) != null) {
+                            str = macro.callMacro(matcher.group(1), matcher.group(2));
+                            readText(str);
+                        } else {
                             Metrics.incrProgSize();
-                            execute(in);
+                            execute(str);
                         }
                     } else {
-                        Metrics.incrProgSize();
-                        execute(str);
+                        throw new InvalidInstructionException(str);
                     }
                 } else if (isComments(str)) {
                     scanner.nextLine();
                 } else if (isMacroDeclaration(str)) {
-                    macroDelcaration(scanner);
+                    declaration(scanner, (name, code, params) -> macroMap.put(name, new Macro(name, code, params)));
                 } else if (isProcedureDeclaration(str)) {
-                    procedureDeclaration(scanner);
+                    declaration(scanner, declareFunction(false));
+                } else if (isFunctionDeclaration(str)) {
+                    declaration(scanner, declareFunction(true));
                 } else {
                     Metrics.incrProgSize();
                     execute(str);
@@ -256,48 +245,29 @@ public abstract class Parser {
         }
     }
 
-    private void macroDelcaration(Scanner scanner) throws InvalidInstructionException {
-        String[] macroLine;
-        String macroValue;
-        String macroName;
-        macroLine = scanner.nextLine().split(Macro.MACRO_SEP);
-        Pattern pat = Pattern.compile(Macro.MACRO_REGX);
-        Matcher matcher = pat.matcher(macroLine[0]);
-        macroValue = getCorrectSyntax(macroLine[1]);
-        String params[] = {};
-        if (matcher.find()) {
-            params = matcher.group(2).split(MACRO_PARAM_SEP);
-            macroName = matcher.group(1);
-        } else {
-            macroName = macroLine[0];
-        }
-        Macro macro = new Macro(macroName, macroValue, params);
-        if (!macroSet.contains(macro)) {
-            macroSet.add(macro);
-        } else {
-            throw new InvalidCodeException("Macro déjà définie " + macroName);
-        }
+    public IDeclaration declareFunction(boolean function) {
+        return new FunctionDeclaration(function);
     }
 
-    private void procedureDeclaration(Scanner scanner) throws InvalidInstructionException {
-        String[] procedureTab;
-        String procedureCode;
-        String procedureName;
-        procedureTab = scanner.nextLine().split("=");
-        Pattern pat = Pattern.compile(Macro.MACRO_REGX);
-        Matcher matcher = pat.matcher(procedureTab[0]);
-        procedureCode = getCorrectSyntax(procedureTab[1]);
+    private void declaration(Scanner scanner, IDeclaration declaration) throws InvalidInstructionException {
+        String[] tab;
+        String code;
+        String name;
+        tab = scanner.nextLine().split("=");
+        Pattern pat = Pattern.compile(CALL_PATTERN);
+        Matcher matcher = pat.matcher(tab[0]);
+        code = tab[1];
         String params[] = {};
         if (matcher.find()) {
             params = matcher.group(2).split(PROC_PARAM_SEP);
-            procedureName = matcher.group(1);
+            name = matcher.group(1);
         } else {
-            procedureName = procedureTab[0];
+            name = tab[0];
         }
-        if (!procedures.containsKey(procedureName)) {
-            procedures.put(procedureName, new ProcedureStruct(procedureCode, params));
+        if (!macroMap.containsKey(name) && !procedureMap.containsKey(name)) {
+            declaration.action(name, code, params);
         } else {
-            throw new InvalidCodeException("Procédure déjà définie " + procedureName);
+            throw new InvalidCodeException("Déjà définie " + name);
         }
     }
 
@@ -315,7 +285,6 @@ public abstract class Parser {
         return hexColor;
     }
 
-
     /**
      * This method is overriden in all subclasses.
      *
@@ -328,4 +297,22 @@ public abstract class Parser {
      */
     public abstract void execute(String str) throws InvalidInstructionException;
 
+    interface IDeclaration {
+        public void action(String name, String code, String[] params);
+    }
+
+    protected class FunctionDeclaration implements IDeclaration {
+        boolean function;
+        ProcedureStruct struct;
+
+        FunctionDeclaration(boolean function) {
+            this.function = function;
+        }
+
+        @Override
+        public void action(String name, String code, String[] params) {
+            struct = new ProcedureStruct(code, params, function);
+            procedureMap.put(name, struct);
+        }
+    }
 }
