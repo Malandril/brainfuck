@@ -20,7 +20,7 @@ public class Procedure implements Instruction {
     private int prevIndex;
     int startIndex;
     int endIndex;
-    private int size = 1;
+    public int size = 1;
     private int[] paramDeclaration;
     private String name;
     private List<List<Instruction>> paramsInstructions = new ArrayList<>();

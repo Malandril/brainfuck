@@ -147,6 +147,7 @@ public class Memory {
         return currentProcedure.pop();
     }
 
+
     public boolean isProcedureStackEmpty() {
         return currentProcedure.isEmpty();
     }
