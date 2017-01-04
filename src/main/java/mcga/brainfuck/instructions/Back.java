@@ -27,7 +27,7 @@ public class Back extends Loop {
         }
         boundLoop = Jump.popJumpStack();
         getInterpreter().popInstructions();
-        boundLoop.size = getInterpreter().index - boundLoop.size-1;
+        boundLoop.size = getInterpreter().index - boundLoop.size - 1;
     }
 
     /**

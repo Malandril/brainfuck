@@ -1,5 +1,6 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 import mcga.brainfuck.instructions.*;
 import mcga.brainfuck.processing.Parser;
@@ -74,6 +75,9 @@ public enum InstructionCreator {
                                     address++;
                                 } else if (LEFT.isIdentifier(s1)) {
                                     address--;
+                                }
+                                else {
+                                    throw new InvalidCodeException("Invalid parameter");
                                 }
                             }
                             sj.add("tab[ptr+" + address + "]");

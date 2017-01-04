@@ -2,6 +2,7 @@ package mcga.brainfuck;
 
 import mcga.brainfuck.exceptions.InvalidValueException;
 import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
+import mcga.brainfuck.instructions.Procedure;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
