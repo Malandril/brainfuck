@@ -16,14 +16,14 @@ import java.util.regex.Pattern;
  * @author Team Make Coding Great Again
  */
 public enum InstructionCreator {
-    INCR("INCR", "+", "FFFFFF", "tab[ptr]++;"),
-    DECR("DECR", "-", "4B0082", "tab[ptr]--;"),
-    LEFT("LEFT", "<", "9400D3", "ptr--;\n MaxMinPtr(ptr);"),
-    RIGHT("RIGHT", ">", "0000FF", "ptr++;\n MaxMinPtr(ptr);"),
-    IN("IN", ",", "FFFF00", "tab[ptr]=(unsigned char) getchar();"),
-    OUT("OUT", ".", "00FF00", "putchar(tab[ptr]);"),
-    JUMP("JUMP", "[", "FF7F00", "while(tab[ptr]){"),
-    BACK("BACK", "]", "FF0000", "}");
+    INCR("INCR", "+", "ffffff", "tab[ptr]++;"),
+    DECR("DECR", "-", "4b0082", "tab[ptr]--;"),
+    LEFT("LEFT", "<", "9400d3", "ptr--;\n MaxMinPtr(ptr);"),
+    RIGHT("RIGHT", ">", "0000ff", "ptr++;\n MaxMinPtr(ptr);"),
+    IN("IN", ",", "ffff00", "tab[ptr]=(unsigned char) getchar();"),
+    OUT("OUT", ".", "00ff00", "putchar(tab[ptr]);"),
+    JUMP("JUMP", "[", "ff7f00", "while(tab[ptr]){"),
+    BACK("BACK", "]", "ff0000", "}");
 
 
     public static final int SHORT_SYNTAX_INDEX = 1;
@@ -63,10 +63,8 @@ public enum InstructionCreator {
                 ProcedureStruct struct = Parser.getProcedure(matcher.group(1));
                 if (struct != null) {
                     String paramGroup = matcher.group(2);
-                    String params = "";
                     StringJoiner sj = new StringJoiner(",");
                     if (paramGroup != null) {
-//                        params = paramGroup.replaceAll(";", ",");
                         String[] split = paramGroup.split(Parser.PROC_PARAM_SEP);
                         for (String s : split) {
                             int address = 0;
@@ -79,7 +77,6 @@ public enum InstructionCreator {
                                 }
                             }
                             sj.add("tab[ptr+" + address + "]");
-
                         }
                     }
                     if (struct.function) {
@@ -94,10 +91,10 @@ public enum InstructionCreator {
     }
 
     /**
-     * Searches for the bitmap color index corresponding to a long or short syntax representation.
+     * Searches for the bitmap color size corresponding to a long or short syntax representation.
      *
      * @param syntax String corresponding to the short or long syntax of an instruction.
-     * @return Bitmap color index corresponding to the short representation of the instruction.
+     * @return Bitmap color size corresponding to the short representation of the instruction.
      * @throws InvalidInstructionException
      */
     public static String getBitmapColorIndex(String syntax) throws InvalidInstructionException {
@@ -173,7 +170,7 @@ public enum InstructionCreator {
                     String paramGroup = matcher.group(2);
                     String[] params = new String[0];
                     if (paramGroup != null) {
-                        params = paramGroup.split(";");
+                        params = paramGroup.split(Parser.PROC_PARAM_SEP);
                     }
                     if (struct.function) {
                         return new Function(s, struct.instructions, struct.size, struct.params, params);

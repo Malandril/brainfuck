@@ -31,15 +31,15 @@ import static mcga.brainfuck.InstructionCreator.getInstruction;
  * @author Team Make Coding Great Again
  */
 public abstract class Parser {
-    public static final String PROCEDURE = "@";
-    public static final String FUNCTION = "§";
     public static final String PROC_PARAM_SEP = ";";
-    public static final String CALL_PATTERN = "([^(]*)(?:\\(((?:.+;?)*?)\\))?";
-    public static final String MACRO = "$";
+    public static final String CALL_PATTERN = "([^(]*)(?:\\(((?:.+" + PROC_PARAM_SEP + "?)*?)\\))?";
     static final int SQUARE_SIDE = 3;
+    private static final String PROCEDURE = "@";
+    private static final String FUNCTION = "§";
+    private static final String MACRO = "$";
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    protected static Map<String, ProcedureStruct> procedureMap = new HashMap<>();
+    private static Map<String, ProcedureStruct> procedureMap = new HashMap<>();
     private Map<String, Macro> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
@@ -216,15 +216,14 @@ public abstract class Parser {
                     Matcher matcher = pattern.matcher(str);
                     if (matcher.matches()) {
                         Macro macro;
-                        if ((macro = macroMap.get(matcher.group(1))) != null) {
-                            str = macro.callMacro(matcher.group(1), matcher.group(2));
+                        String macroName = matcher.group(1);
+                        if ((macro = macroMap.get(macroName)) != null) {
+                            str = macro.callMacro(macroName, matcher.group(2));
                             readText(str);
                         } else {
                             Metrics.incrProgSize();
                             execute(str);
                         }
-                    } else {
-                        throw new InvalidInstructionException(str);
                     }
                 } else if (isComments(str)) {
                     scanner.nextLine();
@@ -278,11 +277,7 @@ public abstract class Parser {
      * @return String corresponding hexadecimal value
      */
     private String colorToHex(Color color) {
-        String hexColor = "";
-        hexColor += String.format("%02X", color.getRed());
-        hexColor += String.format("%02X", color.getGreen());
-        hexColor += String.format("%02X", color.getBlue());
-        return hexColor;
+        return Integer.toHexString(color.getRGB()).substring(2);
     }
 
     /**
@@ -297,8 +292,8 @@ public abstract class Parser {
      */
     public abstract void execute(String str) throws InvalidInstructionException;
 
-    interface IDeclaration {
-        public void action(String name, String code, String[] params);
+    protected interface IDeclaration {
+        void action(String name, String code, String[] params);
     }
 
     protected class FunctionDeclaration implements IDeclaration {

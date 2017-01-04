@@ -28,7 +28,7 @@ public class ProcedureStruct {
             }
         } catch (NumberFormatException e) {
             System.err.println("Mauvais argument de fonction");
-            System.exit(56);
+            System.exit(51);
         }
     }
 }

@@ -8,7 +8,6 @@ import mcga.brainfuck.exceptions.InvalidValueException;
  * @author Team Make Coding Great Again
  */
 public abstract class Loop implements Instruction {
-    protected Loop boundLoop;
 
     /**
      * Overrides the method defined in the Instruction interface to increment the metric DATA_READ

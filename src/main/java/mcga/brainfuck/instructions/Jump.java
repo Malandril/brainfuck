@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static mcga.brainfuck.Brainfuck.getInterpreter;
+
 /**
  * Class defining the action corresponding to the beginning of a loop.
  * This class, as well as the Back class, extends Loop, as they both define a loop in a Brainf*ck program.
@@ -15,17 +17,18 @@ import java.util.Stack;
  * @author Team Make Coding Great Again
  */
 public class Jump extends Loop {
-
     private static Stack<Jump> jumpIndexStack = new Stack<>();
+    int size;
     List<Instruction> jumpInstructions = new ArrayList<>();
 
     /**
      * Default constructor
-     * Sets the index of the Jump and add the Jump to the Jump table
+     * Sets the size of the Jump and add the Jump to the Jump table
      */
     public Jump() {
         jumpIndexStack.add(this);
-        Brainfuck.getInterpreter().pushInstructions(jumpInstructions);
+        size = getInterpreter().index;
+        getInterpreter().pushInstructions(jumpInstructions);
     }
 
     /**
@@ -55,7 +58,9 @@ public class Jump extends Loop {
     public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
         Metrics.incrDataRead();
         if (Brainfuck.getMemory().getCurrentCellValue() != 0) {
-            Brainfuck.getInterpreter().interpretList(jumpInstructions);
+            getInterpreter().interpretList(jumpInstructions);
+        } else {
+            Metrics.incrExecPos(size);
         }
     }
 }

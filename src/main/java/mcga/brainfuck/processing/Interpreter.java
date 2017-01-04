@@ -27,7 +27,8 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
  */
 
 public class Interpreter extends Parser {
-    private int size;
+    public int index=1;
+    public int size;
     private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
 
     /**
@@ -83,7 +84,7 @@ public class Interpreter extends Parser {
     }
 
     /**
-     * Interpret each command between the two index start and end
+     * Interpret each command between the two size start and end
      */
     public void interpretList(List<Instruction> instructions) {
         for (Instruction instruction : instructions) {
@@ -97,7 +98,7 @@ public class Interpreter extends Parser {
     public void interpretation(Instruction instruction) {
         try {
             instruction.interpret();
-//                Metrics.setExecPos(i + 1);
+            Metrics.incrExecPos(1);
             Metrics.setExecMove(Metrics.getExecMove() + 1);
         } catch (InvalidValueException e) {
             System.err.println(e.getMessage());
@@ -121,7 +122,8 @@ public class Interpreter extends Parser {
     @Override
     public void execute(String str) throws InvalidInstructionException {
         instructionsStack.peek().add(InstructionCreator.createInstruction(str));
-        if(RIGHT.isIdentifier(str)){
+        index++;
+        if (RIGHT.isIdentifier(str)) {
             size++;
         }
     }
@@ -136,8 +138,8 @@ public class Interpreter extends Parser {
 
 
     public int readProcedureText(String str) {
-        size = 0;
+        int prevIndex = size;
         super.readText(str);
-        return size+1;
+        return size + 1 - prevIndex;
     }
 }

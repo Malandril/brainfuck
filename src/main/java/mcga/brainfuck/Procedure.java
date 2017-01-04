@@ -44,7 +44,6 @@ public class Procedure implements Instruction {
     }
 
     public void interpret() {
-
         prevIndex = getMemory().getCurrentIndex();
         for (int i = 0; i < paramsInstructions.size(); i++) {
             getInterpreter().interpretList(paramsInstructions.get(i));

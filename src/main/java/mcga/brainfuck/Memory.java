@@ -30,9 +30,9 @@ public class Memory {
     }
 
     /**
-     * Gets the index of the current cell.
+     * Gets the size of the current cell.
      *
-     * @return currentIndex index of the current cell.
+     * @return currentIndex size of the current cell.
      */
     public int getCurrentIndex() {
         return currentIndex;
@@ -42,7 +42,7 @@ public class Memory {
         if (isValidIndex(i)) {
             currentIndex = i;
         } else {
-            throw new MyIndexOutOfBoundsException(i + " index must be between " + 0 + " and " + MAX_SIZE);
+            throw new MyIndexOutOfBoundsException(i + " size must be between " + 0 + " and " + MAX_SIZE);
         }
 
     }
@@ -60,7 +60,7 @@ public class Memory {
     /**
      * Checks if the cell exists int the memory.
      *
-     * @param i index of the current cell.
+     * @param i size of the current cell.
      * @return true if it exists, false otherwise.
      */
     private boolean isValidIndex(int i) {
@@ -81,21 +81,21 @@ public class Memory {
         if (isValidNumber(val + i)) {
             memoire[currentIndex] = val + i;
         } else {
-            throw new InvalidValueException(val + i + " at index: " + currentIndex);
+            throw new InvalidValueException(val + i + " at size: " + currentIndex);
         }
 
     }
 
     /**
-     * Changes the index of the current cell.
+     * Changes the size of the current cell.
      *
-     * @param i value to add to the current index.
+     * @param i value to add to the current size.
      * @throws IndexOutOfBoundsException
      */
     public void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException {
         int val = currentIndex;
         if (!isValidIndex(val + i)) {
-            throw new MyIndexOutOfBoundsException(val + i + " index must be between " + 0 + " and " + MAX_SIZE);
+            throw new MyIndexOutOfBoundsException(val + i + " size must be between " + 0 + " and " + MAX_SIZE);
         } else {
             currentIndex += i;
         }
@@ -127,7 +127,7 @@ public class Memory {
     }
 
     /**
-     * Sets the value of the current index to zero.
+     * Sets the value of the current size to zero.
      */
     public void clearCurrentCell() {
         memoire[currentIndex] = 0;

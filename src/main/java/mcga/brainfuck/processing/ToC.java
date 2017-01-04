@@ -18,8 +18,8 @@ import static mcga.brainfuck.Memory.*;
  */
 public class ToC extends Parser {
     public static final String ARG_STRING = "p";
-    List<String> instructions = new ArrayList<>();
-    List<String> functionInstructions = new ArrayList<>();
+    private List<String> instructions = new ArrayList<>();
+    private List<String> functionInstructions = new ArrayList<>();
 
     public ToC() {
         super();
