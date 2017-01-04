@@ -29,7 +29,7 @@ public class Procedure implements Instruction {
 
     public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) {
         if (params.length != paramDeclaration.length) {
-            throw new InvalidCodeException("nombre de parametres invalide");
+            throw new InvalidCodeException("Invalid number of parameters");
         }
         this.instructions = instructions;
         this.name = name;
