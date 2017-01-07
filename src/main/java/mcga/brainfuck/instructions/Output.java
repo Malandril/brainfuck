@@ -21,7 +21,7 @@ public class Output extends DataIO {
      */
     public void interpret() {
         Metrics.incrDataRead();
-        System.out.print((char) Brainfuck.getMemory().getCurrentCellValue());
+        Brainfuck.getMainOutput().print((char) Brainfuck.getMemory().getCurrentCellValue());
     }
 
 }

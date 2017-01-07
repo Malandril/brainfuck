@@ -13,30 +13,7 @@ public class Metrics {
     private static long DATA_WRITE = 0;
     private static long DATA_READ = 0;
     private static long EXEC_MOVE = 0;
-
-    /**
-     * Prints the metric values for the Trace option
-     */
-    public static void logMetrics() {
-        System.err.println("Exec step => " + Metrics.getExecPos()
-                + '\t' + '\t' + "Data pointer loc => " + Brainfuck.getMemory().getCurrentIndex()
-                + '\t' + '\t' + "Memory => " + Brainfuck.getMemory());
-    }
-
-    /**
-     * Sets the toString to print at the end of the execution of the program
-     *
-     * @return String to print at the end
-     */
-    public static void printMetrics() {
-        System.out.println("\nPROG_SIZE = " + getProgSize() + '\n' +
-                "EXEC_TIME = " + getExecTime() + " ms" + '\n' +
-                "EXEC_MOVE = " + getExecMove() + '\n' +
-                "DATA_MOVE = " + getDataMove() + '\n' +
-                "DATA_READ = " + getDataRead() + '\n' +
-                "DATA_WRITE = " + getDataWrite() + '\n');
-    }
-
+    
     /**
      * Getters and setters of the metrics
      */

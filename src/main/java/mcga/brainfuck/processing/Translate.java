@@ -1,5 +1,6 @@
 package mcga.brainfuck.processing;
 
+import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 
@@ -11,8 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import static java.awt.image.BufferedImage.TYPE_INT_BGR;
 
@@ -87,7 +86,7 @@ public class Translate extends Parser {
             }
         }
         try {
-            ImageIO.write(image, FILE_FORMAT, System.out);
+            ImageIO.write(image, FILE_FORMAT, Brainfuck.getMainOutput());
         } catch (IOException e) {
             e.printStackTrace();
         }

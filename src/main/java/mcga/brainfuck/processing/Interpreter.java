@@ -10,9 +10,7 @@ import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Instruction;
 import mcga.brainfuck.instructions.Jump;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -27,10 +25,10 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
  */
 
 public class Interpreter extends Parser {
-    public int index=1;
+    public int index = 1;
     public int size;
     private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
-
+    
     /**
      * Default constructor of the class.
      *
@@ -40,7 +38,7 @@ public class Interpreter extends Parser {
         super();
         instructionsStack.push(new ArrayList<>());
     }
-
+    
     /**
      * Constructor with a file name
      *
@@ -51,18 +49,17 @@ public class Interpreter extends Parser {
         super(fileName);
         instructionsStack.push(new ArrayList<>());
     }
-
+    
+    
     /**
-     * Constructor defining the stream in parameter as the input stream.
+     * Sets the toString to print at the end of the execution of the program
      *
-     * @param stream inputStream
-     * @see Parser(InputStream)
+     * @return String to print at the end
      */
-    public Interpreter(FileInputStream stream) {
-        super(stream);
+    public void printMetrics() {
+        System.out.println("\nPROG_SIZE = " + Metrics.getProgSize() + '\n' + "EXEC_TIME = " + Metrics.getExecTime() + " ms" + '\n' + "EXEC_MOVE = " + Metrics.getExecMove() + '\n' + "DATA_MOVE = " + Metrics.getDataMove() + '\n' + "DATA_READ = " + Metrics.getDataRead() + '\n' + "DATA_WRITE = " + Metrics.getDataWrite() + '\n');
     }
-
-
+    
     /**
      * Overrides the method of the Parser class to interpret the list of commands
      *
@@ -78,11 +75,10 @@ public class Interpreter extends Parser {
         interpretList(instructionsStack.peek());
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
-        Metrics.printMetrics();
         System.out.println(Brainfuck.getMemory());
-
+        printMetrics();
     }
-
+    
     /**
      * Interpret each command between the two size start and end
      */
@@ -91,7 +87,7 @@ public class Interpreter extends Parser {
             interpretation(instruction);
         }
     }
-
+    
     /**
      * Interpret the current command of the list and modify the metrics corresponding
      */
@@ -107,10 +103,10 @@ public class Interpreter extends Parser {
             System.err.println(e.getMessage());
             System.exit(MyIndexOutOfBoundsException.EXIT_CODE);
         }
-
+    
     }
-
-
+    
+    
     /**
      * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction
      * corresponding to the String in parameter and interprets it.
@@ -127,16 +123,16 @@ public class Interpreter extends Parser {
             size++;
         }
     }
-
+    
     public void pushInstructions(List<Instruction> item) {
         instructionsStack.push(item);
     }
-
+    
     public List<Instruction> popInstructions() {
         return instructionsStack.pop();
     }
-
-
+    
+    
     public int readProcedureText(String str) {
         int prevIndex = size;
         super.readText(str);

@@ -25,7 +25,7 @@ public class Brainfuck {
     private static Interpreter interpreter;
     private static Memory memory = new Memory();
     private static List<Parser> parsers = new ArrayList<>();
-
+    private static PrintStream mainOutput = System.out;
     public static Memory getMemory() {
         return memory;
     }
@@ -82,8 +82,7 @@ public class Brainfuck {
                         bfFile = bfFile.substring(0, index);
                     }
                     String logFile = bfFile + ".log";
-                    System.setErr(new PrintStream(logFile));
-                    Trace trace = new Trace(pValue);
+                    Trace trace = new Trace(pValue, logFile);
                     parsers.add(trace);
                     interpreter = trace;
                 } else if (hasToC) {
@@ -93,8 +92,7 @@ public class Brainfuck {
                         bfFile = bfFile.substring(0, index);
                     }
                     String CFile = bfFile + ".c";
-                    System.setOut(new PrintStream(CFile));
-                    parsers.add(new ToC(pValue));
+                    parsers.add(new ToC(pValue, new PrintStream(CFile)));
                     interpreter=new Interpreter();
                 }
                 if (parsers.isEmpty()) {
@@ -107,7 +105,7 @@ public class Brainfuck {
                 Input.stream = new FileInputStream(line.getOptionValue(INPUT.expression));
             }
             if (line.hasOption(OUTPUT.expression)) {
-                System.setOut(new PrintStream(line.getOptionValue(OUTPUT.expression)));
+                mainOutput = new PrintStream(line.getOptionValue(OUTPUT.expression));
             }
             if (parsers.isEmpty()) {
                 Interpreter interpreter = new Interpreter();
@@ -122,7 +120,11 @@ public class Brainfuck {
             System.exit(3);
         }
     }
-
+    
+    public static PrintStream getMainOutput() {
+        return mainOutput;
+    }
+    
     public static Interpreter getInterpreter() {
         return interpreter;
     }
