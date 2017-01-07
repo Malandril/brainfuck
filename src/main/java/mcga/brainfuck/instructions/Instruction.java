@@ -15,6 +15,6 @@ public interface Instruction {
      * @throws InvalidValueException
      * @throws MyIndexOutOfBoundsException
      */
-    void interpret() throws InvalidValueException, MyIndexOutOfBoundsException;
+    void interpret() throws Exception;
 
 }

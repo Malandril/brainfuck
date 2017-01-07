@@ -14,20 +14,20 @@ import static mcga.brainfuck.Brainfuck.getMemory;
  * @author Team Make Coding Great Again
  */
 public class Back extends Loop {
-
-    Jump boundLoop;
+    
+    private Jump boundLoop;
 
     /**
      * Default constructor of the Back class
      * Sets the size of the Back and the Jump bounded to it
      */
-    public Back() {
+    public Back() throws InvalidCodeException {
         if (Jump.isJumpStackEmpty()) {
             throw new InvalidCodeException();
         }
         boundLoop = Jump.popJumpStack();
         getInterpreter().popInstructions();
-        boundLoop.size = getInterpreter().index - boundLoop.size - 1;
+        boundLoop.size = getInterpreter().getIndex() - boundLoop.size - 1;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Back extends Loop {
      * @throws InvalidValueException
      */
     @Override
-    public void interpret() throws InvalidValueException {
+    public void interpret() throws Exception {
         super.interpret();
         back();
     }
@@ -44,7 +44,7 @@ public class Back extends Loop {
     /**
      * Defines the actions of a back instruction.
      */
-    private void back() throws InvalidValueException {
+    private void back() throws Exception {
         if (getMemory().getCurrentCellValue() != 0) {
             Metrics.incrExecPos(-1 * boundLoop.size);
             getInterpreter().interpretList(boundLoop.jumpInstructions);

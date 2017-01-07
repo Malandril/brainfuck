@@ -44,7 +44,7 @@ public class Trace extends Interpreter {
      * @see Interpreter#parseFile()
      */
     @Override
-    public void parseFile() {
+    public void parseFile() throws Exception {
         super.parseFile();
     }
     
@@ -56,7 +56,7 @@ public class Trace extends Interpreter {
      * @see Interpreter#
      */
     @Override
-    public void interpretation(Instruction instruction) {
+    public void interpretation(Instruction instruction) throws Exception {
         super.interpretation(instruction);
         logMetrics();
     }

@@ -6,9 +6,9 @@ import mcga.brainfuck.Memory;
 /**
  * This exception is called if the value of a memory cell exceeds 255 or becomes negative.
  */
-public class InvalidValueException extends Exception {
-
-    public static final int EXIT_CODE = 1;
+public class InvalidValueException extends MyException {
+    
+    private static final int EXIT_CODE = 1;
 
     /**
      * Calls the superclass constructor with a default message.
@@ -23,7 +23,12 @@ public class InvalidValueException extends Exception {
      * @param value String to display when the exception is thrown.
      * @see Exception#Exception(String)
      */
-    public InvalidValueException(String value) {
+    public InvalidValueException(int value) {
         super("Invalid value: " + value + " , value must be between " + Memory.MIN_CELL_VALUE + " and " + Memory.MAX_CELL_VALUE);
+    }
+    
+    @Override
+    public int getExitCode() {
+        return EXIT_CODE;
     }
 }

@@ -5,8 +5,7 @@ import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.exceptions.InvalidValueException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
+import mcga.brainfuck.exceptions.MyException;
 import mcga.brainfuck.instructions.Instruction;
 import mcga.brainfuck.instructions.Jump;
 
@@ -25,8 +24,8 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
  */
 
 public class Interpreter extends Parser {
-    public int index = 1;
-    public int size;
+    private int index = 1;
+    private int size;
     private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
     
     /**
@@ -66,7 +65,7 @@ public class Interpreter extends Parser {
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile() {
+    public void parseFile() throws Exception {
         super.parseFile();
         if (!Jump.isJumpStackEmpty()) {
             throw new InvalidCodeException();
@@ -82,7 +81,7 @@ public class Interpreter extends Parser {
     /**
      * Interpret each command between the two size start and end
      */
-    public void interpretList(List<Instruction> instructions) {
+    public void interpretList(List<Instruction> instructions) throws Exception {
         for (Instruction instruction : instructions) {
             interpretation(instruction);
         }
@@ -91,19 +90,11 @@ public class Interpreter extends Parser {
     /**
      * Interpret the current command of the list and modify the metrics corresponding
      */
-    public void interpretation(Instruction instruction) {
-        try {
-            instruction.interpret();
-            Metrics.incrExecPos(1);
-            Metrics.setExecMove(Metrics.getExecMove() + 1);
-        } catch (InvalidValueException e) {
-            System.err.println(e.getMessage());
-            System.exit(InvalidValueException.EXIT_CODE);
-        } catch (MyIndexOutOfBoundsException e) {
-            System.err.println(e.getMessage());
-            System.exit(MyIndexOutOfBoundsException.EXIT_CODE);
-        }
-    
+    public void interpretation(Instruction instruction) throws Exception {
+        instruction.interpret();
+        Metrics.incrExecPos(1);
+        Metrics.setExecMove(Metrics.getExecMove() + 1);
+        
     }
     
     
@@ -116,7 +107,7 @@ public class Interpreter extends Parser {
      * @see Parser#execute(String)
      */
     @Override
-    public void execute(String str) throws InvalidInstructionException {
+    public void execute(String str) throws MyException {
         instructionsStack.peek().add(InstructionCreator.createInstruction(str));
         index++;
         if (RIGHT.isIdentifier(str)) {
@@ -133,9 +124,17 @@ public class Interpreter extends Parser {
     }
     
     
-    public int readProcedureText(String str) {
+    public int readProcedureText(String str) throws Exception {
         int prevIndex = size;
         super.readText(str);
         return size + 1 - prevIndex;
+    }
+    
+    public int getIndex() {
+        return index;
+    }
+    
+    public int getSize() {
+        return size;
     }
 }

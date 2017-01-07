@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
  * salut
  */
 public class Macro implements Comparable<Macro> {
-    public String name;
-    public String value;
+    private String name;
+    private String value;
     private String regName;
     private String[] params;
     private ArrayList<String[]> values = new ArrayList<>();
@@ -33,8 +33,8 @@ public class Macro implements Comparable<Macro> {
             values.add(new String[]{matcher.group(1), matcher.group(2)});
         }
     }
-
-    public String callMacro(String str, String paramsStr) {
+    
+    public String callMacro(String str, String paramsStr) throws InvalidCodeException {
         StringBuilder tmp = new StringBuilder();
         if (paramsStr != null) {
             String[] split = paramsStr.split(Parser.PROC_PARAM_SEP);
@@ -63,7 +63,10 @@ public class Macro implements Comparable<Macro> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass() == this.getClass() && this.name.equals(((Macro) obj).name);
+        if (obj != null) {
+            return obj.getClass() == this.getClass() && this.name.equals(((Macro) obj).name);
+        }
+        return false;
     }
 
     @Override

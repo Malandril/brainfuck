@@ -14,7 +14,7 @@ public abstract class Operation implements Instruction {
      * @throws IndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
+    public void interpret() throws InvalidValueException {
         Metrics.setDataWrite(Metrics.getDataWrite() + 1);
     }
 }

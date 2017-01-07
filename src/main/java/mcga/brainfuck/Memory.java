@@ -21,7 +21,7 @@ public class Memory {
     public static final int NOT_ENOUGH_CODE = 18;
     private int currentIndex = 0;
     private int[] memoire;
-    private Deque<Procedure> currentProcedure = new ArrayDeque<>();
+    private Deque<Procedure> procedureStack = new ArrayDeque<>();
 
     /**
      * Constructor of the class Memory.
@@ -43,7 +43,7 @@ public class Memory {
         if (isValidIndex(i)) {
             currentIndex = i;
         } else {
-            throw new MyIndexOutOfBoundsException(i + " size must be between " + 0 + " and " + MAX_SIZE);
+            throw new MyIndexOutOfBoundsException(i);
         }
 
     }
@@ -65,10 +65,9 @@ public class Memory {
      * @return true if it exists, false otherwise.
      */
     private boolean isValidIndex(int i) {
-        if (currentProcedure.isEmpty())
+        if (procedureStack.isEmpty())
             return i >= 0 && i < MAX_SIZE;
-        else
-            return i >= currentProcedure.peek().startIndex && i <= currentProcedure.peek().endIndex;
+        else return i >= procedureStack.peek().getStartIndex() && i <= procedureStack.peek().getEndIndex();
     }
 
     /**
@@ -82,7 +81,7 @@ public class Memory {
         if (isValidNumber(val + i)) {
             memoire[currentIndex] = val + i;
         } else {
-            throw new InvalidValueException(val + i + " at size: " + currentIndex);
+            throw new InvalidValueException(val + i);
         }
 
     }
@@ -96,7 +95,7 @@ public class Memory {
     public void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException {
         int val = currentIndex;
         if (!isValidIndex(val + i)) {
-            throw new MyIndexOutOfBoundsException(val + i + " size must be between " + 0 + " and " + MAX_SIZE);
+            throw new MyIndexOutOfBoundsException(val + i);
         } else {
             currentIndex += i;
         }
@@ -137,19 +136,19 @@ public class Memory {
 
 
     public Procedure peekProcedure() {
-        return currentProcedure.peek();
+        return procedureStack.peek();
     }
 
     public void pushProcedure(Procedure procedure) {
-        currentProcedure.push(procedure);
+        procedureStack.push(procedure);
     }
 
     public Procedure popProcedure() {
-        return currentProcedure.pop();
+        return procedureStack.pop();
     }
 
 
     public boolean isProcedureStackEmpty() {
-        return currentProcedure.isEmpty();
+        return procedureStack.isEmpty();
     }
 }

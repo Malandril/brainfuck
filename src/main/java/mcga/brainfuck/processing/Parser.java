@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,14 +38,14 @@ public abstract class Parser {
     private Map<String, Macro> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
-
-
+    
+    
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
         this.fileName = fileName;
-
+        
     }
-
+    
     /**
      * In case a file is specified in the launching command, this constructor is called.
      *
@@ -55,7 +54,7 @@ public abstract class Parser {
     public Parser(InputStream stream) {
         this.stream = stream;
     }
-
+    
     /**
      * Default constructor.
      * By default, the input stream is System.in.
@@ -75,7 +74,7 @@ public abstract class Parser {
         char firstChar = str.charAt(0);
         return Character.isLetter(firstChar);
     }
-
+    
     /**
      * Tests if the String is a macro declaration beginning with a '$'
      *
@@ -85,30 +84,29 @@ public abstract class Parser {
     private static boolean isMacroDeclaration(String str) {
         return str.startsWith(MACRO);
     }
-
+    
     /**
      * Tests if the String is the start of a comment
      *
      * @param str String to test
      * @return true if it is a '#', false otherwise
-     * @throws InvalidInstructionException
      */
-    private static boolean isComments(String str) throws InvalidInstructionException {
+    private static boolean isComments(String str) {
         return str.equals(COM);
     }
-
+    
     private static boolean isProcedureDeclaration(String str) {
         return str.equals(PROCEDURE);
     }
-
+    
     private static boolean isFunctionDeclaration(String str) {
         return str.equals(FUNCTION);
     }
-
+    
     public static ProcedureStruct getProcedure(String key) {
         return procedureMap.get(key);
     }
-
+    
     /**
      * Reads the file containing the Brainf*ck code. This method is called in each subclass, with some
      * additions depending on the subclass.
@@ -116,16 +114,16 @@ public abstract class Parser {
      * @see Check#parseFile()
      * @see Interpreter#parseFile()
      */
-    public void parseFile() {
+    public void parseFile() throws Exception {
         Metrics.setProgSize(0);
         if (fileName != null && fileName.endsWith(".bmp")) {
             readBitmap();
         } else {
             readText();
         }
-
+        
     }
-
+    
     /**
      * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
@@ -133,102 +131,88 @@ public abstract class Parser {
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
-    private void readBitmap() {
-        try {
-            BufferedImage image = ImageIO.read(stream);
-            int height = image.getHeight();
-            int width = image.getWidth();
-            if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
-                throw new InvalidBitmapException();
-            }
-            String prevColor;
-            String hexColor = "";
-            for (int i = 0; i < height; i += SQUARE_SIDE) {
-                for (int j = 0; j < width; j += SQUARE_SIDE) {
-                    prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
-                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
-                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
-                            Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
-                            hexColor = colorToHex(imgColor);
-                            if (!prevColor.equals(hexColor)) {
-                                throw new InvalidBitmapException();
-                            }
+    private void readBitmap() throws Exception {
+        BufferedImage image = ImageIO.read(stream);
+        int height = image.getHeight();
+        int width = image.getWidth();
+        if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
+            throw new InvalidBitmapException();
+        }
+        String prevColor;
+        String hexColor = "";
+        for (int i = 0; i < height; i += SQUARE_SIDE) {
+            for (int j = 0; j < width; j += SQUARE_SIDE) {
+                prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
+                for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                    for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                        Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
+                        hexColor = colorToHex(imgColor);
+                        if (!prevColor.equals(hexColor)) {
+                            throw new InvalidBitmapException();
                         }
                     }
-                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
-                        execute(hexColor);
-                        Metrics.incrProgSize();
-                    }
+                }
+                if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                    execute(hexColor);
+                    Metrics.incrProgSize();
                 }
             }
-        } catch (InvalidInstructionException e) {
-            e.printStackTrace();
-            System.exit(InvalidInstructionException.EXIT_CODE);
-        } catch (InvalidBitmapException e) {
-            e.printStackTrace();
-            System.exit(InvalidBitmapException.EXIT_CODE);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(3);
         }
+        
     }
-
-    private void readText() {
+    
+    private void readText() throws Exception {
         Scanner scanner = new Scanner(this.stream);
         scanFile(scanner);
     }
-
-    protected void readText(String str) {
+    
+    protected void readText(String str) throws Exception {
         Scanner scanner = new Scanner(str);
         scanFile(scanner);
     }
-
-    private void scanFile(Scanner scanner) {
+    
+    private void scanFile(Scanner scanner) throws Exception {
         String str;
         scanner.useDelimiter("\\s*");
-        try {
-            while (scanner.hasNext()) {
-                str = scanner.next();
-                if (isLetter(str)) {
-                    str += scanner.nextLine();
-                    str = str.replaceAll("\\s*#.*", "");
-                    Pattern pattern = Pattern.compile(CALL_PATTERN);
-                    Matcher matcher = pattern.matcher(str);
-                    if (matcher.matches()) {
-                        Macro macro;
-                        String macroName = matcher.group(1);
-                        if ((macro = macroMap.get(macroName)) != null) {
-                            str = macro.callMacro(macroName, matcher.group(2));
-                            readText(str);
-                        } else {
-                            Metrics.incrProgSize();
-                            execute(str);
-                        }
+        while (scanner.hasNext()) {
+            str = scanner.next();
+            if (isLetter(str)) {
+                str += scanner.nextLine();
+                str = str.replaceAll("\\s*#.*", "");
+                Pattern pattern = Pattern.compile(CALL_PATTERN);
+                Matcher matcher = pattern.matcher(str);
+                if (matcher.matches()) {
+                    Macro macro;
+                    String macroName = matcher.group(1);
+                    if ((macro = macroMap.get(macroName)) != null) {
+                        str = macro.callMacro(macroName, matcher.group(2));
+                        readText(str);
+                    } else {
+                        Metrics.incrProgSize();
+                        execute(str);
                     }
-                } else if (isComments(str)) {
-                    scanner.nextLine();
-                } else if (isMacroDeclaration(str)) {
-                    declaration(scanner, (name, code, params) -> macroMap.put(name, new Macro(name, code, params)));
-                } else if (isProcedureDeclaration(str)) {
-                    declaration(scanner, declareFunction(false));
-                } else if (isFunctionDeclaration(str)) {
-                    declaration(scanner, declareFunction(true));
-                } else {
-                    Metrics.incrProgSize();
-                    execute(str);
                 }
+            } else if (isComments(str)) {
+                scanner.nextLine();
+            } else if (isMacroDeclaration(str)) {
+                declaration(scanner, (name, code, params) -> macroMap.put(name, new Macro(name, code, params)));
+            } else if (isProcedureDeclaration(str)) {
+                declaration(scanner, declareFunction(false));
+            } else if (isFunctionDeclaration(str)) {
+                declaration(scanner, declareFunction(true));
+            } else {
+                Metrics.incrProgSize();
+                execute(str);
             }
-        } catch (InvalidInstructionException e) {
-            System.err.println(e.getMessage());
-            System.exit(InvalidInstructionException.EXIT_CODE);
         }
+        
     }
-
+    
     public IDeclaration declareFunction(boolean function) {
         return new FunctionDeclaration(function);
     }
-
-    private void declaration(Scanner scanner, IDeclaration declaration) throws InvalidInstructionException {
+    
+    private void declaration(Scanner scanner, IDeclaration declaration) throws Exception {
         String[] tab;
         String code;
         String name;
@@ -249,7 +233,7 @@ public abstract class Parser {
             throw new InvalidCodeException("Déjà définie " + name);
         }
     }
-
+    
     /**
      * Converts a Color object to its hexadecimal value.
      *
@@ -259,7 +243,7 @@ public abstract class Parser {
     private String colorToHex(Color color) {
         return Integer.toHexString(color.getRGB()).substring(2);
     }
-
+    
     /**
      * This method is overriden in all subclasses.
      *
@@ -270,6 +254,6 @@ public abstract class Parser {
      * @see Rewrite#execute(String)
      * @see Translate#execute(String)
      */
-    public abstract void execute(String str) throws InvalidInstructionException;
+    public abstract void execute(String str) throws Exception;
     
 }

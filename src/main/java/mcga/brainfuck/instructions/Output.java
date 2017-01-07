@@ -11,14 +11,9 @@ import mcga.brainfuck.Metrics;
  */
 public class Output extends DataIO {
     /**
-     * Default constructor
-     */
-    public Output() {
-    }
-
-    /**
      * Overrides the method defined in the Instruction interface to execute the output action.
      */
+    @Override
     public void interpret() {
         Metrics.incrDataRead();
         Brainfuck.getMainOutput().print((char) Brainfuck.getMemory().getCurrentCellValue());

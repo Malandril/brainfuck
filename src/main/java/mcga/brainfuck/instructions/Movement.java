@@ -16,7 +16,7 @@ public abstract class Movement implements Instruction {
      * @throws MyIndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws InvalidValueException, IndexOutOfBoundsException, MyIndexOutOfBoundsException {
+    public void interpret() throws InvalidValueException, MyIndexOutOfBoundsException {
         Metrics.setDataMove(Metrics.getDataMove() + 1);
     }
 }

@@ -14,7 +14,7 @@ class FunctionDeclaration implements IDeclaration {
     }
     
     @Override
-    public void action(String name, String code, String[] params) {
+    public void action(String name, String code, String[] params) throws Exception {
         struct = new ProcedureStruct(code, params, function);
         Parser.procedureMap.put(name, struct);
     }

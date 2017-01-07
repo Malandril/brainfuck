@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
 
+import mcga.brainfuck.exceptions.MyException;
 import mcga.brainfuck.instructions.Input;
 import mcga.brainfuck.processing.*;
 import mcga.brainfuck.processing.Parser;
@@ -42,7 +43,14 @@ public class Brainfuck {
      * @param args Different parameters accepted
      */
     public static void main(String[] args) {
-        readArguments(args);
+        try {
+            readArguments(args);
+        } catch (MyException e) {
+            System.err.println(e.getMessage());
+            System.exit(e.getExitCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -51,7 +59,7 @@ public class Brainfuck {
      * @param args list of the arguments passed in parameter
      */
 
-    private static void readArguments(String[] args) {
+    private static void readArguments(String[] args) throws Exception {
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();
@@ -76,7 +84,7 @@ public class Brainfuck {
                     }
 
                 } else if (hasTrace) {
-                    int index = pValue.lastIndexOf(".");
+                    int index = pValue.lastIndexOf('.');
                     String bfFile = pValue;
                     if (index > 0) {
                         bfFile = bfFile.substring(0, index);
@@ -91,8 +99,8 @@ public class Brainfuck {
                     if (index > 0) {
                         bfFile = bfFile.substring(0, index);
                     }
-                    String CFile = bfFile + ".c";
-                    parsers.add(new ToC(pValue, new PrintStream(CFile)));
+                    String cFile = bfFile + ".c";
+                    parsers.add(new ToC(pValue, new PrintStream(cFile)));
                     interpreter=new Interpreter();
                 }
                 if (parsers.isEmpty()) {
@@ -112,7 +120,9 @@ public class Brainfuck {
                 parsers.add(interpreter);
                 Brainfuck.interpreter = interpreter;
             }
-            parsers.forEach(Parser::parseFile);
+            for (Parser parser : parsers) {
+                parser.parseFile();
+            }
         } catch (ParseException exp) {
             System.err.println("Parsing failed.  Error : " + exp.getMessage());
         } catch (FileNotFoundException e) {

@@ -6,6 +6,11 @@ package mcga.brainfuck.exceptions;
  * <li>The image height or length isn't a multiple of 3.</li>
  * </ul>
  */
-public class InvalidBitmapException extends Exception {
-    public static final int EXIT_CODE = 14;
+public class InvalidBitmapException extends MyException {
+    private static final int EXIT_CODE = 14;
+    
+    @Override
+    public int getExitCode() {
+        return EXIT_CODE;
+    }
 }

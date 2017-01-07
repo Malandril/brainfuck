@@ -6,79 +6,79 @@ package mcga.brainfuck;
  * @author Team Make Coding Great Again
  */
 public class Metrics {
-    private static long PROG_SIZE = 0;
-    private static double EXEC_TIME = 0;
-    private static long EXEC_POS = 0;
-    private static long DATA_MOVE = 0;
-    private static long DATA_WRITE = 0;
-    private static long DATA_READ = 0;
-    private static long EXEC_MOVE = 0;
+    private static long progSize = 0;
+    private static double execTime = 0;
+    private static long execPos = 0;
+    private static long dataMove = 0;
+    private static long dataWrite = 0;
+    private static long dataRead = 0;
+    private static long execMove = 0;
     
     /**
      * Getters and setters of the metrics
      */
 
     public static long getProgSize() {
-        return PROG_SIZE;
+        return progSize;
     }
 
     public static void setProgSize(long progSize) {
-        PROG_SIZE = progSize;
+        Metrics.progSize = progSize;
     }
 
     public static double getExecTime() {
-        return EXEC_TIME;
+        return execTime;
     }
 
     public static void setExecTime(double execTime) {
-        EXEC_TIME = execTime;
+        Metrics.execTime = execTime;
     }
 
     public static long getExecPos() {
-        return EXEC_POS;
+        return execPos;
     }
 
     public static void setExecPos(long execPos) {
-        EXEC_POS = execPos;
+        Metrics.execPos = execPos;
     }
 
     public static long getDataMove() {
-        return DATA_MOVE;
+        return dataMove;
     }
 
     public static void setDataMove(long dataMove) {
-        DATA_MOVE = dataMove;
+        Metrics.dataMove = dataMove;
     }
 
     public static long getDataWrite() {
-        return DATA_WRITE;
+        return dataWrite;
     }
 
     public static void setDataWrite(long dataWrite) {
-        DATA_WRITE = dataWrite;
+        Metrics.dataWrite = dataWrite;
     }
 
     public static long getDataRead() {
-        return DATA_READ;
+        return dataRead;
     }
 
     public static void incrDataRead() {
-        DATA_READ++;
+        dataRead++;
     }
 
     public static long getExecMove() {
-        return EXEC_MOVE;
+        return execMove;
     }
 
     public static void setExecMove(long execMove) {
-        EXEC_MOVE = execMove;
+        Metrics.execMove = execMove;
     }
 
     public static void incrExecPos(long i) {
-        EXEC_POS += i;
+        execPos += i;
     }
 
     public static void incrProgSize() {
-        PROG_SIZE++;
+        progSize++;
     }
 }

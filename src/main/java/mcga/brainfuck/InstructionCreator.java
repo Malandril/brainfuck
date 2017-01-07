@@ -2,6 +2,7 @@ package mcga.brainfuck;
 
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
+import mcga.brainfuck.exceptions.MyException;
 import mcga.brainfuck.instructions.*;
 import mcga.brainfuck.processing.Parser;
 
@@ -23,7 +24,7 @@ public enum InstructionCreator {
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
     public static final int C_SYNTAX_INDEX = 3;
-    public static Pattern patternProc = Pattern.compile(Parser.CALL_PATTERN);
+    public static final Pattern patternProc = Pattern.compile(Parser.CALL_PATTERN);
     
     private List<String> identifiers;
     
@@ -36,7 +37,7 @@ public enum InstructionCreator {
         this.identifiers = Arrays.asList(names);
     }
     
-    public static String getCSyntax(String str) throws InvalidInstructionException {
+    public static String getCSyntax(String str) throws InvalidInstructionException, InvalidCodeException {
         InstructionCreator inst = getInstruction(str);
         if (inst != null) {
             return inst.identifiers.get(C_SYNTAX_INDEX);
@@ -64,7 +65,7 @@ public enum InstructionCreator {
                             sj.add("tab[ptr+" + address + "]");
                         }
                     }
-                    if (struct.function) {
+                    if (struct.isFunction()) {
                         return "tab[ptr]=" + matcher.group(1) + "(" + sj.toString() + ");";
                     } else {
                         return matcher.group(1) + "(" + sj.toString() + ");";
@@ -114,7 +115,7 @@ public enum InstructionCreator {
      * @return Instruction corresponding to the String in parameter.
      * @throws InvalidInstructionException
      */
-    public static Instruction createInstruction(String s) throws InvalidInstructionException {
+    public static Instruction createInstruction(String s) throws MyException {
         InstructionCreator inst = getInstruction(s);
         Instruction instruction;
         if (inst != null) {
@@ -157,10 +158,10 @@ public enum InstructionCreator {
                     if (paramGroup != null) {
                         params = paramGroup.split(Parser.PROC_PARAM_SEP);
                     }
-                    if (struct.function) {
-                        return new Function(s, struct.instructions, struct.size, struct.params, params);
+                    if (struct.isFunction()) {
+                        return struct.createFunction(params);
                     } else {
-                        return new Procedure(s, struct.instructions, struct.size, struct.params, params);
+                        return struct.createProcedure(params);
                     }
                 }
             }

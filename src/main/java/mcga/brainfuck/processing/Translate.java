@@ -1,15 +1,12 @@
 package mcga.brainfuck.processing;
 
-import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -54,6 +51,7 @@ public class Translate extends Parser {
      * @throws InvalidInstructionException
      * @see Parser#execute(String)
      */
+    @Override
     public void execute(String str) throws InvalidInstructionException {
         colorFifo.add(Color.decode(InstructionCreator.getBitmapColorIndex(str)));
     }
@@ -63,7 +61,7 @@ public class Translate extends Parser {
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile() {
+    public void parseFile() throws Exception {
         super.parseFile();
         writeBitmap();
     }
@@ -84,11 +82,6 @@ public class Translate extends Parser {
                     }
                 }
             }
-        }
-        try {
-            ImageIO.write(image, FILE_FORMAT, Brainfuck.getMainOutput());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

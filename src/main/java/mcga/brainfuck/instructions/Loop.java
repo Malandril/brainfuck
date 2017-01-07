@@ -13,9 +13,8 @@ public abstract class Loop implements Instruction {
      * Overrides the method defined in the Instruction interface to increment the metric DATA_READ
      *
      * @throws InvalidValueException
-     * @throws IndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
+    public void interpret() throws Exception {
     }
 }

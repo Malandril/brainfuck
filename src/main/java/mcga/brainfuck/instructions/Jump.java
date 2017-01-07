@@ -4,9 +4,10 @@ import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InvalidValueException;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 import static mcga.brainfuck.Brainfuck.getInterpreter;
 
@@ -17,20 +18,20 @@ import static mcga.brainfuck.Brainfuck.getInterpreter;
  * @author Team Make Coding Great Again
  */
 public class Jump extends Loop {
-    private static Stack<Jump> jumpIndexStack = new Stack<>();
+    private static Deque<Jump> jumpIndexStack = new ArrayDeque<>();
     int size;
     List<Instruction> jumpInstructions = new ArrayList<>();
-
+    
     /**
      * Default constructor
      * Sets the size of the Jump and add the Jump to the Jump table
      */
     public Jump() {
         jumpIndexStack.add(this);
-        size = getInterpreter().index;
+        size = getInterpreter().getIndex();
         getInterpreter().pushInstructions(jumpInstructions);
     }
-
+    
     /**
      * Pops the Jump of the Jump table
      *
@@ -39,23 +40,22 @@ public class Jump extends Loop {
     public static Jump popJumpStack() {
         return jumpIndexStack.pop();
     }
-
+    
     public static boolean isJumpStackEmpty() {
         return jumpIndexStack.isEmpty();
     }
-
+    
     public static Jump peekJumpStack() {
         return jumpIndexStack.peek();
     }
-
+    
     /**
      * Overrides the method defined in the Instruction interface to execute the jump action.
      *
      * @throws InvalidValueException
-     * @throws IndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws InvalidValueException, IndexOutOfBoundsException {
+    public void interpret() throws Exception {
         Metrics.incrDataRead();
         if (Brainfuck.getMemory().getCurrentCellValue() != 0) {
             getInterpreter().interpretList(jumpInstructions);
