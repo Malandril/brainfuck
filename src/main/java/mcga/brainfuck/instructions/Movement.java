@@ -1,8 +1,8 @@
 package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.BrainfuckIndexOutOfBoundsException;
 import mcga.brainfuck.exceptions.InvalidValueException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 
 /**
  * Superclass of the Left and Right classes.
@@ -13,10 +13,10 @@ public abstract class Movement implements Instruction {
      * Overrides the method defined in the Instruction interface to increment the metric DATA_MOVE
      * @throws InvalidValueException
      * @throws IndexOutOfBoundsException
-     * @throws MyIndexOutOfBoundsException
+     * @throws BrainfuckIndexOutOfBoundsException
      */
     @Override
-    public void interpret() throws InvalidValueException, MyIndexOutOfBoundsException {
+    public void interpret() throws InvalidValueException, BrainfuckIndexOutOfBoundsException {
         Metrics.setDataMove(Metrics.getDataMove() + 1);
     }
 }

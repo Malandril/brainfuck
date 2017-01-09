@@ -2,6 +2,7 @@ package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InstructionException;
 import mcga.brainfuck.exceptions.InvalidValueException;
 
 import java.util.ArrayDeque;
@@ -55,7 +56,7 @@ public class Jump extends Loop {
      * @throws InvalidValueException
      */
     @Override
-    public void interpret() throws Exception {
+    public void interpret() throws InstructionException {
         Metrics.incrDataRead();
         if (Brainfuck.getMemory().getCurrentCellValue() != 0) {
             getInterpreter().interpretList(jumpInstructions);

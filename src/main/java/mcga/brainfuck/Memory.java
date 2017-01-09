@@ -1,7 +1,7 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.BrainfuckIndexOutOfBoundsException;
 import mcga.brainfuck.exceptions.InvalidValueException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Procedure;
 
 import java.util.ArrayDeque;
@@ -38,12 +38,12 @@ public class Memory {
     public int getCurrentIndex() {
         return currentIndex;
     }
-
-    public void setCurrentIndex(int i) throws MyIndexOutOfBoundsException {
+    
+    public void setCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
         if (isValidIndex(i)) {
             currentIndex = i;
         } else {
-            throw new MyIndexOutOfBoundsException(i);
+            throw new BrainfuckIndexOutOfBoundsException(i);
         }
 
     }
@@ -92,10 +92,10 @@ public class Memory {
      * @param i value to add to the current size.
      * @throws IndexOutOfBoundsException
      */
-    public void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException {
+    public void changeCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
         int val = currentIndex;
         if (!isValidIndex(val + i)) {
-            throw new MyIndexOutOfBoundsException(val + i);
+            throw new BrainfuckIndexOutOfBoundsException(val + i);
         } else {
             currentIndex += i;
         }

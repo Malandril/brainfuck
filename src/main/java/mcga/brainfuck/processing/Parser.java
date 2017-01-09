@@ -6,12 +6,14 @@ import mcga.brainfuck.ProcedureStruct;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
+import mcga.brainfuck.exceptions.ParserException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -114,7 +116,7 @@ public abstract class Parser {
      * @see Check#parseFile()
      * @see Interpreter#parseFile()
      */
-    public void parseFile() throws Exception {
+    public void parseFile() throws ParserException {
         Metrics.setProgSize(0);
         if (fileName != null && fileName.endsWith(".bmp")) {
             readBitmap();
@@ -131,8 +133,13 @@ public abstract class Parser {
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
-    private void readBitmap() throws Exception {
-        BufferedImage image = ImageIO.read(stream);
+    private void readBitmap() throws ParserException {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int height = image.getHeight();
         int width = image.getWidth();
         if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
@@ -161,17 +168,17 @@ public abstract class Parser {
         
     }
     
-    private void readText() throws Exception {
+    private void readText() throws InvalidCodeException {
         Scanner scanner = new Scanner(this.stream);
         scanFile(scanner);
     }
     
-    protected void readText(String str) throws Exception {
+    protected void readText(String str) throws InvalidCodeException {
         Scanner scanner = new Scanner(str);
         scanFile(scanner);
     }
     
-    private void scanFile(Scanner scanner) throws Exception {
+    private void scanFile(Scanner scanner) throws InvalidCodeException {
         String str;
         scanner.useDelimiter("\\s*");
         while (scanner.hasNext()) {
@@ -212,7 +219,7 @@ public abstract class Parser {
         return new FunctionDeclaration(function);
     }
     
-    private void declaration(Scanner scanner, IDeclaration declaration) throws Exception {
+    private void declaration(Scanner scanner, IDeclaration declaration) throws InvalidCodeException {
         String[] tab;
         String code;
         String name;
@@ -254,6 +261,6 @@ public abstract class Parser {
      * @see Rewrite#execute(String)
      * @see Translate#execute(String)
      */
-    public abstract void execute(String str) throws Exception;
+    public abstract void execute(String str) throws InvalidCodeException;
     
 }

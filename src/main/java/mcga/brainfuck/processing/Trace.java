@@ -2,6 +2,8 @@ package mcga.brainfuck.processing;
 
 import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InstructionException;
+import mcga.brainfuck.exceptions.ParserException;
 import mcga.brainfuck.instructions.Instruction;
 
 import java.io.FileNotFoundException;
@@ -44,7 +46,7 @@ public class Trace extends Interpreter {
      * @see Interpreter#parseFile()
      */
     @Override
-    public void parseFile() throws Exception {
+    public void parseFile() throws ParserException {
         super.parseFile();
     }
     
@@ -56,7 +58,7 @@ public class Trace extends Interpreter {
      * @see Interpreter#
      */
     @Override
-    public void interpretation(Instruction instruction) throws Exception {
+    public void interpretation(Instruction instruction) throws InstructionException {
         super.interpretation(instruction);
         logMetrics();
     }

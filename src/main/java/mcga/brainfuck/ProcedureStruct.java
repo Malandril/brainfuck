@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
-import mcga.brainfuck.exceptions.MyException;
+import mcga.brainfuck.exceptions.InvalidCodeException;
+import mcga.brainfuck.exceptions.InvalidParametersException;
 import mcga.brainfuck.instructions.Function;
 import mcga.brainfuck.instructions.Instruction;
 import mcga.brainfuck.instructions.Procedure;
@@ -19,7 +20,7 @@ public class ProcedureStruct {
     private int size;
     private boolean function;
     
-    public ProcedureStruct(String code, String[] params, boolean function) throws Exception {
+    public ProcedureStruct(String code, String[] params, boolean function) throws InvalidCodeException {
         getInterpreter().pushInstructions(instructions);
         size = getInterpreter().readProcedureText(code);
         getInterpreter().popInstructions();
@@ -35,12 +36,12 @@ public class ProcedureStruct {
         }
     }
     
-    public Procedure createProcedure(String[] params) throws MyException {
-        return new Procedure(instructions, size, declarationParams, params);
+    public Procedure createProcedure(String name, String[] params) throws InvalidParametersException {
+        return new Procedure(name, instructions, size, declarationParams, params);
     }
     
-    public Procedure createFunction(String[] params) throws MyException {
-        return new Function(instructions, size, declarationParams, params);
+    public Procedure createFunction(String name, String[] params) throws InvalidParametersException {
+        return new Function(name, instructions, size, declarationParams, params);
     }
     
     public int getDeclarationParam(int i) {

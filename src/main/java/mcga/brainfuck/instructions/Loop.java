@@ -1,5 +1,6 @@
 package mcga.brainfuck.instructions;
 
+import mcga.brainfuck.exceptions.InstructionException;
 import mcga.brainfuck.exceptions.InvalidValueException;
 
 /**
@@ -15,6 +16,6 @@ public abstract class Loop implements Instruction {
      * @throws InvalidValueException
      */
     @Override
-    public void interpret() throws Exception {
+    public void interpret() throws InstructionException {
     }
 }

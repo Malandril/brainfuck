@@ -2,6 +2,7 @@ package mcga.brainfuck.processing;
 
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
+import mcga.brainfuck.exceptions.ParserException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -61,7 +62,7 @@ public class Translate extends Parser {
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile() throws Exception {
+    public void parseFile() throws ParserException {
         super.parseFile();
         writeBitmap();
     }

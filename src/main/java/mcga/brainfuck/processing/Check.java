@@ -3,7 +3,7 @@ package mcga.brainfuck.processing;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.exceptions.MyException;
+import mcga.brainfuck.exceptions.ParserException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ public class Check extends Parser {
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile() throws Exception {
+    public void parseFile() throws ParserException {
         super.parseFile();
         checkCount();
     
@@ -63,7 +63,7 @@ public class Check extends Parser {
      * @see Parser#execute(String)
      */
     @Override
-    public void execute(String str) throws MyException {
+    public void execute(String str) throws InvalidCodeException {
         InstructionCreator instr = InstructionCreator.getInstruction(str);
         if (instr != null) {
             switch (instr) {

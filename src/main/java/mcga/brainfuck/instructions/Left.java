@@ -1,8 +1,8 @@
 package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.exceptions.BrainfuckIndexOutOfBoundsException;
 import mcga.brainfuck.exceptions.InvalidValueException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 
 /**
  * Class defining the action corresponding to the shift of the memory pointer to the left.
@@ -17,7 +17,7 @@ public class Left extends Movement {
      * @throws InvalidValueException
      */
     @Override
-    public void interpret() throws InvalidValueException, MyIndexOutOfBoundsException {
+    public void interpret() throws InvalidValueException, BrainfuckIndexOutOfBoundsException {
         super.interpret();
         Brainfuck.getMemory().changeCurrentIndex(- 1);
     }

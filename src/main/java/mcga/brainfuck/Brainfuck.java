@@ -1,7 +1,7 @@
 package mcga.brainfuck;
 
 
-import mcga.brainfuck.exceptions.MyException;
+import mcga.brainfuck.exceptions.BrainfuckException;
 import mcga.brainfuck.instructions.Input;
 import mcga.brainfuck.processing.*;
 import mcga.brainfuck.processing.Parser;
@@ -45,7 +45,7 @@ public class Brainfuck {
     public static void main(String[] args) {
         try {
             readArguments(args);
-        } catch (MyException e) {
+        } catch (BrainfuckException e) {
             System.err.println(e.getMessage());
             System.exit(e.getExitCode());
         } catch (Exception e) {

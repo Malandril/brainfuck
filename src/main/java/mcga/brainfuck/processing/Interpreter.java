@@ -3,9 +3,10 @@ package mcga.brainfuck.processing;
 import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InstructionException;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.exceptions.MyException;
+import mcga.brainfuck.exceptions.ParserException;
 import mcga.brainfuck.instructions.Instruction;
 import mcga.brainfuck.instructions.Jump;
 
@@ -65,13 +66,18 @@ public class Interpreter extends Parser {
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile() throws Exception {
+    public void parseFile() throws ParserException {
         super.parseFile();
         if (!Jump.isJumpStackEmpty()) {
             throw new InvalidCodeException();
         }
         double startTime = System.nanoTime();
-        interpretList(instructionsStack.peek());
+        try {
+            interpretList(instructionsStack.peek());
+        } catch (InstructionException e) {
+            System.err.println(e.getMessage());
+            System.exit(e.getExitCode());
+        }
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
         System.out.println(Brainfuck.getMemory());
@@ -81,7 +87,7 @@ public class Interpreter extends Parser {
     /**
      * Interpret each command between the two size start and end
      */
-    public void interpretList(List<Instruction> instructions) throws Exception {
+    public void interpretList(List<Instruction> instructions) throws InstructionException {
         for (Instruction instruction : instructions) {
             interpretation(instruction);
         }
@@ -90,7 +96,7 @@ public class Interpreter extends Parser {
     /**
      * Interpret the current command of the list and modify the metrics corresponding
      */
-    public void interpretation(Instruction instruction) throws Exception {
+    public void interpretation(Instruction instruction) throws InstructionException {
         instruction.interpret();
         Metrics.incrExecPos(1);
         Metrics.setExecMove(Metrics.getExecMove() + 1);
@@ -107,7 +113,7 @@ public class Interpreter extends Parser {
      * @see Parser#execute(String)
      */
     @Override
-    public void execute(String str) throws MyException {
+    public void execute(String str) throws InvalidCodeException {
         instructionsStack.peek().add(InstructionCreator.createInstruction(str));
         index++;
         if (RIGHT.isIdentifier(str)) {
@@ -124,7 +130,7 @@ public class Interpreter extends Parser {
     }
     
     
-    public int readProcedureText(String str) throws Exception {
+    public int readProcedureText(String str) throws InvalidCodeException {
         int prevIndex = size;
         super.readText(str);
         return size + 1 - prevIndex;

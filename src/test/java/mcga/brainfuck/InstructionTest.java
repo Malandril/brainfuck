@@ -1,7 +1,7 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.BrainfuckIndexOutOfBoundsException;
 import mcga.brainfuck.exceptions.InvalidValueException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.*;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -60,7 +60,7 @@ public class InstructionTest {
     @Test
     public void testExceptionLeft() throws Exception {
         instruction = new Left();
-        expectedException.expect(MyIndexOutOfBoundsException.class);
+        expectedException.expect(BrainfuckIndexOutOfBoundsException.class);
         instruction.interpret();
     }
 

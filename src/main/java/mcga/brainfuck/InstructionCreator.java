@@ -2,7 +2,7 @@ package mcga.brainfuck;
 
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.exceptions.MyException;
+import mcga.brainfuck.exceptions.InvalidParametersException;
 import mcga.brainfuck.instructions.*;
 import mcga.brainfuck.processing.Parser;
 
@@ -37,7 +37,7 @@ public enum InstructionCreator {
         this.identifiers = Arrays.asList(names);
     }
     
-    public static String getCSyntax(String str) throws InvalidInstructionException, InvalidCodeException {
+    public static String getCSyntax(String str) throws InvalidCodeException {
         InstructionCreator inst = getInstruction(str);
         if (inst != null) {
             return inst.identifiers.get(C_SYNTAX_INDEX);
@@ -59,7 +59,7 @@ public enum InstructionCreator {
                                 } else if (LEFT.isIdentifier(s1)) {
                                     address--;
                                 } else {
-                                    throw new InvalidCodeException("Invalid parameter");
+                                    throw new InvalidParametersException("Invalid parameter");
                                 }
                             }
                             sj.add("tab[ptr+" + address + "]");
@@ -96,7 +96,6 @@ public enum InstructionCreator {
      *
      * @param str String to check.
      * @return Instruction corresponding
-     * @throws InvalidInstructionException
      */
     public static InstructionCreator getInstruction(String str) {
         for (InstructionCreator instructionCreator : InstructionCreator.values()) {
@@ -115,7 +114,7 @@ public enum InstructionCreator {
      * @return Instruction corresponding to the String in parameter.
      * @throws InvalidInstructionException
      */
-    public static Instruction createInstruction(String s) throws MyException {
+    public static Instruction createInstruction(String s) throws InvalidCodeException {
         InstructionCreator inst = getInstruction(s);
         Instruction instruction;
         if (inst != null) {
@@ -151,7 +150,8 @@ public enum InstructionCreator {
         } else {
             Matcher matcher = patternProc.matcher(s);
             if (matcher.find()) {
-                ProcedureStruct struct = Parser.getProcedure(matcher.group(1));
+                String name = matcher.group(1);
+                ProcedureStruct struct = Parser.getProcedure(name);
                 if (struct != null) {
                     String paramGroup = matcher.group(2);
                     String[] params = new String[0];
@@ -159,9 +159,9 @@ public enum InstructionCreator {
                         params = paramGroup.split(Parser.PROC_PARAM_SEP);
                     }
                     if (struct.isFunction()) {
-                        return struct.createFunction(params);
+                        return struct.createFunction(name, params);
                     } else {
-                        return struct.createProcedure(params);
+                        return struct.createProcedure(name, params);
                     }
                 }
             }

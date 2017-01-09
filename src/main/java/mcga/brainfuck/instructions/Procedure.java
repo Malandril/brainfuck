@@ -1,8 +1,7 @@
 package mcga.brainfuck.instructions;
 
-import mcga.brainfuck.exceptions.InvalidCodeException;
-import mcga.brainfuck.exceptions.MyException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
+import mcga.brainfuck.exceptions.InstructionException;
+import mcga.brainfuck.exceptions.InvalidParametersException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +22,14 @@ public class Procedure implements Instruction {
     private int size = 1;
     private int prevIndex;
     private int[] paramDeclaration;
+    private String name;
     private List<Integer> paramsCall = new ArrayList<>();
     private List<Instruction> instructions = new ArrayList<>();
     
-    public Procedure(List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) throws MyException {
+    public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) throws InvalidParametersException {
+        this.name = name;
         if (params.length != paramDeclaration.length) {
-            throw new InvalidCodeException("Invalid number of parameters");
+            throw new InvalidParametersException(name);
         }
         this.instructions = instructions;
         this.paramDeclaration = paramDeclaration;
@@ -42,18 +43,18 @@ public class Procedure implements Instruction {
                 } else if (LEFT.isIdentifier(s1)) {
                     address--;
                 } else {
-                    throw new InvalidCodeException("Invalid parameter");
+                    throw new InvalidParametersException(name);
                 }
             }
             if (address < 0 || address > MAX_SIZE) {
-                throw new MyIndexOutOfBoundsException(address);
+                throw new InvalidParametersException(name);
             }
             this.paramsCall.add(address);
         }
     }
     
     @Override
-    public void interpret() throws Exception {
+    public void interpret() throws InstructionException {
         prevIndex = getMemory().getCurrentIndex();
         for (int i = 0; i < paramsCall.size(); i++) {
             paramsCells.add(i, getMemory().getCurrentCellValue() + paramsCall.get(i));
@@ -63,7 +64,7 @@ public class Procedure implements Instruction {
         free();
     }
     
-    private void malloc() throws MyException {
+    private void malloc() throws InstructionException {
         int i = MAX_SIZE - 1;
         getMemory().setCurrentIndex(i);
         if (getMemory().isProcedureStackEmpty()) {
@@ -91,7 +92,7 @@ public class Procedure implements Instruction {
         getMemory().setCurrentIndex(startIndex);
     }
     
-    protected void free() throws MyException {
+    protected void free() throws InstructionException {
         int i = endIndex;
         while (i >= startIndex) {
             getMemory().setCurrentIndex(i--);

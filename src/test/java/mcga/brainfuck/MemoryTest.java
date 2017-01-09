@@ -1,7 +1,7 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.BrainfuckIndexOutOfBoundsException;
 import mcga.brainfuck.exceptions.InvalidValueException;
-import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -64,14 +64,14 @@ public class MemoryTest {
 
 
     @Test
-    public void testExceptionLowChangeCurentIndex() throws MyIndexOutOfBoundsException {
-        expectedException.expect(MyIndexOutOfBoundsException.class);
+    public void testExceptionLowChangeCurentIndex() throws BrainfuckIndexOutOfBoundsException {
+        expectedException.expect(BrainfuckIndexOutOfBoundsException.class);
         memory.changeCurrentIndex(-1);
     }
 
     @Test
-    public void testExceptionHightChangeCurrentIndex() throws MyIndexOutOfBoundsException {
-        expectedException.expect(MyIndexOutOfBoundsException.class);
+    public void testExceptionHightChangeCurrentIndex() throws BrainfuckIndexOutOfBoundsException {
+        expectedException.expect(BrainfuckIndexOutOfBoundsException.class);
         memory.changeCurrentIndex(30000);
     }
 

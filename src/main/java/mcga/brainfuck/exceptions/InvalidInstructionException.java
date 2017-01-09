@@ -3,7 +3,7 @@ package mcga.brainfuck.exceptions;
 /**
  * This exception is called if the instruction written in the file doesn't correspond to a Brainf*ck instruction.
  */
-public class InvalidInstructionException extends MyException {
+public class InvalidInstructionException extends InvalidCodeException {
     
     private static final int EXIT_CODE = 42;
 

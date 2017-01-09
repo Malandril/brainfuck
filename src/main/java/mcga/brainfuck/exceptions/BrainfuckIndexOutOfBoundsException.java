@@ -6,14 +6,14 @@ import mcga.brainfuck.Memory;
  * This exception is called if the pointer of the memory points on a cell not in the possible values :
  * negative size or over 30 000
  */
-public class MyIndexOutOfBoundsException extends MyException {
+public class BrainfuckIndexOutOfBoundsException extends InstructionException {
     private static final int EXIT_CODE = 2;
     
-    public MyIndexOutOfBoundsException(String s) {
+    public BrainfuckIndexOutOfBoundsException(String s) {
         super(s);
     }
     
-    public MyIndexOutOfBoundsException(int i) {
+    public BrainfuckIndexOutOfBoundsException(int i) {
         super("invalid Index: " + i + " ,value must be between " + 0 + " and " + Memory.MAX_SIZE);
     }
     

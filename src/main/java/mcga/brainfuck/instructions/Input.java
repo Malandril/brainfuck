@@ -3,8 +3,11 @@ package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.Metrics;
+import mcga.brainfuck.exceptions.InstructionException;
+import mcga.brainfuck.exceptions.InvalidInputFileException;
 import mcga.brainfuck.exceptions.InvalidValueException;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -23,9 +26,14 @@ public class Input extends DataIO {
      * @throws InvalidValueException
      */
     @Override
-    public void interpret() throws Exception {
+    public void interpret() throws InstructionException {
         Metrics.setDataWrite(Metrics.getDataWrite() + 1);
-        int c = stream.read();
+        int c = 0;
+        try {
+            c = stream.read();
+        } catch (IOException e) {
+            throw new InvalidInputFileException(e.getMessage());
+        }
         Brainfuck.getMemory().clearCurrentCell();
         Brainfuck.getMemory().addCurrentCellValue(c);
         
