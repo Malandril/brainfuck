@@ -1,6 +1,5 @@
 package mcga.brainfuck.processing;
 
-import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.Macro;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.ProcedureStruct;
@@ -21,9 +20,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static mcga.brainfuck.InstructionCreator.SHORT_SYNTAX_INDEX;
-import static mcga.brainfuck.InstructionCreator.getInstruction;
-
 /**
  * This class contains a bunch of methods used to parse the file containing the Brainf*ck code
  * and execute the code.
@@ -39,7 +35,7 @@ public abstract class Parser {
     private static final String MACRO = "$";
     private static final String COM = "#";
     private static final String EMPTY_INSTRUCTION = "000000";
-    private static Map<String, ProcedureStruct> procedureMap = new HashMap<>();
+    static Map<String, ProcedureStruct> procedureMap = new HashMap<>();
     private Map<String, Macro> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
@@ -66,22 +62,6 @@ public abstract class Parser {
      */
     public Parser() {
         this(System.in);
-    }
-
-    /**
-     * Searches for the short syntax representation corresponding to a long syntax representation.
-     *
-     * @param longStr String corresponding to the long syntax of an instruction.
-     * @return String corresponding to the short representation of the instruction.
-     * @throws InvalidInstructionException
-     */
-    public static String getShortSyntax(String longStr) throws InvalidInstructionException {
-        InstructionCreator instruction = getInstruction(longStr);
-        if (instruction != null) {
-            return instruction.getIdentifier(SHORT_SYNTAX_INDEX);
-        } else {
-            throw new InvalidInstructionException();
-        }
     }
 
     /**

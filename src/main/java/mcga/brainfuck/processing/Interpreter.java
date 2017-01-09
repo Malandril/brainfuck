@@ -10,9 +10,7 @@ import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Instruction;
 import mcga.brainfuck.instructions.Jump;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -27,7 +25,7 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
  */
 
 public class Interpreter extends Parser {
-    public int index=1;
+    public int index = 1;
     public int size;
     private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
 
@@ -52,16 +50,15 @@ public class Interpreter extends Parser {
         instructionsStack.push(new ArrayList<>());
     }
 
-    /**
-     * Constructor defining the stream in parameter as the input stream.
-     *
-     * @param stream inputStream
-     * @see Parser(InputStream)
-     */
-    public Interpreter(FileInputStream stream) {
-        super(stream);
-    }
 
+    /**
+     * Sets the toString to print at the end of the execution of the program
+     *
+     * @return String to print at the end
+     */
+    public void printMetrics() {
+        System.out.println("\nPROG_SIZE = " + Metrics.getProgSize() + '\n' + "EXEC_TIME = " + Metrics.getExecTime() + " ms" + '\n' + "EXEC_MOVE = " + Metrics.getExecMove() + '\n' + "DATA_MOVE = " + Metrics.getDataMove() + '\n' + "DATA_READ = " + Metrics.getDataRead() + '\n' + "DATA_WRITE = " + Metrics.getDataWrite() + '\n');
+    }
 
     /**
      * Overrides the method of the Parser class to interpret the list of commands
@@ -78,9 +75,8 @@ public class Interpreter extends Parser {
         interpretList(instructionsStack.peek());
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
-        Metrics.printMetrics();
         System.out.println(Brainfuck.getMemory());
-
+        printMetrics();
     }
 
     /**

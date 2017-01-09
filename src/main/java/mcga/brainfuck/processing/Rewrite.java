@@ -1,5 +1,7 @@
 package mcga.brainfuck.processing;
 
+import mcga.brainfuck.Brainfuck;
+import mcga.brainfuck.InstructionCreator;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 
 import java.io.FileInputStream;
@@ -46,8 +48,8 @@ public class Rewrite extends Parser {
     public void execute(String str) {
         String strConverted;
         try {
-            strConverted = Parser.getShortSyntax(str);
-            System.out.print(strConverted);
+            strConverted = InstructionCreator.getShortSyntax(str);
+            Brainfuck.getMainOutput().print(strConverted);
         } catch (InvalidInstructionException e) {
             System.err.println(e.getMessage());
             System.exit(42);

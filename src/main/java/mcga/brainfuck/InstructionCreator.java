@@ -1,5 +1,6 @@
 package mcga.brainfuck;
 
+import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 import mcga.brainfuck.instructions.*;
 import mcga.brainfuck.processing.Parser;
@@ -42,17 +43,6 @@ public enum InstructionCreator {
         this.identifiers = Arrays.asList(names);
     }
 
-    //
-//    /**
-//     * Searches for the short syntax representation corresponding to a long syntax representation.
-//     *
-//     * @param longStr String corresponding to the long syntax of an instruction.
-//     * @return String corresponding to the short representation of the instruction.
-//     * @throws InvalidInstructionException
-//     */
-//    public static String getShortSyntax(String longStr) throws InvalidInstructionException {
-//        return getInstruction(longStr).identifiers.get(SHORT_SYNTAX_INDEX);
-//    }
     public static String getCSyntax(String str) throws InvalidInstructionException {
         InstructionCreator inst = getInstruction(str);
         if (inst != null) {
@@ -182,6 +172,23 @@ public enum InstructionCreator {
         }
         throw new InvalidInstructionException(s);
     }
+
+    /**
+     * Searches for the short syntax representation corresponding to a long syntax representation.
+     *
+     * @param longStr String corresponding to the long syntax of an instruction.
+     * @return String corresponding to the short representation of the instruction.
+     * @throws InvalidInstructionException
+     */
+    public static String getShortSyntax(String longStr) throws InvalidInstructionException {
+        InstructionCreator instruction = getInstruction(longStr);
+        if (instruction != null) {
+            return instruction.getIdentifier(SHORT_SYNTAX_INDEX);
+        } else {
+            throw new InvalidInstructionException();
+        }
+    }
+
 
     /**
      * Returns the identifier at the index i.

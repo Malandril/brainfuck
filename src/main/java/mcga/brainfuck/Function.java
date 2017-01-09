@@ -3,6 +3,7 @@ package mcga.brainfuck;
 import mcga.brainfuck.exceptions.InvalidValueException;
 import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
 import mcga.brainfuck.instructions.Instruction;
+import mcga.brainfuck.instructions.Procedure;
 
 import java.util.List;
 

@@ -1,15 +1,16 @@
-package mcga.brainfuck;
+package mcga.brainfuck.instructions;
 
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidValueException;
 import mcga.brainfuck.exceptions.MyIndexOutOfBoundsException;
-import mcga.brainfuck.instructions.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static mcga.brainfuck.Brainfuck.getInterpreter;
 import static mcga.brainfuck.Brainfuck.getMemory;
+import static mcga.brainfuck.InstructionCreator.LEFT;
+import static mcga.brainfuck.InstructionCreator.RIGHT;
 import static mcga.brainfuck.Memory.*;
 
 /**
@@ -17,37 +18,43 @@ import static mcga.brainfuck.Memory.*;
  */
 public class Procedure implements Instruction {
     public List<Integer> paramsCells = new ArrayList<>();
-    private int prevIndex;
-    int startIndex;
-    int endIndex;
+    public int startIndex;
+    public int endIndex;
     public int size = 1;
+    private int prevIndex;
     private int[] paramDeclaration;
     private String name;
-    private List<List<Instruction>> paramsInstructions = new ArrayList<>();
+    private List<Integer> paramsCall = new ArrayList<>();
     private List<Instruction> instructions = new ArrayList<>();
 
     public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) {
         if (params.length != paramDeclaration.length) {
-            throw new InvalidCodeException("nombre de parametres invalide");
+            throw new InvalidCodeException("Invalid number of parameters");
         }
         this.instructions = instructions;
         this.name = name;
         this.paramDeclaration = paramDeclaration;
         this.size = size;
         for (String param : params) {
-            ArrayList<Instruction> list = new ArrayList<>();
-            getInterpreter().pushInstructions(list);
-            getInterpreter().readProcedureText(param);
-            getInterpreter().popInstructions();
-            this.paramsInstructions.add(list);
+            int address = 0;
+            for (int i = 0; i < param.length(); i++) {
+                String s1 = param.substring(i, i + 1);
+                if (RIGHT.isIdentifier(s1)) {
+                    address++;
+                } else if (LEFT.isIdentifier(s1)) {
+                    address--;
+                } else {
+                    throw new InvalidCodeException("Invalid parameter");
+                }
+            }
+            this.paramsCall.add(address);
         }
     }
 
     public void interpret() {
         prevIndex = getMemory().getCurrentIndex();
-        for (int i = 0; i < paramsInstructions.size(); i++) {
-            getInterpreter().interpretList(paramsInstructions.get(i));
-            paramsCells.add(i, getMemory().getCurrentCellValue());
+        for (int i = 0; i < paramsCall.size(); i++) {
+            paramsCells.add(i, getMemory().getCurrentCellValue() + paramsCall.get(i));
         }
         try {
             malloc();
