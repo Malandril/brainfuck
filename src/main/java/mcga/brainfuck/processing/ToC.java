@@ -12,6 +12,7 @@ import static mcga.brainfuck.InstructionCreator.getCSyntax;
 import static mcga.brainfuck.Memory.*;
 
 /**
+ * Class defining the actions to do when the user wants to translate his code from Brainf*ck to C language.
  * @author Gaetan Vialon
  * @author Thomas Canava
  *         Created the 22/12/2016.
@@ -21,6 +22,9 @@ public class ToC extends Parser {
     private List<String> instructions = new ArrayList<>();
     private List<String> functionInstructions = new ArrayList<>();
 
+    /**
+     * Empty constructor
+     */
     public ToC() {
         super();
     }
@@ -47,6 +51,12 @@ public class ToC extends Parser {
         super(stream);
     }
 
+    /**
+     * Builds the string corresponding to the heading of the generated file.
+     * It contains the inclusion of stdio.h and stdlib.h, as well as the declaration of the variables
+     * and the prototype of the main method.
+     * @return String corresponding to the heading of the file.
+     */
     public String initialize() {
         StringBuilder init = new StringBuilder();
         init.append("#include <stdio.h> \n")
@@ -64,10 +74,19 @@ public class ToC extends Parser {
         return init.toString();
     }
 
+    /**
+     * Returns the String corresponding to the end of the main method.
+     * @return String corresponding to the end of the main method.
+     */
     public String endOfFile() {
         return "return 1;\n}";
     }
 
+    /**
+     *
+     * @return
+     */
+    // TODO: 09/01/2017 finish comments here
     private String maxminptr() {
         String MaxMinPtr;
         MaxMinPtr = "void MaxMinPtr(int i){\n";
@@ -76,6 +95,10 @@ public class ToC extends Parser {
         return MaxMinPtr;
     }
 
+    /**
+     * Overrides the main class method so that it prints all the parts of the generated file.
+     * @see Parser#parseFile()
+     */
     @Override
     public void parseFile() {
         super.parseFile();
@@ -86,11 +109,22 @@ public class ToC extends Parser {
         System.out.println(endOfFile());
     }
 
+    /**
+     *
+     * @param function
+     * @return
+     */
+    // TODO: 09/01/2017 finish comments here
     @Override
     public IDeclaration declareFunction(boolean function) {
         return new CFunctionDeclaration(function);
     }
 
+    /**
+     * Overrides the main class method so that for each instruction, its C syntax is added to the instructions List.
+     * @param str string value of the argument to interpret
+     * @throws InvalidInstructionException if the instruction is invalid
+     */
     @Override
     public void execute(String str) throws InvalidInstructionException {
         try {
@@ -101,7 +135,16 @@ public class ToC extends Parser {
         }
     }
 
+    /**
+     * Inner class
+     */
+    // TODO: 09/01/2017 finish comments here
     class CFunctionDeclaration extends Parser.FunctionDeclaration {
+
+        /**
+         * Constructor of the CFunctionDeclaration class.
+         * @param function
+         */
         CFunctionDeclaration(boolean function) {
             super(function);
         }

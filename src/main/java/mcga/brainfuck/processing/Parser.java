@@ -117,14 +117,30 @@ public abstract class Parser {
         return str.equals(COM);
     }
 
+    /**
+     * Determines if the String corresponds to a procedure declaration.
+     * @param str String to analyze
+     * @return true if str is a procedure declaration, false otherwise
+     */
     private static boolean isProcedureDeclaration(String str) {
         return str.equals(PROCEDURE);
     }
 
+    /**
+     * Determines if the String corresponds to a function declaration.
+     * @param str String to analyze
+     * @return true if str is a function declaration, false otherwise
+     */
     private static boolean isFunctionDeclaration(String str) {
         return str.equals(FUNCTION);
     }
 
+    /**
+     * Gets the procedure
+     * @param key
+     * @return
+     */
+    // TODO: 09/01/2017 write return
     public static ProcedureStruct getProcedure(String key) {
         return procedureMap.get(key);
     }
@@ -292,14 +308,26 @@ public abstract class Parser {
      */
     public abstract void execute(String str) throws InvalidInstructionException;
 
+    /**
+     * Inner interface which implements an action method for both the {@link FunctionDeclaration FunctionDeclaration} and
+     * {@link mcga.brainfuck.processing.ToC.CFunctionDeclaration CFunctionDeclaration} classes.
+     */
     protected interface IDeclaration {
         void action(String name, String code, String[] params);
     }
 
+    /**
+     * Inner class
+     */
+    // TODO: 09/01/2017 finish comments here
     protected class FunctionDeclaration implements IDeclaration {
         boolean function;
         ProcedureStruct struct;
 
+        /**
+         * Cnstructor of the FunctionDeclaration class
+         * @param function
+         */
         FunctionDeclaration(boolean function) {
             this.function = function;
         }

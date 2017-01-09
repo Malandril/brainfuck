@@ -183,10 +183,20 @@ public enum InstructionCreator {
         throw new InvalidInstructionException(s);
     }
 
+    /**
+     * Returns the identifier at the index i.
+     * @param i index to search for
+     * @return String corresponding to the identifier
+     */
     public String getIdentifier(int i) {
         return this.identifiers.get(i);
     }
 
+    /**
+     * Checks if the String in parameter is an identifier.
+     * @param str String to check
+     * @return true if str is an identifier, false otherwise
+     */
     public boolean isIdentifier(String str) {
         return this.identifiers.contains(str);
     }

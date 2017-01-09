@@ -24,7 +24,9 @@ public class Translate extends Parser {
     public static final String FILE_FORMAT = "bmp";
     private Deque<Color> colorFifo = new ArrayDeque<>();
 
-
+    /**
+     * Empty constructor
+     */
     public Translate() {
         super();
     }
@@ -35,7 +37,6 @@ public class Translate extends Parser {
      * @throws FileNotFoundException
      * @see Parser#Parser()
      */
-
     public Translate(String fileName) throws FileNotFoundException {
         super(fileName);
     }
@@ -71,7 +72,7 @@ public class Translate extends Parser {
 
     /**
      * Uses the color queue to color the blocks of pixels of a buffered image and writes the buffered image
-     * into a bmp file
+     * into a bmp file.
      */
     public void writeBitmap() {
         int cote = (int) Math.ceil(Math.sqrt(colorFifo.size())) * SQUARE_SIDE;

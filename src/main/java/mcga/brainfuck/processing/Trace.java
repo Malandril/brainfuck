@@ -13,6 +13,9 @@ import java.io.FileNotFoundException;
  */
 public class Trace extends Interpreter {
 
+    /**
+     * Empty constructor
+     */
     public Trace() {
         super();
     }
@@ -39,7 +42,7 @@ public class Trace extends Interpreter {
 
     /**
      * Overrides the method of the Interpreter class to interpret the commands and write the metrics
-     * in the log at the same time
+     * in the log at the same time.
      *
      * @param instruction size of the command to interpret
      * @see Interpreter#

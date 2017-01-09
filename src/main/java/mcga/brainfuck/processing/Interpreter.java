@@ -128,15 +128,28 @@ public class Interpreter extends Parser {
         }
     }
 
+    /**
+     * Pushes the List of instructions in parameter in the instructionsStack stack.
+     * @param item List of instructions
+     */
     public void pushInstructions(List<Instruction> item) {
         instructionsStack.push(item);
     }
 
+    /**
+     * Pops the instructionsStack stack.
+     * @return List of instructions
+     */
     public List<Instruction> popInstructions() {
         return instructionsStack.pop();
     }
 
-
+    /**
+     *
+     * @param str
+     * @return
+     */
+    // TODO: 09/01/2017 finish comments here
     public int readProcedureText(String str) {
         int prevIndex = size;
         super.readText(str);

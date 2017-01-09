@@ -11,7 +11,9 @@ import java.io.FileNotFoundException;
  */
 public class Rewrite extends Parser {
 
-
+    /**
+     * Empty constructor
+     */
     public Rewrite() {
         super();
     }
