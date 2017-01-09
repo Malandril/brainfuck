@@ -1,8 +1,8 @@
 package mcga.brainfuck.processing;
 
 import mcga.brainfuck.InstructionCreator;
+import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.exceptions.ParserException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +18,6 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
  * @author Team Make Coding Great Again
  */
 public class Translate extends Parser {
-    public static final String FILE_FORMAT = "bmp";
     private Deque<Color> colorFifo = new ArrayDeque<>();
 
 
@@ -62,7 +61,7 @@ public class Translate extends Parser {
      * @see Parser#parseFile()
      */
     @Override
-    public void parseFile() throws ParserException {
+    public void parseFile() throws InvalidCodeException {
         super.parseFile();
         writeBitmap();
     }

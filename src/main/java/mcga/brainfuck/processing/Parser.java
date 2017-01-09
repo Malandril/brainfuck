@@ -6,7 +6,6 @@ import mcga.brainfuck.ProcedureStruct;
 import mcga.brainfuck.exceptions.InvalidBitmapException;
 import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
-import mcga.brainfuck.exceptions.ParserException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -31,6 +30,7 @@ public abstract class Parser {
     public static final String PROC_PARAM_SEP = ";";
     public static final String CALL_PATTERN = "([^(]*)(?:\\(((?:.+" + PROC_PARAM_SEP + "?)*?)\\))?";
     static final int SQUARE_SIDE = 3;
+    private static final String FILE_FORMAT = ".bmp";
     private static final String PROCEDURE = "@";
     private static final String FUNCTION = "§";
     private static final String MACRO = "$";
@@ -116,9 +116,9 @@ public abstract class Parser {
      * @see Check#parseFile()
      * @see Interpreter#parseFile()
      */
-    public void parseFile() throws ParserException {
+    public void parseFile() throws InvalidCodeException {
         Metrics.setProgSize(0);
-        if (fileName != null && fileName.endsWith(".bmp")) {
+        if (fileName != null && fileName.endsWith(FILE_FORMAT)) {
             readBitmap();
         } else {
             readText();
@@ -133,37 +133,37 @@ public abstract class Parser {
      * @see Check#readBitmap()
      * @see Interpreter#readBitmap()
      */
-    private void readBitmap() throws ParserException {
+    private void readBitmap() throws InvalidCodeException {
         BufferedImage image = null;
         try {
             image = ImageIO.read(stream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int height = image.getHeight();
-        int width = image.getWidth();
-        if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
-            throw new InvalidBitmapException();
-        }
-        String prevColor;
-        String hexColor = "";
-        for (int i = 0; i < height; i += SQUARE_SIDE) {
-            for (int j = 0; j < width; j += SQUARE_SIDE) {
-                prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
-                for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
-                    for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
-                        Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
-                        hexColor = colorToHex(imgColor);
-                        if (!prevColor.equals(hexColor)) {
-                            throw new InvalidBitmapException();
+            int height = image.getHeight();
+            int width = image.getWidth();
+            if (height % SQUARE_SIDE != 0 || width % SQUARE_SIDE != 0) {
+                throw new InvalidBitmapException();
+            }
+            String prevColor;
+            String hexColor = "";
+            for (int i = 0; i < height; i += SQUARE_SIDE) {
+                for (int j = 0; j < width; j += SQUARE_SIDE) {
+                    prevColor = colorToHex(new Color(image.getRGB(j, i))); // hexadecimal code of the color of the upper left pixel of the square
+                    for (int iSquare = 0; iSquare < SQUARE_SIDE; iSquare++) {
+                        for (int jSquare = 0; jSquare < SQUARE_SIDE; jSquare++) {
+                            Color imgColor = new Color(image.getRGB(jSquare + j, iSquare + i));
+                            hexColor = colorToHex(imgColor);
+                            if (!prevColor.equals(hexColor)) {
+                                throw new InvalidBitmapException();
+                            }
                         }
                     }
-                }
-                if (!hexColor.equals(EMPTY_INSTRUCTION)) {
-                    execute(hexColor);
-                    Metrics.incrProgSize();
+                    if (!hexColor.equals(EMPTY_INSTRUCTION)) {
+                        execute(hexColor);
+                        Metrics.incrProgSize();
+                    }
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         
     }
@@ -237,7 +237,7 @@ public abstract class Parser {
         if (!macroMap.containsKey(name) && !procedureMap.containsKey(name)) {
             declaration.action(name, code, params);
         } else {
-            throw new InvalidCodeException("Déjà définie " + name);
+            throw new InvalidCodeException(name + " is already defined");
         }
     }
     

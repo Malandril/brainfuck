@@ -1,7 +1,6 @@
 package mcga.brainfuck.processing;
 
 import mcga.brainfuck.exceptions.InvalidCodeException;
-import mcga.brainfuck.exceptions.ParserException;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -65,7 +64,7 @@ public class ToC extends Parser {
     }
     
     @Override
-    public void parseFile() throws ParserException {
+    public void parseFile() throws InvalidCodeException {
         super.parseFile();
         outputStream.println(initialize());
         for (String instruction : instructions) {

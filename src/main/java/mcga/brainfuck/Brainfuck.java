@@ -48,8 +48,6 @@ public class Brainfuck {
         } catch (BrainfuckException e) {
             System.err.println(e.getMessage());
             System.exit(e.getExitCode());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -59,7 +57,7 @@ public class Brainfuck {
      * @param args list of the arguments passed in parameter
      */
 
-    private static void readArguments(String[] args) throws Exception {
+    private static void readArguments(String[] args) throws BrainfuckException {
         Input.stream = System.in;
         Options options = createOptions();
         CommandLineParser commandParser = new DefaultParser();

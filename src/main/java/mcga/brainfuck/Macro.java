@@ -1,6 +1,7 @@
 package mcga.brainfuck;
 
 import mcga.brainfuck.exceptions.InvalidCodeException;
+import mcga.brainfuck.exceptions.InvalidParametersException;
 import mcga.brainfuck.processing.Parser;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Macro implements Comparable<Macro> {
         if (paramsStr != null) {
             String[] split = paramsStr.split(Parser.PROC_PARAM_SEP);
             if(split.length!=params.length){
-                throw new InvalidCodeException("nombre de parametres incorrect");
+                throw new InvalidParametersException();
             }
             for (String[] string : values) {
                 for (int j = 0; j < split.length; j++) {

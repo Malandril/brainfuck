@@ -3,7 +3,7 @@ package mcga.brainfuck.processing;
 import mcga.brainfuck.Brainfuck;
 import mcga.brainfuck.Metrics;
 import mcga.brainfuck.exceptions.InstructionException;
-import mcga.brainfuck.exceptions.ParserException;
+import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.instructions.Instruction;
 
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class Trace extends Interpreter {
      * @see Interpreter#parseFile()
      */
     @Override
-    public void parseFile() throws ParserException {
+    public void parseFile() throws InvalidCodeException {
         super.parseFile();
     }
     

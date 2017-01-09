@@ -7,6 +7,7 @@ public class InvalidInputFileException extends InstructionException {
     private static final int EXIT_CODE = 3;
     
     public InvalidInputFileException() {
+        super();
     }
     
     public InvalidInputFileException(String message) {
