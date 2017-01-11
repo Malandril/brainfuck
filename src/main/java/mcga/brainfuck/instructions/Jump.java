@@ -19,7 +19,7 @@ import static mcga.brainfuck.Brainfuck.getInterpreter;
  * @author Team Make Coding Great Again
  */
 public class Jump extends Loop {
-    private static Deque<Jump> jumpIndexStack = new ArrayDeque<>();
+    private static Deque<Jump> jummpStack = new ArrayDeque<>();
     int size;
     List<Instruction> jumpInstructions = new ArrayList<>();
     
@@ -28,7 +28,7 @@ public class Jump extends Loop {
      * Sets the size of the Jump and add the Jump to the Jump table
      */
     public Jump() {
-        jumpIndexStack.add(this);
+        jummpStack.push(this);
         size = getInterpreter().getIndex();
         getInterpreter().pushInstructions(jumpInstructions);
     }
@@ -39,15 +39,15 @@ public class Jump extends Loop {
      * @return Jump popped from the Jump table
      */
     public static Jump popJumpStack() {
-        return jumpIndexStack.pop();
+        return jummpStack.pop();
     }
     
     public static boolean isJumpStackEmpty() {
-        return jumpIndexStack.isEmpty();
+        return jummpStack.isEmpty();
     }
     
     public static Jump peekJumpStack() {
-        return jumpIndexStack.peek();
+        return jummpStack.peek();
     }
     
     /**
