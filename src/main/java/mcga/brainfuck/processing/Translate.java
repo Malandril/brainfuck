@@ -33,7 +33,7 @@ public class Translate extends Parser {
     /**
      * Constructor with the name of file
      * @param fileName String containing the name of the file
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not found
      * @see Parser#Parser()
      */
     public Translate(String fileName) throws FileNotFoundException {
@@ -50,9 +50,10 @@ public class Translate extends Parser {
     }
 
     /**
-     * For each instruction, adds to colorFifo the corresponding color.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that for each instruction, adds to colorFifo the corresponding Color.
      * @param str String corresponding to an instruction
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException if the instruction is invalid
      * @see Parser#execute(String)
      */
     public void execute(String str) throws InvalidInstructionException {

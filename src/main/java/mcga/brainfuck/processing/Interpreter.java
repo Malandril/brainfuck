@@ -43,7 +43,7 @@ public class Interpreter extends Parser {
      * Constructor with a file name
      *
      * @param fileName String file to interpret
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not found
      */
     public Interpreter(String fileName) throws FileNotFoundException {
         super(fileName);
@@ -52,16 +52,14 @@ public class Interpreter extends Parser {
 
 
     /**
-     * Sets the toString to print at the end of the execution of the program
-     *
-     * @return String to print at the end
+     * Sets the toString to print at the end of the execution of the program.
      */
     public void printMetrics() {
         System.out.println("\nPROG_SIZE = " + Metrics.getProgSize() + '\n' + "EXEC_TIME = " + Metrics.getExecTime() + " ms" + '\n' + "EXEC_MOVE = " + Metrics.getExecMove() + '\n' + "DATA_MOVE = " + Metrics.getDataMove() + '\n' + "DATA_READ = " + Metrics.getDataRead() + '\n' + "DATA_WRITE = " + Metrics.getDataWrite() + '\n');
     }
 
     /**
-     * Overrides the method of the Parser class to interpret the list of commands
+     * Overrides the method of the Parser class to interpret the list of commands.
      *
      * @see Parser#parseFile()
      */
@@ -80,7 +78,7 @@ public class Interpreter extends Parser {
     }
 
     /**
-     * Interpret each command between the two size start and end
+     * Interprets each command between the two size start and end.
      */
     public void interpretList(List<Instruction> instructions) {
         for (Instruction instruction : instructions) {
@@ -89,7 +87,7 @@ public class Interpreter extends Parser {
     }
 
     /**
-     * Interpret the current command of the list and modify the metrics corresponding
+     * Interprets the current command of the list and modifies the metrics corresponding.
      */
     public void interpretation(Instruction instruction) {
         try {
@@ -108,12 +106,12 @@ public class Interpreter extends Parser {
 
 
     /**
-     * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction
-     * corresponding to the String in parameter and interprets it.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that it creates the Instruction corresponding to the String in parameter and adds it to the top List of
+     * instructionsStack.
      *
      * @param str String corresponding to the Instruction
-     * @throws InvalidInstructionException
-     * @see Parser#execute(String)
+     * @throws InvalidInstructionException if the instruction is invalid
      */
     @Override
     public void execute(String str) throws InvalidInstructionException {
@@ -125,7 +123,7 @@ public class Interpreter extends Parser {
     }
 
     /**
-     * Pushes the List of instructions in parameter in the instructionsStack stack.
+     * Pushes the List of instructions in parameter in the instructionsStack dequeue.
      * @param item List of instructions
      */
     public void pushInstructions(List<Instruction> item) {
@@ -133,7 +131,7 @@ public class Interpreter extends Parser {
     }
 
     /**
-     * Pops the instructionsStack stack.
+     * Pops the instructionsStack dequeue.
      * @return List of instructions
      */
     public List<Instruction> popInstructions() {

@@ -27,7 +27,6 @@ public class ToC extends Parser {
      */
     public ToC() {
         super();
-        this.outputStream = outputStream;
     }
 
     /**
@@ -113,7 +112,8 @@ public class ToC extends Parser {
 
 
     /**
-     * Overrides the main class method so that for each instruction, its C syntax is added to the instructions List.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that for each instruction, its C syntax is added to the instructions List.
      * @param str string value of the argument to interpret
      * @throws InvalidInstructionException if the instruction is invalid
      */

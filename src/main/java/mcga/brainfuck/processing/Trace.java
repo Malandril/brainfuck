@@ -27,7 +27,7 @@ public class Trace extends Interpreter {
      * Constructor of the Trace class using the constructor of the Interpreter class
      *
      * @param fileName String file to interpret
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not found
      */
     public Trace(String fileName, String logFileName) throws FileNotFoundException {
         super(fileName);
@@ -56,7 +56,7 @@ public class Trace extends Interpreter {
      * in the log at the same time.
      *
      * @param instruction size of the command to interpret
-     * @see Interpreter#
+     * @see Interpreter#interpretation(Instruction)
      */
     @Override
     public void interpretation(Instruction instruction) {

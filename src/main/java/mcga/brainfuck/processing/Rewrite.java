@@ -21,9 +21,9 @@ public class Rewrite extends Parser {
     }
 
     /**
-     * Constructor with the name of the file
+     * Constructor with the name of the file.
      * @param fileName String corresponding to the name of the file to translate
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not found
      * @see Parser#Parser()
      */
     public Rewrite(String fileName) throws FileNotFoundException {
@@ -31,7 +31,7 @@ public class Rewrite extends Parser {
     }
 
     /**
-     * Constructor with the FileInputStream in parameter
+     * Constructor with the FileInputStream in parameter.
      * @param stream Input stream of the Brainf*ck code.
      * @see Parser#Parser()
      */
@@ -40,7 +40,8 @@ public class Rewrite extends Parser {
     }
 
     /**
-     * Prints on the standard output the shortened representation of the program given as input.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that it prints on the standard output the shortened representation of the program given as input.
      * @param str string to convert.
      * @see Parser#execute(String)
      */

@@ -1,6 +1,5 @@
 package mcga.brainfuck;
 
-import mcga.brainfuck.exceptions.InvalidCodeException;
 import mcga.brainfuck.exceptions.InvalidInstructionException;
 import mcga.brainfuck.instructions.*;
 import mcga.brainfuck.processing.Parser;
@@ -43,6 +42,14 @@ public enum InstructionCreator {
         this.identifiers = Arrays.asList(names);
     }
 
+    /**
+     * Returns the C language syntax corresponding to the String in parameter.
+     * If the String is a known Brainf*ck instruction, the method returns the instruction written in C language.
+     * Otherwise, it analyzes the String to translate the actions to do in C language.
+     * @param str String to analyze
+     * @return String corresponding to the instruction / action in C language
+     * @throws InvalidInstructionException if the instruction is invalid
+     */
     public static String getCSyntax(String str) throws InvalidInstructionException {
         InstructionCreator inst = getInstruction(str);
         if (inst != null) {
@@ -85,7 +92,7 @@ public enum InstructionCreator {
      *
      * @param syntax String corresponding to the short or long syntax of an instruction.
      * @return Bitmap color size corresponding to the short representation of the instruction.
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException if the instruction is invalid
      */
     public static String getBitmapColorIndex(String syntax) throws InvalidInstructionException {
         InstructionCreator inst = getInstruction(syntax);
@@ -97,10 +104,10 @@ public enum InstructionCreator {
 
     /**
      * Finds the instruction (if it exists) corresponding to the String in parameter.
+     * Returns null if the instruction doesn't exist.
      *
      * @param str String to check.
      * @return Instruction corresponding
-     * @throws InvalidInstructionException
      */
     public static InstructionCreator getInstruction(String str) {
         for (InstructionCreator instructionCreator : InstructionCreator.values()) {
@@ -113,11 +120,11 @@ public enum InstructionCreator {
     }
 
     /**
-     * Creates an Instruction object and, for each possible instruction, creates the object corresponding.
+     * Creates an Instruction object and, for each possible instruction, creates the corresponding object.
      *
      * @param s String to try to convert to an instruction.
      * @return Instruction corresponding to the String in parameter.
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException if the instruction is invalid
      */
     public static Instruction createInstruction(String s) throws InvalidInstructionException {
         InstructionCreator inst = getInstruction(s);
@@ -178,7 +185,7 @@ public enum InstructionCreator {
      *
      * @param longStr String corresponding to the long syntax of an instruction.
      * @return String corresponding to the short representation of the instruction.
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException if the instruction is invalid
      */
     public static String getShortSyntax(String longStr) throws InvalidInstructionException {
         InstructionCreator instruction = getInstruction(longStr);

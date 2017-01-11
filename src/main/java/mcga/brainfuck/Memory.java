@@ -75,7 +75,7 @@ public class Memory {
      * Adds i to the value of the current cell.
      *
      * @param i value to add in the current cell.
-     * @throws InvalidValueException
+     * @throws InvalidValueException if the value is invalid
      */
     public void addCurrentCellValue(int i) throws InvalidValueException {
         int val = getCurrentCellValue();
@@ -91,7 +91,7 @@ public class Memory {
      * Changes the size of the current cell.
      *
      * @param i value to add to the current size.
-     * @throws IndexOutOfBoundsException
+     * @throws MyIndexOutOfBoundsException if i < 0 or i > 30000
      */
     public void changeCurrentIndex(int i) throws MyIndexOutOfBoundsException {
         int val = currentIndex;

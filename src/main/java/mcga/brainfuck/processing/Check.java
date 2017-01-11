@@ -50,10 +50,10 @@ public class Check extends Parser {
 
 
     /**
-     * This method overrides Parser#execute called in Parser#parseFile so that it only counts the number of opening
-     * and closing brackets.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that it only counts the number of opening and closing brackets.
      * @param str String corresponding to an instruction
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException if the instruction is invalid
      * @see Parser#execute(String)
      */
     @Override

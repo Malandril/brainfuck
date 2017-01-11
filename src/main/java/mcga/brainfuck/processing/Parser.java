@@ -285,12 +285,13 @@ public abstract class Parser {
      * @see Interpreter#execute(String)
      * @see Rewrite#execute(String)
      * @see Translate#execute(String)
+     * @see ToC#execute(String)
      */
     public abstract void execute(String str) throws InvalidInstructionException;
 
     /**
      * Inner interface which implements an action method for both the {@link FunctionDeclaration FunctionDeclaration} and
-     * {@link mcga.brainfuck.processing.ToC.CFunctionDeclaration CFunctionDeclaration} classes.
+     * {@link mcga.brainfuck.processing.ToC.ToCFunctionDeclaration ToCFunctionDeclaration} classes.
      */
     protected interface IDeclaration {
         void action(String name, String code, String[] params);
