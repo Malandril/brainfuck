@@ -105,7 +105,7 @@ public enum InstructionCreator {
      */
     public static InstructionCreator getInstruction(String str) {
         for (InstructionCreator instructionCreator : InstructionCreator.values()) {
-            if (instructionCreator.identifiers.contains(str)) {
+            if (instructionCreator.identifiers.contains(str) && !isCSyntax(instructionCreator,str)) {
                 return instructionCreator;
             }
         }
@@ -197,5 +197,9 @@ public enum InstructionCreator {
     
     public boolean isIdentifier(String str) {
         return this.identifiers.contains(str);
+    }
+
+    public static boolean isCSyntax(InstructionCreator instructionCreator, String str){
+        return instructionCreator.identifiers.indexOf(str)==3;
     }
 }
