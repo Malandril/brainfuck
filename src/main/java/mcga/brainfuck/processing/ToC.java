@@ -111,11 +111,11 @@ public class ToC extends Parser {
             instructions.add(sb.toString());
             readText(code);
             if (function) {
-                instructions.add("int tmpPtr=ptr");
+                instructions.add("int tmpPtr=ptr;");
             }
             instructions.add("ptr = end;\n" + "while (ptr >= start) {\n" + "   tab[ptr--] = 0;\n" + "}\n" + "start = tmpStart;\n" + "end = tmpEnd;\n" + "ptr = tmpPtr;\n");
             if (function) {
-                instructions.add("return tab[tmpPtr]");
+                instructions.add("return tab[tmpPtr];");
             }
             instructions.add("}");
             instructions = tmp;
