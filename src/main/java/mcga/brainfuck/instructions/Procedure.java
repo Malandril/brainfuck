@@ -13,7 +13,7 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
 import static mcga.brainfuck.Memory.*;
 
 /**
- * Created by user on 07/12/2016.
+ * This method defines a procedure.
  */
 public class Procedure implements Instruction {
 
@@ -27,6 +27,15 @@ public class Procedure implements Instruction {
     private List<Integer> paramsCall = new ArrayList<>();
     private List<Instruction> instructions = new ArrayList<>();
 
+    /**
+     *
+     * @param name
+     * @param instructions
+     * @param size
+     * @param paramDeclaration
+     * @param params
+     * @throws InvalidParametersException
+     */
     public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) throws InvalidParametersException {
         this.name = name;
         if (params.length != paramDeclaration.length) {
@@ -53,7 +62,7 @@ public class Procedure implements Instruction {
             this.paramsCall.add(address);
         }
     }
-
+    
     @Override
     public void interpret() throws InstructionException {
         prevIndex = getMemory().getCurrentIndex();
@@ -81,6 +90,7 @@ public class Procedure implements Instruction {
             System.err.println(NOT_ENOUGH_MESSAGE);
             System.exit(NOT_ENOUGH_CODE);
         } else {
+            getMemory().setCurrentIndex(i);
             getMemory().pushProcedure(this);
             startIndex = i;
             endIndex = startIndex + size - 1;
@@ -93,7 +103,7 @@ public class Procedure implements Instruction {
         }
         getMemory().setCurrentIndex(startIndex);
     }
-
+    
     protected void free() throws InstructionException {
         int i = endIndex;
         while (i >= startIndex) {
@@ -103,15 +113,15 @@ public class Procedure implements Instruction {
         getMemory().popProcedure();
         getMemory().setCurrentIndex(prevIndex);
     }
-
+    
     public int getStartIndex() {
         return startIndex;
     }
-
+    
     public int getEndIndex() {
         return endIndex;
     }
-
+    
     public int getSize() {
         return size;
     }
