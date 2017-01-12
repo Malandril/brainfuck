@@ -16,6 +16,7 @@ import static mcga.brainfuck.Memory.*;
  * Created by user on 07/12/2016.
  */
 public class Procedure implements Instruction {
+
     private List<Integer> paramsCells = new ArrayList<>();
     private int startIndex;
     private int endIndex;
@@ -25,7 +26,7 @@ public class Procedure implements Instruction {
     private String name;
     private List<Integer> paramsCall = new ArrayList<>();
     private List<Instruction> instructions = new ArrayList<>();
-    
+
     public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) throws InvalidParametersException {
         this.name = name;
         if (params.length != paramDeclaration.length) {
@@ -52,19 +53,20 @@ public class Procedure implements Instruction {
             this.paramsCall.add(address);
         }
     }
-    
+
     @Override
     public void interpret() throws InstructionException {
         prevIndex = getMemory().getCurrentIndex();
         for (int i = 0; i < paramsCall.size(); i++) {
-            paramsCells.add(i, getMemory().getCurrentCellValue() + paramsCall.get(i));
+            getMemory().changeCurrentIndex(paramsCall.get(i));
+            paramsCells.add(i, getMemory().getCurrentCellValue());
         }
-        malloc();
+        memoryAllocation();
         getInterpreter().interpretList(instructions);
         free();
     }
-    
-    private void malloc() throws InstructionException {
+
+    private void memoryAllocation() throws InstructionException {
         int i = MAX_SIZE - 1;
         getMemory().setCurrentIndex(i);
         if (getMemory().isProcedureStackEmpty()) {
@@ -79,7 +81,6 @@ public class Procedure implements Instruction {
             System.err.println(NOT_ENOUGH_MESSAGE);
             System.exit(NOT_ENOUGH_CODE);
         } else {
-            getMemory().setCurrentIndex(i);
             getMemory().pushProcedure(this);
             startIndex = i;
             endIndex = startIndex + size - 1;
@@ -88,10 +89,11 @@ public class Procedure implements Instruction {
                 getMemory().setCurrentIndex(index);
                 getMemory().addCurrentCellValue(paramsCells.get(k));
             }
+            getMemory().setCurrentIndex(startIndex);
         }
         getMemory().setCurrentIndex(startIndex);
     }
-    
+
     protected void free() throws InstructionException {
         int i = endIndex;
         while (i >= startIndex) {
@@ -101,15 +103,15 @@ public class Procedure implements Instruction {
         getMemory().popProcedure();
         getMemory().setCurrentIndex(prevIndex);
     }
-    
+
     public int getStartIndex() {
         return startIndex;
     }
-    
+
     public int getEndIndex() {
         return endIndex;
     }
-    
+
     public int getSize() {
         return size;
     }

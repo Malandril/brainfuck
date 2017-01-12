@@ -79,7 +79,7 @@ public class Interpreter extends Parser {
         }
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
-        System.out.println(Brainfuck.getMemory());
+        System.out.println("\n\n"+Brainfuck.getMemory());
         printMetrics();
     }
     

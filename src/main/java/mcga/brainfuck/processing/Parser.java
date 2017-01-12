@@ -40,14 +40,14 @@ public abstract class Parser {
     private Map<String, Macro> macroMap = new HashMap<>();
     private InputStream stream;
     private String fileName;
-    
-    
+
+
     public Parser(String fileName) throws FileNotFoundException {
         this(new FileInputStream(fileName));
         this.fileName = fileName;
-        
+
     }
-    
+
     /**
      * In case a file is specified in the launching command, this constructor is called.
      *
@@ -56,7 +56,7 @@ public abstract class Parser {
     public Parser(InputStream stream) {
         this.stream = stream;
     }
-    
+
     /**
      * Default constructor.
      * By default, the input stream is System.in.
@@ -64,7 +64,7 @@ public abstract class Parser {
     public Parser() {
         this(System.in);
     }
-    
+
     /**
      * Tests the first character to determine if the String is made of several short syntax instructions
      * or a single long syntax instruction.
@@ -76,7 +76,7 @@ public abstract class Parser {
         char firstChar = str.charAt(0);
         return Character.isLetter(firstChar);
     }
-    
+
     /**
      * Tests if the String is a macro declaration beginning with a '$'
      *
@@ -86,7 +86,7 @@ public abstract class Parser {
     private static boolean isMacroDeclaration(String str) {
         return str.startsWith(MACRO);
     }
-    
+
     /**
      * Tests if the String is the start of a comment
      *
@@ -96,19 +96,19 @@ public abstract class Parser {
     private static boolean isComments(String str) {
         return str.equals(COM);
     }
-    
+
     private static boolean isProcedureDeclaration(String str) {
         return str.equals(PROCEDURE);
     }
-    
+
     private static boolean isFunctionDeclaration(String str) {
         return str.equals(FUNCTION);
     }
-    
+
     public static ProcedureStruct getProcedure(String key) {
         return procedureMap.get(key);
     }
-    
+
     /**
      * Reads the file containing the Brainf*ck code. This method is called in each subclass, with some
      * additions depending on the subclass.
@@ -123,9 +123,9 @@ public abstract class Parser {
         } else {
             readText();
         }
-        
+
     }
-    
+
     /**
      * Reads the bitmap image containing the Brainfuck code. This method is called in each subclass, with some
      * additions depending on the subclass.
@@ -134,7 +134,7 @@ public abstract class Parser {
      * @see Interpreter#readBitmap()
      */
     private void readBitmap() throws InvalidCodeException {
-        BufferedImage image = null;
+        BufferedImage image;
         try {
             image = ImageIO.read(stream);
             int height = image.getHeight();
@@ -165,19 +165,19 @@ public abstract class Parser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
     }
-    
+
     private void readText() throws InvalidCodeException {
         Scanner scanner = new Scanner(this.stream);
         scanFile(scanner);
     }
-    
+
     protected void readText(String str) throws InvalidCodeException {
         Scanner scanner = new Scanner(str);
         scanFile(scanner);
     }
-    
+
     private void scanFile(Scanner scanner) throws InvalidCodeException {
         String str;
         scanner.useDelimiter("\\s*");
@@ -212,13 +212,13 @@ public abstract class Parser {
                 execute(str);
             }
         }
-        
+
     }
-    
+
     public IDeclaration declareFunction(boolean function) {
         return new FunctionDeclaration(function);
     }
-    
+
     private void declaration(Scanner scanner, IDeclaration declaration) throws InvalidCodeException {
         String[] tab;
         String code;
@@ -229,7 +229,10 @@ public abstract class Parser {
         code = tab[1];
         String params[] = {};
         if (matcher.find()) {
-            params = matcher.group(2).split(PROC_PARAM_SEP);
+            String paramsString = matcher.group(2);
+            if (paramsString != null) {
+                params = paramsString.split(PROC_PARAM_SEP);
+            }
             name = matcher.group(1);
         } else {
             name = tab[0];
@@ -240,7 +243,7 @@ public abstract class Parser {
             throw new InvalidCodeException(name + " is already defined");
         }
     }
-    
+
     /**
      * Converts a Color object to its hexadecimal value.
      *
@@ -250,7 +253,7 @@ public abstract class Parser {
     private String colorToHex(Color color) {
         return Integer.toHexString(color.getRGB()).substring(2);
     }
-    
+
     /**
      * This method is overriden in all subclasses.
      *
@@ -262,5 +265,5 @@ public abstract class Parser {
      * @see Translate#execute(String)
      */
     public abstract void execute(String str) throws InvalidCodeException;
-    
+
 }

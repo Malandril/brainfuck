@@ -38,14 +38,9 @@ public class Memory {
     public int getCurrentIndex() {
         return currentIndex;
     }
-    
-    public void setCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
-        if (isValidIndex(i)) {
-            currentIndex = i;
-        } else {
-            throw new BrainfuckIndexOutOfBoundsException(i);
-        }
 
+    public void setCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
+        currentIndex = i;
     }
 
     /**
@@ -132,7 +127,6 @@ public class Memory {
     public void clearCurrentCell() {
         memoire[currentIndex] = 0;
     }
-
 
 
     public Procedure peekProcedure() {
