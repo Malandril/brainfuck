@@ -52,7 +52,7 @@ public class ToC extends Parser {
     }
 
     private String endOfFile() {
-        return "return 1;\n}";
+        return "return 0;\n}";
     }
 
     private String maxminptr() {
