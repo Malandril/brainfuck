@@ -28,13 +28,13 @@ public class Procedure implements Instruction {
     private List<Instruction> instructions = new ArrayList<>();
 
     /**
-     *
-     * @param name
-     * @param instructions
-     * @param size
-     * @param paramDeclaration
-     * @param params
-     * @throws InvalidParametersException
+     * Constructor of the Procedure class.
+     * @param name name of the procedure
+     * @param instructions instructions of the procedure
+     * @param size size of the procedure
+     * @param paramDeclaration parameters of the declaration of the procedure
+     * @param params parameters of the procedure
+     * @throws InvalidParametersException if a parameter is invalid
      */
     public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) throws InvalidParametersException {
         this.name = name;
@@ -62,7 +62,11 @@ public class Procedure implements Instruction {
             this.paramsCall.add(address);
         }
     }
-    
+
+    /**
+     * Interprets the procedure.
+     * @throws InstructionException if an instruction can cause an issue during the execution
+     */
     @Override
     public void interpret() throws InstructionException {
         prevIndex = getMemory().getCurrentIndex();
@@ -75,6 +79,10 @@ public class Procedure implements Instruction {
         free();
     }
 
+    /**
+     * Checks if there is enough space in the memory to declare a procedure.
+     * @throws InstructionException if an instruction can cause an issue during the execution
+     */
     private void memoryAllocation() throws InstructionException {
         int i = MAX_SIZE - 1;
         getMemory().setCurrentIndex(i);
@@ -103,7 +111,11 @@ public class Procedure implements Instruction {
         }
         getMemory().setCurrentIndex(startIndex);
     }
-    
+
+    /**
+     * Frees the cells occupied by the procedure in the memory.
+     * @throws InstructionException if an instruction can cause an issue during the execution
+     */
     protected void free() throws InstructionException {
         int i = endIndex;
         while (i >= startIndex) {
