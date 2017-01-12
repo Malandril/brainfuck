@@ -139,11 +139,10 @@ public class Interpreter extends Parser {
     }
 
     /**
-     *
-     * @param str
-     * @return
+     * Reads the code of the procedure and calculates its size in the memory.
+     * @param str Code of the procedure
+     * @return size of the procedure in the memory
      */
-    // TODO: 09/01/2017 finish comments here
     public int readProcedureText(String str) {
         int prevIndex = size;
         super.readText(str);
