@@ -27,7 +27,6 @@ public enum InstructionCreator {
     JUMP("JUMP", "[", "ff7f00", "while(tab[ptr]){"),
     BACK("BACK", "]", "ff0000", "}");
     
-    
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
     public static final int C_SYNTAX_INDEX = 3;
