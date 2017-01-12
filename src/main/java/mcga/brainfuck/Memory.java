@@ -15,7 +15,7 @@ import java.util.StringJoiner;
  */
 public class Memory {
     public static final int MIN_CELL_VALUE = 0;
-    public static final int MAX_CELL_VALUE = 255;
+    public static final int MAX_CELL_VALUE = 2550000;
     public static final int MAX_SIZE = 30000;
     public static final String NOT_ENOUGH_MESSAGE = "Pas assez de cases memoire pour appeler la fonction";
     public static final int NOT_ENOUGH_CODE = 18;
