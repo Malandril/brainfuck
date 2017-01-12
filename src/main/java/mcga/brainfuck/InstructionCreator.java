@@ -18,16 +18,22 @@ import java.util.regex.Pattern;
  * @author Team Make Coding Great Again
  */
 public enum InstructionCreator {
-    INCR("INCR", "+", "ffffff", "tab[ptr]++;"), DECR("DECR", "-", "4b0082", "tab[ptr]--;"), LEFT("LEFT", "<", "9400d3", "ptr--;\n MaxMinPtr(ptr);"), RIGHT("RIGHT", ">", "0000ff", "ptr++;\n MaxMinPtr(ptr);"), IN("IN", ",", "ffff00", "tab[ptr]=(unsigned char) getchar();"), OUT("OUT", ".", "00ff00", "putchar(tab[ptr]);"), JUMP("JUMP", "[", "ff7f00", "while(tab[ptr]){"), BACK("BACK", "]", "ff0000", "}");
-
-
+    INCR("INCR", "+", "ffffff", "tab[ptr]++;"),
+    DECR("DECR", "-", "4b0082", "tab[ptr]--;"),
+    LEFT("LEFT", "<", "9400d3", "ptr--;\n MaxMinPtr(ptr);"),
+    RIGHT("RIGHT", ">", "0000ff", "ptr++;\n MaxMinPtr(ptr);"),
+    IN("IN", ",", "ffff00", "tab[ptr]=(unsigned char) getchar();"),
+    OUT("OUT", ".", "00ff00", "putchar(tab[ptr]);"),
+    JUMP("JUMP", "[", "ff7f00", "while(tab[ptr]){"),
+    BACK("BACK", "]", "ff0000", "}");
+    
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
     public static final int C_SYNTAX_INDEX = 3;
     public static final Pattern patternProc = Pattern.compile(Parser.CALL_PATTERN);
-
+    
     private List<String> identifiers;
-
+    
     /**
      * Constructor of the enum
      *
@@ -36,7 +42,7 @@ public enum InstructionCreator {
     InstructionCreator(String... names) {
         this.identifiers = Arrays.asList(names);
     }
-
+    
     public static String getCSyntax(String str) throws InvalidCodeException {
         InstructionCreator inst = getInstruction(str);
         if (inst != null) {
@@ -75,7 +81,7 @@ public enum InstructionCreator {
         }
         throw new InvalidInstructionException(str);
     }
-
+    
     /**
      * Searches for the bitmap color size corresponding to a long or short syntax representation.
      *
@@ -90,7 +96,7 @@ public enum InstructionCreator {
         }
         throw new InvalidInstructionException(syntax);
     }
-
+    
     /**
      * Finds the instruction (if it exists) corresponding to the String in parameter.
      *
@@ -104,10 +110,10 @@ public enum InstructionCreator {
                     return instructionCreator;
             }
         }
-
         return null;
+    
     }
-
+    
     /**
      * Creates an Instruction object and, for each possible instruction, creates the object corresponding.
      *
@@ -169,7 +175,7 @@ public enum InstructionCreator {
         }
         throw new InvalidInstructionException(s);
     }
-
+    
     /**
      * Searches for the short syntax representation corresponding to a long syntax representation.
      *
@@ -185,11 +191,11 @@ public enum InstructionCreator {
             throw new InvalidInstructionException();
         }
     }
-
+    
     public String getIdentifier(int i) {
         return this.identifiers.get(i);
     }
-
+    
     public boolean isIdentifier(String str) {
         return this.identifiers.contains(str);
     }

@@ -12,6 +12,7 @@ import static mcga.brainfuck.InstructionCreator.getCSyntax;
 import static mcga.brainfuck.Memory.*;
 
 /**
+ * Class defining the actions to do when the user wants to translate his code from Brainf*ck to C language.
  * @author Team Make Coding Great Again
  *         Created the 22/12/2016.
  */
@@ -21,11 +22,16 @@ public class ToC extends Parser {
     private List<String> functionInstructions = new ArrayList<>();
     private PrintStream outputStream;
 
+    /**
+     * Empty constructor
+     */
+    public ToC() {}
+
     public ToC(PrintStream outputStream) {
         super();
         this.outputStream = outputStream;
     }
-
+    
     /**
      * Constructor with the name of file
      *
@@ -33,17 +39,23 @@ public class ToC extends Parser {
      * @throws FileNotFoundException if the input file isn't found
      * @see Parser#Parser()
      */
-
+    
     public ToC(String fileName, PrintStream outputStream) throws FileNotFoundException {
         super(fileName);
         this.outputStream = outputStream;
     }
 
 
-    private String initialize() {
+    /**
+     * Builds the string corresponding to the heading of the generated file.
+     * It contains the inclusion of stdio.h and stdlib.h, as well as the declaration of the variables
+     * and the prototype of the main method.
+     * @return String corresponding to the heading of the file.
+     */
+    public String initialize() {
         StringBuilder init = new StringBuilder();
         init.append("#include <stdio.h> \n").append("#include <stdlib.h> \n\n").append("unsigned char tab[").append(MAX_SIZE).append("] = {};\n").append("int ptr = 0;\n").append("int start = 0;\n").append("int end = ").append(MAX_SIZE - 1).append(";\n").append(maxminptr());
-
+        
         for (String instruction : functionInstructions) {
             init.append(instruction).append("\n");
         }
@@ -51,10 +63,20 @@ public class ToC extends Parser {
         return init.toString();
     }
 
-    private String endOfFile() {
-        return "return 0;\n}";
+
+    /**
+     * Returns the String corresponding to the end of the main method.
+     * @return String corresponding to the end of the main method.
+     */
+    public String endOfFile() {
+        return "return 1;\n}";
     }
 
+
+    /**
+     * Generates the code in C language which checks if the value of the pointer exceeds the limits of the memory.
+     * @return Code corresponding to the function
+     */
     private String maxminptr() {
         String MaxMinPtr;
         MaxMinPtr = "void MaxMinPtr(int i){\n";
@@ -63,6 +85,11 @@ public class ToC extends Parser {
         return MaxMinPtr;
     }
 
+
+    /**
+     * Overrides the main class method so that it prints all the parts of the generated file.
+     * @see Parser#parseFile()
+     */
     @Override
     public void parseFile() throws InvalidCodeException {
         super.parseFile();
@@ -73,17 +100,38 @@ public class ToC extends Parser {
         outputStream.println(endOfFile());
     }
 
+
+    /**
+     * Declares a function.
+     * @param function true is the function is a function, false if the function is a procedure.
+     * @return a new {@link ToCFunctionDeclaration ToCFunctionDeclaration} object
+     */
     @Override
     public IDeclaration declareFunction(boolean function) {
         return new ToCFunctionDeclaration(function);
     }
 
+
+    /**
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that for each instruction, its C syntax is added to the instructions List.
+     * @param str string value of the argument to interpret
+     * @throws InvalidCodeException if the instruction is invalid
+     */
     @Override
     public void execute(String str) throws InvalidCodeException {
         instructions.add(getCSyntax(str));
     }
 
+    /**
+     * Represents a function declaration in C language
+     */
     private class ToCFunctionDeclaration extends FunctionDeclaration {
+
+        /**
+         * Constructor of the ToCFunctionDeclaration class.
+         * @param function true is the function is a function, false if the function is a procedure.
+         */
         ToCFunctionDeclaration(boolean function) {
             super(function);
         }
