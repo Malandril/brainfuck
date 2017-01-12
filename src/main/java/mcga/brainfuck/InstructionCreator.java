@@ -18,8 +18,14 @@ import java.util.regex.Pattern;
  * @author Team Make Coding Great Again
  */
 public enum InstructionCreator {
-    INCR("INCR", "+", "ffffff", "tab[ptr]++;"), DECR("DECR", "-", "4b0082", "tab[ptr]--;"), LEFT("LEFT", "<", "9400d3", "ptr--;\n MaxMinPtr(ptr);"), RIGHT("RIGHT", ">", "0000ff", "ptr++;\n MaxMinPtr(ptr);"), IN("IN", ",", "ffff00", "tab[ptr]=(unsigned char) getchar();"), OUT("OUT", ".", "00ff00", "putchar(tab[ptr]);"), JUMP("JUMP", "[", "ff7f00", "while(tab[ptr]){"), BACK("BACK", "]", "ff0000", "}");
-    
+    INCR("INCR", "+", "ffffff", "tab[ptr]++;"),
+    DECR("DECR", "-", "4b0082", "tab[ptr]--;"),
+    LEFT("LEFT", "<", "9400d3", "ptr--;\n MaxMinPtr(ptr);"),
+    RIGHT("RIGHT", ">", "0000ff", "ptr++;\n MaxMinPtr(ptr);"),
+    IN("IN", ",", "ffff00", "tab[ptr]=(unsigned char) getchar();"),
+    OUT("OUT", ".", "00ff00", "putchar(tab[ptr]);"),
+    JUMP("JUMP", "[", "ff7f00", "while(tab[ptr]){"),
+    BACK("BACK", "]", "ff0000", "}");
     
     public static final int SHORT_SYNTAX_INDEX = 1;
     public static final int BITMAP_COLOR_INDEX = 2;
