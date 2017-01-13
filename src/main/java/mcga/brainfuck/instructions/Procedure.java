@@ -1,5 +1,6 @@
 package mcga.brainfuck.instructions;
 
+import mcga.brainfuck.exceptions.BrainfuckIndexOutOfBoundsException;
 import mcga.brainfuck.exceptions.InstructionException;
 import mcga.brainfuck.exceptions.InvalidParametersException;
 
@@ -60,7 +61,11 @@ public class Procedure implements Instruction {
             paramsCells.add(i, getMemory().getCurrentCellValue() + paramsCall.get(i));
         }
         malloc();
-        getInterpreter().interpretList(instructions);
+        try {
+            getInterpreter().interpretList(instructions);
+        } catch (BrainfuckIndexOutOfBoundsException e) {
+            throw new BrainfuckIndexOutOfBoundsException(e, startIndex, endIndex, "in function " + name);
+        }
         free();
     }
     
