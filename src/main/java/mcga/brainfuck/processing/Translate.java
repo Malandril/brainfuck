@@ -20,7 +20,9 @@ import static java.awt.image.BufferedImage.TYPE_INT_BGR;
 public class Translate extends Parser {
     private Deque<Color> colorFifo = new ArrayDeque<>();
 
-
+    /**
+     * Empty constructor
+     */
     public Translate() {
         super();
     }
@@ -28,10 +30,9 @@ public class Translate extends Parser {
     /**
      * Constructor with the name of file
      * @param fileName String containing the name of the file
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not found
      * @see Parser#Parser()
      */
-
     public Translate(String fileName) throws FileNotFoundException {
         super(fileName);
     }
@@ -46,9 +47,10 @@ public class Translate extends Parser {
     }
 
     /**
-     * For each instruction, adds to colorFifo the corresponding color.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that for each instruction, adds to colorFifo the corresponding Color.
      * @param str String corresponding to an instruction
-     * @throws InvalidInstructionException
+     * @throws InvalidInstructionException if the instruction is invalid
      * @see Parser#execute(String)
      */
     @Override
@@ -68,7 +70,7 @@ public class Translate extends Parser {
 
     /**
      * Uses the color queue to color the blocks of pixels of a buffered image and writes the buffered image
-     * into a bmp file
+     * into a bmp file.
      */
     public void writeBitmap() {
         int cote = (int) Math.ceil(Math.sqrt(colorFifo.size())) * SQUARE_SIDE;

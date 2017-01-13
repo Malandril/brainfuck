@@ -17,29 +17,32 @@ import java.io.PrintStream;
  */
 public class Trace extends Interpreter {
     private PrintStream logFile = System.out;
-    
+
+    /**
+     * Empty constructor
+     */
     public Trace() {
         super();
     }
-    
+
     /**
      * Constructor of the Trace class using the constructor of the Interpreter class
      *
      * @param fileName String file to interpret
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not found
      */
     public Trace(String fileName, String logFileName) throws FileNotFoundException {
         super(fileName);
         logFile = new PrintStream(logFileName);
     }
-    
+
     /**
      * Prints the metric values for the Trace option
      */
     public void logMetrics() {
         logFile.println("Exec step => " + Metrics.getExecPos() + '\t' + '\t' + "Data pointer loc => " + Brainfuck.getMemory().getCurrentIndex() + '\t' + '\t' + "Memory => " + Brainfuck.getMemory());
     }
-    
+
     /**
      * Overrides the method of the Interpreter class to parse the file
      *
@@ -49,13 +52,13 @@ public class Trace extends Interpreter {
     public void parseFile() throws InvalidCodeException {
         super.parseFile();
     }
-    
+
     /**
      * Overrides the method of the Interpreter class to interpret the commands and write the metrics
-     * in the log at the same time
+     * in the log at the same time.
      *
      * @param instruction size of the command to interpret
-     * @see Interpreter#
+     * @see Interpreter#interpretation(Instruction)
      */
     @Override
     public void interpretation(Instruction instruction) throws InstructionException {
