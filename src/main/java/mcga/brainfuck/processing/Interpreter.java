@@ -149,6 +149,10 @@ public class Interpreter extends Parser {
         return index;
     }
     
+    public void incrIndex(int val) {
+        index += val;
+    }
+    
     public int getSize() {
         return size;
     }

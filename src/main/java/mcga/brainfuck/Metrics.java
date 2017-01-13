@@ -8,7 +8,7 @@ package mcga.brainfuck;
 public class Metrics {
     private static long progSize = 0;
     private static double execTime = 0;
-    private static long execPos = 0;
+    private static long execStep = 0;
     private static long dataMove = 0;
     private static long dataWrite = 0;
     private static long dataRead = 0;
@@ -33,13 +33,13 @@ public class Metrics {
     public static void setExecTime(double execTime) {
         Metrics.execTime = execTime;
     }
-
-    public static long getExecPos() {
-        return execPos;
+    
+    public static long getExecStep() {
+        return execStep;
     }
-
-    public static void setExecPos(long execPos) {
-        Metrics.execPos = execPos;
+    
+    public static void setExecStep(long execStep) {
+        Metrics.execStep = execStep;
     }
 
     public static long getDataMove() {
@@ -75,7 +75,7 @@ public class Metrics {
     }
 
     public static void incrExecPos(long i) {
-        execPos += i;
+        execStep += i;
     }
 
     public static void incrProgSize() {

@@ -40,7 +40,8 @@ public class Trace extends Interpreter {
      * Prints the metric values for the Trace option
      */
     public void logMetrics() {
-        logFile.println("Exec step => " + Metrics.getExecPos() + '\t' + '\t' + "Data pointer loc => " + Brainfuck.getMemory().getCurrentIndex() + '\t' + '\t' + "Memory => " + Brainfuck.getMemory());
+        String message = "Exec step => " + Metrics.getExecStep() + '\t' + '\t' + "Data pointer loc => " + Brainfuck.getMemory().getCurrentIndex() + '\t' + '\t' + "Memory => " + Brainfuck.getMemory();
+        logFile.println(message);
     }
 
     /**

@@ -44,6 +44,7 @@ public class Procedure implements Instruction {
         this.instructions = instructions;
         this.paramDeclaration = paramDeclaration;
         this.size = size;
+        getInterpreter().incrIndex(instructions.size());
         for (String param : params) {
             int address = 0;
             for (int i = 0; i < param.length(); i++) {
