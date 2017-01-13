@@ -25,7 +25,7 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
 
 public class Interpreter extends Parser {
     private int index = 1;
-    private int size;
+    private int size=0;
     private Deque<List<Instruction>> instructionsStack = new ArrayDeque<>();
     
     /**
@@ -51,16 +51,14 @@ public class Interpreter extends Parser {
     
     
     /**
-     * Sets the toString to print at the end of the execution of the program
-     *
-     * @return String to print at the end
+     * Sets the toString to print at the end of the execution of the program.
      */
     public void printMetrics() {
         System.out.println("\nPROG_SIZE = " + Metrics.getProgSize() + '\n' + "EXEC_TIME = " + Metrics.getExecTime() + " ms" + '\n' + "EXEC_MOVE = " + Metrics.getExecMove() + '\n' + "DATA_MOVE = " + Metrics.getDataMove() + '\n' + "DATA_READ = " + Metrics.getDataRead() + '\n' + "DATA_WRITE = " + Metrics.getDataWrite() + '\n');
     }
     
     /**
-     * Overrides the method of the Parser class to interpret the list of commands
+     * Overrides the method of the Parser class to interpret the list of commands.
      *
      * @see Parser#parseFile()
      */
@@ -79,12 +77,12 @@ public class Interpreter extends Parser {
         }
         double endTime = System.nanoTime();
         Metrics.setExecTime((endTime - startTime) * Math.pow(10, -6));
-        System.out.println(Brainfuck.getMemory());
+        System.out.println("\n\n"+Brainfuck.getMemory());
         printMetrics();
     }
     
     /**
-     * Interpret each command between the two size start and end
+     * Interprets each command between the two size start and end.
      */
     public void interpretList(List<Instruction> instructions) throws InstructionException {
         for (Instruction instruction : instructions) {
@@ -93,7 +91,7 @@ public class Interpreter extends Parser {
     }
     
     /**
-     * Interpret the current command of the list and modify the metrics corresponding
+     * Interprets the current command of the list and modifies the metrics corresponding.
      */
     public void interpretation(Instruction instruction) throws InstructionException {
         instruction.interpret();
@@ -104,12 +102,12 @@ public class Interpreter extends Parser {
     
     
     /**
-     * This method overrides Parser#execute called in Parser#parseFile so that it creates the Instruction
-     * corresponding to the String in parameter and interprets it.
+     * This method overrides {@link Parser#execute(String) execute} called in {@link Parser#parseFile() parseFile}
+     * so that it creates the Instruction corresponding to the String in parameter and adds it to the top List of
+     * instructionsStack.
      *
      * @param str String corresponding to the Instruction
-     * @throws InvalidInstructionException
-     * @see Parser#execute(String)
+     * @throws InvalidInstructionException if the instruction is invalid
      */
     @Override
     public void execute(String str) throws InvalidCodeException {
@@ -119,16 +117,28 @@ public class Interpreter extends Parser {
             size++;
         }
     }
-    
+
+    /**
+     * Pushes the List of instructions in parameter in the instructionsStack dequeue.
+     * @param item List of instructions
+     */
     public void pushInstructions(List<Instruction> item) {
         instructionsStack.push(item);
     }
-    
+
+    /**
+     * Pops the instructionsStack dequeue.
+     * @return List of instructions
+     */
     public List<Instruction> popInstructions() {
         return instructionsStack.pop();
     }
-    
-    
+
+    /**
+     * Reads the code of the procedure and calculates its size in the memory.
+     * @param str Code of the procedure
+     * @return size of the procedure in the memory
+     */
     public int readProcedureText(String str) throws InvalidCodeException {
         int prevIndex = size;
         super.readText(str);

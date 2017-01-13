@@ -12,7 +12,7 @@ import java.util.List;
 import static mcga.brainfuck.Brainfuck.getInterpreter;
 
 /**
- * Created by user on 23/12/2016.
+ * This class checks all the conditions required to create a procedure or a function.
  */
 public class ProcedureStruct {
     private List<Instruction> instructions = new ArrayList<>();

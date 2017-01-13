@@ -14,8 +14,8 @@ import java.util.StringJoiner;
  * @author Team Make Coding Great Again
  */
 public class Memory {
-    public static final int MIN_CELL_VALUE = -5999950;
-    public static final int MAX_CELL_VALUE = 25999905;
+    public static final int MIN_CELL_VALUE = 0;
+    public static final int MAX_CELL_VALUE = 2550000;
     public static final int MAX_SIZE = 30000;
     public static final String NOT_ENOUGH_MESSAGE = "Pas assez de cases memoire pour appeler la fonction";
     public static final int NOT_ENOUGH_CODE = 18;
@@ -38,14 +38,9 @@ public class Memory {
     public int getCurrentIndex() {
         return currentIndex;
     }
-    
-    public void setCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
-        if (isValidIndex(i)) {
-            currentIndex = i;
-        } else {
-            throw new BrainfuckIndexOutOfBoundsException(i);
-        }
 
+    public void setCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
+        currentIndex = i;
     }
 
     /**
@@ -74,7 +69,7 @@ public class Memory {
      * Adds i to the value of the current cell.
      *
      * @param i value to add in the current cell.
-     * @throws InvalidValueException
+     * @throws InvalidValueException if the value is invalid
      */
     public void addCurrentCellValue(int i) throws InvalidValueException {
         int val = getCurrentCellValue();
@@ -90,7 +85,7 @@ public class Memory {
      * Changes the size of the current cell.
      *
      * @param i value to add to the current size.
-     * @throws IndexOutOfBoundsException
+     * @throws BrainfuckIndexOutOfBoundsException if the index is invalid
      */
     public void changeCurrentIndex(int i) throws BrainfuckIndexOutOfBoundsException {
         int val = currentIndex;
@@ -132,7 +127,6 @@ public class Memory {
     public void clearCurrentCell() {
         memoire[currentIndex] = 0;
     }
-
 
 
     public Procedure peekProcedure() {

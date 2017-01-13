@@ -14,7 +14,7 @@ import static mcga.brainfuck.InstructionCreator.RIGHT;
 import static mcga.brainfuck.Memory.*;
 
 /**
- * Created by user on 07/12/2016.
+ * This method defines a procedure.
  */
 public class Procedure implements Instruction {
     private List<Integer> paramsCells = new ArrayList<>();
@@ -26,7 +26,16 @@ public class Procedure implements Instruction {
     private String name;
     private List<Integer> paramsCall = new ArrayList<>();
     private List<Instruction> instructions = new ArrayList<>();
-    
+
+    /**
+     * Constructor of the Procedure class.
+     * @param name name of the procedure
+     * @param instructions instructions of the procedure
+     * @param size size of the procedure
+     * @param paramDeclaration parameters of the declaration of the procedure
+     * @param params parameters of the procedure
+     * @throws InvalidParametersException if a parameter is invalid
+     */
     public Procedure(String name, List<Instruction> instructions, int size, int[] paramDeclaration, String[] params) throws InvalidParametersException {
         this.name = name;
         if (params.length != paramDeclaration.length) {
@@ -53,14 +62,19 @@ public class Procedure implements Instruction {
             this.paramsCall.add(address);
         }
     }
-    
+
+    /**
+     * Interprets the procedure.
+     * @throws InstructionException if an instruction can cause an issue during the execution
+     */
     @Override
     public void interpret() throws InstructionException {
         prevIndex = getMemory().getCurrentIndex();
         for (int i = 0; i < paramsCall.size(); i++) {
-            paramsCells.add(i, getMemory().getCurrentCellValue() + paramsCall.get(i));
+            getMemory().changeCurrentIndex(paramsCall.get(i));
+            paramsCells.add(i, getMemory().getCurrentCellValue());
         }
-        malloc();
+        memoryAllocation();
         try {
             getInterpreter().interpretList(instructions);
         } catch (BrainfuckIndexOutOfBoundsException e) {
@@ -68,8 +82,12 @@ public class Procedure implements Instruction {
         }
         free();
     }
-    
-    private void malloc() throws InstructionException {
+
+    /**
+     * Checks if there is enough space in the memory to declare a procedure.
+     * @throws InstructionException if an instruction can cause an issue during the execution
+     */
+    private void memoryAllocation() throws InstructionException {
         int i = MAX_SIZE - 1;
         getMemory().setCurrentIndex(i);
         if (getMemory().isProcedureStackEmpty()) {
@@ -96,7 +114,11 @@ public class Procedure implements Instruction {
         }
         getMemory().setCurrentIndex(startIndex);
     }
-    
+
+    /**
+     * Frees the cells occupied by the procedure in the memory.
+     * @throws InstructionException if an instruction can cause an issue during the execution
+     */
     protected void free() throws InstructionException {
         int i = endIndex;
         while (i >= startIndex) {
